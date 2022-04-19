@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://seyslee.github.io/sitemap.xml
