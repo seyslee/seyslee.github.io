@@ -1,0 +1,264 @@
+<!doctype html><html lang=en dir=ltr class=scroll-smooth data-default-appearance=dark data-auto-appearance=false><head><meta charset=utf-8><meta http-equiv=content-language content="en"><meta name=viewport content="width=device-width,initial-scale=1"><meta http-equiv=x-ua-compatible content="ie=edge"><title>Hugo x github 블로그 설치 방법 &#183; seyslee</title><meta name=title content="Hugo x github 블로그 설치 방법 &#183; seyslee"><meta name=description content="seyslee"><link rel=canonical href=https://seyslee.github.io/blog/installing-hugo-github-blog/><link type=text/css rel=stylesheet href=/css/main.bundle.min.39b7a5b20cc3e1243a974332de8d5e458dd9f15f0f8e06962e8afb4c2b9ce9805c65a0f9359b396ceb5d5f8c16f9ede5d854c208fb561f4fbc5b9a05f4c3cdec.css integrity="sha512-ObelsgzD4SQ6l0My3o1eRY3Z8V8PjgaWLor7TCuc6YBcZaD5NZs5bOtdX4wW+e3l2FTCCPtWH0+8W5oF9MPN7A=="><script type=text/javascript src=/js/appearance.min.12e98742cd283574d030a7fe55f29597df4ee214f7ff7075b4d19a64d046a602753c715295550be7899b661619cec89c679049d36c624681671a8013c1249896.js integrity="sha512-EumHQs0oNXTQMKf+VfKVl99O4hT3/3B1tNGaZNBGpgJ1PHFSlVUL54mbZhYZzsicZ5BJ02xiRoFnGoATwSSYlg=="></script>
+<script defer type=text/javascript id=script-bundle src=/js/main.bundle.min.9ae0a991bb442898e9bc60cf318b4de3ff878325ff3821625a5564b32b2f66aec0e7f7d0e00ca3ac7df59d9f01c18c88b6bdd213184f86ac9ce06d7bdffbadf8.js integrity="sha512-muCpkbtEKJjpvGDPMYtN4/+HgyX/OCFiWlVksysvZq7A5/fQ4AyjrH31nZ8BwYyItr3SExhPhqyc4G173/ut+A==" data-copy=Copy data-copied=Copied></script>
+<link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=manifest href=/site.webmanifest><meta property="og:title" content="Hugo x github 블로그 설치 방법"><meta property="og:description" content="Hugo 와 Github 를 사용해 블로그를 구축하는 방법"><meta property="og:type" content="article"><meta property="og:url" content="https://seyslee.github.io/blog/installing-hugo-github-blog/"><meta property="article:section" content="blog"><meta property="article:published_time" content="2021-07-31T00:29:09+09:00"><meta property="article:modified_time" content="2022-01-07T23:20:25+09:00"><meta property="og:site_name" content="seyslee"><meta name=twitter:card content="summary"><meta name=twitter:title content="Hugo x github 블로그 설치 방법"><meta name=twitter:description content="Hugo 와 Github 를 사용해 블로그를 구축하는 방법"><script type=application/ld+json>[{"@context":"https://schema.org","@type":"Article","articleSection":"Blogs","name":"Hugo x github 블로그 설치 방법","headline":"Hugo x github 블로그 설치 방법","description":"Hugo 와 Github 를 사용해 블로그를 구축하는 방법","abstract":"개요 # hugo 기반의 깃허브 블로그를 구축할 수 있다.","inLanguage":"en","url":"https:\/\/seyslee.github.io\/blog\/installing-hugo-github-blog\/","author":{"@type":"Person","name":"Younsung Lee"},"copyrightYear":"2021","dateCreated":"2021-07-31T00:29:09\u002b09:00","datePublished":"2021-07-31T00:29:09\u002b09:00","dateModified":"2022-01-07T23:20:25\u002b09:00","keywords":["hugo","github"],"mainEntityOfPage":"true","wordCount":"1894"}]</script><meta name=generator content="Hugo 0.97.3"><meta name=author content="Younsung Lee"><link href=mailto:ivecloudblack@gmail.com rel=me><link href=https://github.com/seyslee rel=me></head><body class="flex flex-col h-screen px-6 m-auto text-lg leading-7 bg-neutral text-neutral-900 sm:px-14 md:px-24 lg:px-32 dark:bg-neutral-800 dark:text-neutral max-w-7xl"><div id=the-top class="absolute flex self-center"><a class="px-3 py-1 text-sm -translate-y-8 rounded-b-lg bg-primary-200 dark:bg-neutral-600 focus:translate-y-0" href=#main-content><span class="font-bold ltr:pr-2 rtl:pl-2 text-primary-600 dark:text-primary-400">&darr;</span>Skip to main content</a></div><header class="flex justify-between py-6 font-semibold sm:items-center sm:py-10 text-neutral-900 dark:text-neutral print:hidden"><div><a class="decoration-primary-500 hover:underline hover:decoration-2 hover:underline-offset-2" rel=me href=/>seyslee</a></div><nav><ul class="flex flex-col list-none sm:flex-row"><li class="mb-1 ltr:text-right rtl:text-left sm:mb-0 ltr:sm:mr-7 ltr:sm:last:mr-0 rtl:sm:ml-7 rtl:sm:last:ml-0"><a class="decoration-primary-500 hover:underline hover:decoration-2 hover:underline-offset-2" href=/blog/ title=Blogs>Post</a></li><li class="mb-1 ltr:text-right rtl:text-left sm:mb-0 ltr:sm:mr-7 ltr:sm:last:mr-0 rtl:sm:ml-7 rtl:sm:last:ml-0"><a class="decoration-primary-500 hover:underline hover:decoration-2 hover:underline-offset-2" href=/tags/ title=Tags>Tag</a></li></ul></nav></header><main id=main-content class="relative grow"><article><header class=max-w-prose><h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">Hugo x github 블로그 설치 방법</h1><div class="mt-8 mb-12 text-base text-neutral-500 dark:text-neutral-400 print:hidden"><div class="flex flex-row flex-wrap items-center"><time datetime="2021-07-31 00:29:09 +0900 +0900">Jul 31, 2021</time><span class="px-2 text-primary-500">&#183;</span><time datetime="2022-01-07 23:20:25 +0900 +0900">Updated: Jan 7, 2022</time></div></div></header><section class="flex flex-col max-w-full mt-0 prose lg:flex-row dark:prose-invert"><div class="order-first px-0 lg:max-w-xs ltr:lg:pl-8 rtl:lg:pr-8 lg:order-last"><div class="ltr:pl-5 rtl:pr-5 toc lg:sticky lg:top-10 print:hidden"><details open class="mt-0 overflow-hidden rounded-lg rtl:pr-5 ltr:pl-5 ltr:-ml-5 rtl:-mr-5 lg:mt-3"><summary class="block py-1 text-lg font-semibold cursor-pointer rtl:pr-5 ltr:pl-5 ltr:-ml-5 rtl:-mr-5 text-neutral-800 dark:text-neutral-100 lg:hidden bg-neutral-100 dark:bg-neutral-700">Table of Contents</summary><div class="py-2 border-dotted ltr:border-l rtl:border-r rtl:pr-5 ltr:pl-5 ltr:-ml-5 rtl:-mr-5 border-neutral-300 dark:border-neutral-600"><nav id=TableOfContents><ul><li><a href=#개요>개요</a></li><li><a href=#환경>환경</a></li><li><a href=#전제조건>전제조건</a></li><li><a href=#블로그-만드는-방법>블로그 만드는 방법</a><ul><li><ul><li><a href=#1-레포지터리-생성>1. 레포지터리 생성</a></li><li><a href=#2-hugo-설치>2. Hugo 설치</a></li><li><a href=#3-사이트-생성>3. 사이트 생성</a></li><li><a href=#4-테마-다운로드>4. 테마 다운로드</a></li><li><a href=#5-리모트-추가>5. 리모트 추가</a></li><li><a href=#6-서브모듈-추가>6. 서브모듈 추가</a></li><li><a href=#7-테스트>7. 테스트</a></li><li><a href=#8-게시글-작성>8. 게시글 작성</a></li><li><a href=#9-배포-스크립트-작성>9. 배포 스크립트 작성</a></li><li><a href=#10-배포-실행>10. 배포 실행</a></li></ul></li></ul></li><li><a href=#참고자료>참고자료</a></li><li><a href=#더-나아가서>더 나아가서</a></li></ul></nav></div></details></div></div><div class="min-w-0 min-h-0 max-w-prose"><h1 id=개요 class="relative group">개요 <span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%ea%b0%9c%ec%9a%94 aria-label=Anchor>#</a></span></h1><p>hugo 기반의 깃허브 블로그를 구축할 수 있다.</p><br><h1 id=환경 class="relative group">환경 <span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%ed%99%98%ea%b2%bd aria-label=Anchor>#</a></span></h1><ul><li><strong>Hardware</strong> : MacBook Pro (13-inch, M1, 2020)</li><li><strong>OS</strong> : macOS Big Sur 11.5</li><li><strong>Shell</strong> : zsh</li><li><strong>Hugo</strong> : hugo v0.86.0+extended darwin/arm64 <em>(brew를 이용해서 설치)</em></li><li><strong>brew</strong> : Homebrew 3.2.5</li></ul><br><h1 id=전제조건 class="relative group">전제조건 <span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%ec%a0%84%ec%a0%9c%ec%a1%b0%ea%b1%b4 aria-label=Anchor>#</a></span></h1><ol><li><p>패키지 관리자인 Homebrew가 설치되어 있는 macOS 환경</p></li><li><p>Github 계정</p></li></ol><br><h1 id=블로그-만드는-방법 class="relative group">블로그 만드는 방법 <span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%eb%b8%94%eb%a1%9c%ea%b7%b8-%eb%a7%8c%eb%93%9c%eb%8a%94-%eb%b0%a9%eb%b2%95 aria-label=Anchor>#</a></span></h1><h3 id=1-레포지터리-생성 class="relative group">1. 레포지터리 생성 <span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#1-%eb%a0%88%ed%8f%ac%ec%a7%80%ed%84%b0%eb%a6%ac-%ec%83%9d%ec%84%b1 aria-label=Anchor>#</a></span></h3><p>블로그를 생성하기 위해 레포지터리 2개를 새로 생성한다.</p><p>왜 블로그를 운영하는 데에 레포지터리가 2개나 필요할까. 개발용 레포지터리는 말 그대로 소스 원본 저장 및 관리용이며, 서비스용 레포지터리는 개발용 레포지터리를 빌드한 결과물이 담긴 레포지터리이다.</p><p>사실 개발용 레포지터리를 꼭 등록하지 않아도 블로그는 운영이 가능하지만, 둘 다 일괄적으로 Github 레포지터리로 관리하면 편하기 때문이다. 대표적인 장점으로 개발용 레포지터리의 Commit log를 보면서 블로그 작업이나 글 작성, 변경에 대한 이력도 추적 가능하다.</p><ul><li><p><strong>개발용(Development) 레포지터리 이름</strong> : blog</p></li><li><p><strong>서비스용(Production) 레포지터리 이름</strong> : <u>iiivvveee</u>.github.io</p><p><em>(본인의 Github username을 레포지터리 이름 맨 앞에 넣어준다. Github 유저네임이 seyslee일 경우, 레포지터리 이름은 <u>seyslee</u>.github.io가 된다.)</em></p><br></li></ul><h3 id=2-hugo-설치 class="relative group">2. Hugo 설치 <span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#2-hugo-%ec%84%a4%ec%b9%98 aria-label=Anchor>#</a></span></h3><p>Hugo 블로그를 생성하려면 hugo 를 먼저 설치해야한다.</p><p>macOS용 패키지 관리자인 Homebrew를 사용중이라면 아래 명령어 한 줄로 쉽게 설치가 가능하다.</p><p>만약 Homebrew가 설치되어 있지 않다면 <a href=https://brew.sh/index_ko>brew 공식홈페이지</a>를 방문해서 설치한다.</p><br><p><strong>brew를 이용한 hugo 설치</strong></p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>$ brew install hugo
+</span></span></code></pre></div><br><p><strong>hugo 버전 확인</strong></p><p>정상적으로 hugo가 설치가 되었다면 hugo의 버전이 출력되어야 한다.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>$ hugo version
+</span></span><span class=line><span class=cl>hugo v0.86.0+extended darwin/arm64 <span class=nv>BuildDate</span><span class=o>=</span>unknown
+</span></span></code></pre></div><br><h3 id=3-사이트-생성 class="relative group">3. 사이트 생성 <span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#3-%ec%82%ac%ec%9d%b4%ed%8a%b8-%ec%83%9d%ec%84%b1 aria-label=Anchor>#</a></span></h3><p>프로젝트 폴더를 만들 경로로 이동한다.</p><p>내 경우는 github_repos 라는 폴더 안에 모든 레포지터리를 관리하는 구성이기 때문에 github_repos 폴더 안에 blog 폴더를 따로 생성하기로 결정했다.</p><p>현재 작업 구성은 아래와 같다.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>$ <span class=nb>pwd</span>
+</span></span><span class=line><span class=cl>/Users/ive/github_repos
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>## 트리 구조로 본 프로젝트 경로</span>
+</span></span><span class=line><span class=cl>/
+</span></span><span class=line><span class=cl>└── Users
+</span></span><span class=line><span class=cl>    └── ive
+</span></span><span class=line><span class=cl>        └── github_repos
+</span></span><span class=line><span class=cl>            └── blog &lt;<span class=o>==</span> 내가 새로 만들 블로그 폴더
+</span></span></code></pre></div><br><p><strong>사이트 생성 명령어 형식</strong></p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>$ hugo new site &lt;프로젝트 이름<span class=o>(</span>폴더명<span class=o>)</span>&gt;
+</span></span></code></pre></div><br><p><strong>내가 실행한 명령어</strong></p><p>사이트 생성 전에 현재 작업경로를 미리 확인한다.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>$ <span class=nb>pwd</span>
+</span></span><span class=line><span class=cl>/Users/ive/github_repos
+</span></span></code></pre></div><br><p><strong>사이트 생성</strong></p><p>blog라는 이름의 디렉토리를 현재 경로에 생성하고, 해당 디렉토리 안에 블로그 환경을 자동 구성한다.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>$ hugo new site blog
+</span></span><span class=line><span class=cl>Congratulations! Your new Hugo site is created in /Users/ive/github_repos/blog.
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>Just a few more steps and you<span class=err>&#39;</span>re ready to go:
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>1. Download a theme into the same-named folder.
+</span></span><span class=line><span class=cl>   Choose a theme from https://themes.gohugo.io/ or
+</span></span><span class=line><span class=cl>   create your own with the <span class=s2>&#34;hugo new theme &lt;THEMENAME&gt;&#34;</span> command.
+</span></span><span class=line><span class=cl>2. Perhaps you want to add some content. You can add single files
+</span></span><span class=line><span class=cl>   with <span class=s2>&#34;hugo new &lt;SECTIONNAME&gt;/&lt;FILENAME&gt;.&lt;FORMAT&gt;&#34;</span>.
+</span></span><span class=line><span class=cl>3. Start the built-in live server via <span class=s2>&#34;hugo server&#34;</span>.
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>Visit https://gohugo.io/ <span class=k>for</span> quickstart guide and full documentation.
+</span></span></code></pre></div><p><code>Congratulations!</code>메세지가 나오고 정상적으로 blog 폴더가 생성된 걸 확인할 수 있다.</p><br><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>$ <span class=nb>pwd</span>
+</span></span><span class=line><span class=cl>/Users/ive/github_repos
+</span></span></code></pre></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>$ ls
+</span></span><span class=line><span class=cl>PycharmProjects            nodejs-with-docker-toyproj
+</span></span><span class=line><span class=cl>blog                       ps
+</span></span><span class=line><span class=cl>gs-gradle                  seyslee
+</span></span><span class=line><span class=cl>jenkins-pipeline-toyproj
+</span></span></code></pre></div><p>현재 경로에 <code>blog</code> 디렉토리가 새로 생성되었다!</p><br><h3 id=4-테마-다운로드 class="relative group">4. 테마 다운로드 <span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#4-%ed%85%8c%eb%a7%88-%eb%8b%a4%ec%9a%b4%eb%a1%9c%eb%93%9c aria-label=Anchor>#</a></span></h3><p>현재 블로그 테마는 <a href=https://themes.gohugo.io/themes/hugo-theme-codex/>hugo-theme-codex</a>를 사용 중이다.</p><p>블로그 프로젝트 폴더로 이동한 후 <code>git init</code> 명령어를 실행해 블로그 폴더에 git 환경을 구성한다.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>$ <span class=nb>pwd</span>
+</span></span><span class=line><span class=cl>/Users/ive/github_repos/blog
+</span></span><span class=line><span class=cl>$ git init
+</span></span></code></pre></div><br><p><strong>서브모듈(Submodule)의 개념</strong></p><p>Git의 서브모듈(Submodule)이란 하나의 저장소(Repository) 안에 있는 또 다른 별개의 저장소이다. 보통 다른 원격 저장소를 가져와(Pull) 서브모듈로 사용하게 된다.</p><br><p><strong>테마 깃허브 저장소를 서브모듈로 가져오기</strong></p><p>아래 명령어는 hugo-theme-codex 테마 깃허브 저장소를 내 저장소 내 서브모듈로 가져오는 명령어이다.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>$ git submodule add https://github.com/jakewies/hugo-theme-codex.git themes/hugo-theme-codex
+</span></span></code></pre></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>.
+</span></span><span class=line><span class=cl>├── archetypes
+</span></span><span class=line><span class=cl>├── content
+</span></span><span class=line><span class=cl>├── data
+</span></span><span class=line><span class=cl>├── layouts
+</span></span><span class=line><span class=cl>├── resources
+</span></span><span class=line><span class=cl>├── static
+</span></span><span class=line><span class=cl>└── themes
+</span></span><span class=line><span class=cl>    └── hugo-theme-codex &lt;<span class=o>===[</span>submodule<span class=o>]===</span> https://github.com/jakewies/hugo-theme-codex
+</span></span></code></pre></div><br><p><code>git submodule</code> 명령어를 실행해 submodule 목록이 생성된 걸 확인한다.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>$ git submodule
+</span></span><span class=line><span class=cl> 9e911e331c90fcd56ae5d01ae5ecb2fa06ba55da themes/hugo-theme-codex <span class=o>(</span>v1.6.0<span class=o>)</span>
+</span></span></code></pre></div><br><p><strong>설정파일(<code>config.toml</code>) 생성</strong></p><p>그 다음 <code>themes/hugo-theme-codex/exampleSite/config.toml</code> 파일을 복사해 초기에 생성된 <code>config.toml</code> 에 덮어쓴다.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>.
+</span></span><span class=line><span class=cl>├── archetypes
+</span></span><span class=line><span class=cl>├── config.toml &lt;<span class=o>==</span> 초기에 생성된 config.toml
+</span></span><span class=line><span class=cl><span class=o>[</span>...<span class=o>]</span>
+</span></span><span class=line><span class=cl>└── themes
+</span></span><span class=line><span class=cl>    └── hugo-theme-codex
+</span></span><span class=line><span class=cl>        └── exampleSite
+</span></span><span class=line><span class=cl>            └── config.toml &lt;<span class=o>==</span> 복사할 config.toml
+</span></span></code></pre></div><br><p>교체한 <code>config.toml</code> 설정파일을 열어보면 맨 윗줄에 <code>themesDir</code> 값이 있다.</p><p>이 라인과 주석을 삭제하고 저장한다.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-toml data-lang=toml><span class=line><span class=cl><span class=c># REMOVE THIS</span>
+</span></span><span class=line><span class=cl><span class=nx>themesDir</span> <span class=p>=</span> <span class=s2>&#34;../../&#34;</span> 
+</span></span></code></pre></div><p>추가적인 블로그 설정 변경은 <a href=https://themes.gohugo.io/themes/hugo-theme-codex/>hugo-theme-codex 공식문서</a>를 참고한다.</p><br><p><strong>index 페이지 설정</strong></p><p><code>content/_index.md</code> 파일을 생성하여 사이트의 초기화면(index) 페이지를 구성할 수 있다.</p><p><code>.md</code> 확장자는 markdown 파일을 의미한다.</p><br><p><code>_index.md</code>파일 위치는 다음과 같다.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>.
+</span></span><span class=line><span class=cl>├── archetypes
+</span></span><span class=line><span class=cl>├── config.toml
+</span></span><span class=line><span class=cl><span class=o>[</span>...<span class=o>]</span>
+</span></span><span class=line><span class=cl>└── content
+</span></span><span class=line><span class=cl>    └── _index.md &lt;<span class=o>==</span> 메인 페이지 설정파일
+</span></span></code></pre></div><br><p><code>_index.md</code> 파일 내용은 다음과 같이 작성한다.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-markdown data-lang=markdown><span class=line><span class=cl>---
+</span></span><span class=line><span class=cl>heading: &#34;Hi, I&#39;m Codex&#34;
+</span></span><span class=line><span class=cl>subheading: &#34;A minimal blog theme for hugo.&#34;
+</span></span><span class=line><span class=cl>handle: &#34;hugo-theme-codex&#34;
+</span></span><span class=line><span class=cl>---
+</span></span></code></pre></div><br><p>이후 본인의 환경에 맞게 수정한다.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-markdown data-lang=markdown><span class=line><span class=cl>---
+</span></span><span class=line><span class=cl>heading: &#34;Younsung Lee&#34;
+</span></span><span class=line><span class=cl>subheading: &#34;시스템 엔지니어&#34;
+</span></span><span class=line><span class=cl>handle: &#34;seyslee&#34;
+</span></span><span class=line><span class=cl>---
+</span></span></code></pre></div><br><p><strong>테스트</strong></p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>$ hugo server -D
+</span></span></code></pre></div><p><code>hugo server</code> : 생성한 페이지를 빌드하기 전, localhost 에서 미리 확인해보기 위한 웹서버 실행 명령어.</p><ul><li><code>-D</code> : draft 속성이 true 인 글도 보이도록 하는 옵션</li></ul><br><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>Start building sites … 
+</span></span><span class=line><span class=cl>hugo v0.86.0+extended darwin/arm64 <span class=nv>BuildDate</span><span class=o>=</span>unknown
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>                   <span class=p>|</span> EN  
+</span></span><span class=line><span class=cl>-------------------+-----
+</span></span><span class=line><span class=cl>  Pages            <span class=p>|</span> <span class=m>23</span>  
+</span></span><span class=line><span class=cl>  Paginator pages  <span class=p>|</span>  <span class=m>0</span>  
+</span></span><span class=line><span class=cl>  Non-page files   <span class=p>|</span>  <span class=m>0</span>  
+</span></span><span class=line><span class=cl>  Static files     <span class=p>|</span> <span class=m>12</span>  
+</span></span><span class=line><span class=cl>  Processed images <span class=p>|</span>  <span class=m>0</span>  
+</span></span><span class=line><span class=cl>  Aliases          <span class=p>|</span>  <span class=m>0</span>  
+</span></span><span class=line><span class=cl>  Sitemaps         <span class=p>|</span>  <span class=m>1</span>  
+</span></span><span class=line><span class=cl>  Cleaned          <span class=p>|</span>  <span class=m>0</span>  
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>Built in <span class=m>19</span> ms
+</span></span><span class=line><span class=cl>Watching <span class=k>for</span> changes in /Users/ive/github_repos/blog/<span class=o>{</span>archetypes,content,data,layouts,static,themes<span class=o>}</span>
+</span></span><span class=line><span class=cl>Watching <span class=k>for</span> config changes in /Users/ive/github_repos/blog/config.toml
+</span></span><span class=line><span class=cl>Environment: <span class=s2>&#34;development&#34;</span>
+</span></span><span class=line><span class=cl>Serving pages from memory
+</span></span><span class=line><span class=cl>Running in Fast Render Mode. For full rebuilds on change: hugo server --disableFastRender
+</span></span><span class=line><span class=cl>Web Server is available at http://localhost:1313/ <span class=o>(</span><span class=nb>bind</span> address 127.0.0.1<span class=o>)</span>
+</span></span><span class=line><span class=cl>Press Ctrl+C to stop
+</span></span></code></pre></div><p>마지막에 <code>Web Server is available at http://localhost:1313/</code> 메세지가 출력되면 정상적으로 완료된 것이다.</p><p>인터넷 브라우저를 열어 http://localhost:1313/ 으로 접속한다. Index 페이지가 잘 수정되었는지 확인한다.</p><p><figure><img class="my-0 rounded-md" src=./1.jpg alt></figure></p><p>페이지 확인을 마친 후에 Ctrl + C 키를 눌러 개발환경의 웹 서버를 종료할 수 있다.</p><br><h3 id=5-리모트-추가 class="relative group">5. 리모트 추가 <span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#5-%eb%a6%ac%eb%aa%a8%ed%8a%b8-%ec%b6%94%ea%b0%80 aria-label=Anchor>#</a></span></h3><p><strong>명령어 형식</strong></p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>$ git remote add origin &lt;블로그 작성용 레포지터리의 URL&gt;
+</span></span></code></pre></div><ul><li><p><strong><code>git remote</code></strong> : 현재 프로젝트에 등록된 리모트 저장소를 확인하는 명령어. 이 명령어는 리모트 저장소의 단축 이름을 보여준다. 레포지터리를 복제(Clone)하면 <code>origin</code>이라는 리모트 저장소가 자동으로 등록되기 때문에 <code>origin</code>이라는 이름을 볼 수 있다.</p></li><li><p><strong><code>origin</code></strong> : 축약형 이름을 말한다.</p></li><li><p><strong>블로그 작성용 레포지터리의 URL</strong> : <code>https://github.com/&lt;Github 유저네임>/&lt;블로그용 레포지터리 이름></code></p></li></ul><br><p><strong>내가 실행한 명령어</strong></p><p>필자의 경우 Github 유저네임는 iiivvveee, 블로그 작성용 레포지터리의 이름은 blog이다.</p><p>그 결과 아래 명령어를 실행해 리모트를 추가했다.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>$ git remote add origin https://github.com/iiivvveee/blog
+</span></span><span class=line><span class=cl>                                           ^-------^ ^--^
+</span></span><span class=line><span class=cl>                                               <span class=p>|</span>      <span class=p>|</span>
+</span></span><span class=line><span class=cl>                                               <span class=p>|</span>      +--&gt; 블로그용 레포지터리 이름
+</span></span><span class=line><span class=cl>                                               +---------&gt; Github 유저네임
+</span></span></code></pre></div><br><p>리모트 저장소가 정상적으로 추가되었는지 <code>git remote -v</code> 명령어로 확인한다.</p><p><code>-v</code> 옵션을 주면 등록된 리모트 저장소의 이름과 URL을 같이 볼 수 있다.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>$ git remote -v
+</span></span><span class=line><span class=cl>origin    https://github.com/iiivvveee/blog <span class=o>(</span>fetch<span class=o>)</span>
+</span></span><span class=line><span class=cl>origin    https://github.com/iiivvveee/blog <span class=o>(</span>push<span class=o>)</span>
+</span></span></code></pre></div><br><h3 id=6-서브모듈-추가 class="relative group">6. 서브모듈 추가 <span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#6-%ec%84%9c%eb%b8%8c%eb%aa%a8%eb%93%88-%ec%b6%94%ea%b0%80 aria-label=Anchor>#</a></span></h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>$ git submodule add -b master https://github.com/iiivvveee/iiivvveee.github.io.git public
+</span></span></code></pre></div><p>서브모듈을 추가후 정상적으로 적용되었는지 <code>git submodule</code> 명령어로 확인한다.</p><br><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>$ git submodule   
+</span></span><span class=line><span class=cl>-a3a5abf8f39e7b6dcaf49431c90f4e963591e35d public
+</span></span><span class=line><span class=cl> 9e911e331c90fcd56ae5d01ae5ecb2fa06ba55da themes/hugo-theme-codex <span class=o>(</span>v1.6.0<span class=o>)</span>
+</span></span></code></pre></div><p>public 폴더가 submodule 로 추가된 걸 확인할 수 있다.</p><br><h3 id=7-테스트 class="relative group">7. 테스트 <span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#7-%ed%85%8c%ec%8a%a4%ed%8a%b8 aria-label=Anchor>#</a></span></h3><p><code>hugo server</code> : 생성한 페이지를 빌드하기 전, localhost 에서 미리 확인해보기 위한 웹서버 실행 명령어.</p><ul><li><code>-D</code> : draft 속성이 true 인 글도 보이도록 하는 옵션</li></ul><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>$ hugo server -D
+</span></span><span class=line><span class=cl>Start building sites … 
+</span></span><span class=line><span class=cl>hugo v0.86.0+extended darwin/arm64 <span class=nv>BuildDate</span><span class=o>=</span>unknown
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>                   <span class=p>|</span> EN  
+</span></span><span class=line><span class=cl>-------------------+-----
+</span></span><span class=line><span class=cl>  Pages            <span class=p>|</span> <span class=m>10</span>  
+</span></span><span class=line><span class=cl>  Paginator pages  <span class=p>|</span>  <span class=m>0</span>  
+</span></span><span class=line><span class=cl>  Non-page files   <span class=p>|</span>  <span class=m>0</span>  
+</span></span><span class=line><span class=cl>  Static files     <span class=p>|</span> <span class=m>12</span>  
+</span></span><span class=line><span class=cl>  Processed images <span class=p>|</span>  <span class=m>0</span>  
+</span></span><span class=line><span class=cl>  Aliases          <span class=p>|</span>  <span class=m>0</span>  
+</span></span><span class=line><span class=cl>  Sitemaps         <span class=p>|</span>  <span class=m>1</span>  
+</span></span><span class=line><span class=cl>  Cleaned          <span class=p>|</span>  <span class=m>0</span>  
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>Built in <span class=m>27</span> ms
+</span></span><span class=line><span class=cl>Watching <span class=k>for</span> changes in /Users/ive/github_repos/blog/<span class=o>{</span>archetypes,content,data,layouts,static,themes<span class=o>}</span>
+</span></span><span class=line><span class=cl>Watching <span class=k>for</span> config changes in /Users/ive/github_repos/blog/config.toml
+</span></span><span class=line><span class=cl>Environment: <span class=s2>&#34;development&#34;</span>
+</span></span><span class=line><span class=cl>Serving pages from memory
+</span></span><span class=line><span class=cl>Running in Fast Render Mode. For full rebuilds on change: hugo server --disableFastRender
+</span></span><span class=line><span class=cl>Web Server is available at http://localhost:1313/ <span class=o>(</span><span class=nb>bind</span> address 127.0.0.1<span class=o>)</span>
+</span></span></code></pre></div><br><p>Hugo 의 기본포트는 1313 이다. 이 때, Hugo의 강점인 빠른 속도가 체감된다. Build 하는 시간이 겨우 27ms 밖에 안걸린다.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>Change detected, rebuilding site.
+</span></span><span class=line><span class=cl>2021-07-31 01:36:42.676 +0900
+</span></span><span class=line><span class=cl>Source changed <span class=s2>&#34;/Users/ive/github_repos/blog/content/blog/installing-hugo-github-blog.md&#34;</span>: CREATE
+</span></span><span class=line><span class=cl>Total in <span class=m>7</span> ms
+</span></span></code></pre></div><br><p>개발환경에서 테스트하는 동안 Hugo는 실시간으로 변경사항을 체크해 반영하는 기능도 있다.</p><p>hugo server는 기본적으로 사용자가 변경한 사항이 있는지 파일을 항상 감시하고 사이트를 자동으로 재구축하는 기능을 갖고 있다.</p><p>즉, 블로그의 게시글을 한 글자라도 수정하면 그 즉시 hugo server가 수정사항을 반영해서 변경된 웹사이트로 다시 보여준다.</p><p>글을 작성하는 사람의 입장에서 내가 입력한 변경사항을 바로 확인할 수 있어서 매우 편리하다.</p><p>브라우저를 키고 주소창에 http://localhost:1313/ 을 입력해 접속한다. 내가 만든 블로그 화면이 잘 보일 것이다.</p><br><h3 id=8-게시글-작성 class="relative group">8. 게시글 작성 <span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#8-%ea%b2%8c%ec%8b%9c%ea%b8%80-%ec%9e%91%ec%84%b1 aria-label=Anchor>#</a></span></h3><p>새 게시글을 생성할 때는 아래 명령어를 사용한다.</p><br><p><strong>명령어 형식</strong></p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>$ hugo new blog/&lt;게시글 이름&gt;.md
+</span></span></code></pre></div><br><p><strong>실제 실행한 명령어</strong></p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>$ hugo new blog/new-post.md
+</span></span><span class=line><span class=cl>/Users/ive/github_repos/blog/content/blog/new-post.md created
+</span></span></code></pre></div><br><p><strong>게시글이 생성되는 경로</strong></p><p>hugo-theme-codex 테마 기준으로 게시글은 <code>./content/blog/</code> 디렉토리 아래에 생성되어야 정상적으로 표출된다.</p><p>테마마다 게시글이 위치해야하는 경로는 다를 수 있다. 테마 페이지에서 안내해주는 가이드 문서를 정독하고 게시글을 해당 경로에 맞게 생성한다.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>.
+</span></span><span class=line><span class=cl>├── archetypes
+</span></span><span class=line><span class=cl>├── content
+</span></span><span class=line><span class=cl>│   └── blog
+</span></span><span class=line><span class=cl>│       └── new-post.md &lt;<span class=o>==</span> 새로 생성된 게시글
+</span></span><span class=line><span class=cl>├── data
+</span></span><span class=line><span class=cl>├── layouts
+</span></span><span class=line><span class=cl>├── public
+</span></span><span class=line><span class=cl>├── resources
+</span></span><span class=line><span class=cl>├── static
+</span></span><span class=line><span class=cl>├── deploy.sh
+</span></span><span class=line><span class=cl>└── themes
+</span></span><span class=line><span class=cl>    └── hugo-theme-codex
+</span></span></code></pre></div><br><p><strong>글 작성시 주의사항</strong></p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>---
+</span></span><span class=line><span class=cl>title: <span class=s2>&#34;Hugo x github 블로그 설치 방법&#34;</span>
+</span></span><span class=line><span class=cl>date: 2021-07-31T00:29:09+09:00
+</span></span><span class=line><span class=cl>lastmod: 2021-07-31T00:33:04+09:00
+</span></span><span class=line><span class=cl>slug: <span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl>description: <span class=s2>&#34;Hugo 와 Github 를 사용해 블로그를 구축하는 방법&#34;</span>
+</span></span><span class=line><span class=cl>keywords: <span class=o>[]</span>
+</span></span><span class=line><span class=cl>draft: <span class=nb>false</span>
+</span></span><span class=line><span class=cl>tags: <span class=o>[</span><span class=s2>&#34;Linux&#34;</span>, <span class=s2>&#34;OS&#34;</span><span class=o>]</span>
+</span></span><span class=line><span class=cl>math: <span class=nb>false</span>
+</span></span><span class=line><span class=cl>toc: <span class=nb>true</span>
+</span></span><span class=line><span class=cl>---
+</span></span></code></pre></div><br><p><strong>Front Matter 설명</strong></p><ul><li><strong>title</strong> : 게시글의 제목</li><li><strong>date</strong> : 게시글의 최초 작성시간</li><li><strong>lastmod</strong> : 게시글의 마지막 수정시간</li><li><strong>description</strong> : 게시글의 설명글. 검색엔진 최적화(SEO, Search Engine Optimization)를 위해서 게시글 제목(title)에 담긴 내용을 풀어 간단하게 적어놓는다.</li><li><strong>draft</strong> : <code>draft: true</code> 일 경우, 실제 배포환경에서 해당 게시글은 보이지 않게 된다. 작성한 글을 개발 환경이 아닌 실제 환경에도 게시하고 싶다면 반드시 <code>draft: false</code> 값을 설정해주자.</li><li><strong>tags</strong> : 게시글의 태그</li><li><strong>toc</strong> : table of content의 약자. Front Matter의 값이 <code>toc: true</code> 일 경우 마크다운 기반의 게시글 목차를 정리해서 보여준다.<br><figure><img class="my-0 rounded-md" src=./2.jpg alt></figure></li></ul><br><h3 id=9-배포-스크립트-작성 class="relative group">9. 배포 스크립트 작성 <span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#9-%eb%b0%b0%ed%8f%ac-%ec%8a%a4%ed%81%ac%eb%a6%bd%ed%8a%b8-%ec%9e%91%ec%84%b1 aria-label=Anchor>#</a></span></h3><p>앞으로 Hugo 블로그를 관리하려면 2개의 레포지터리에 모두 Commit 해야한다. 구분된 레포지터리 경로마다 들어가서 commit과 push를 총 2번 해야하는 불편함이 있다.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Repository name : iiivvveee.github.io</span>
+</span></span><span class=line><span class=cl>$ <span class=nb>cd</span> public
+</span></span><span class=line><span class=cl>$ git add .
+</span></span><span class=line><span class=cl>$ git commit -m <span class=s2>&#34;First commit&#34;</span>
+</span></span><span class=line><span class=cl>$ git push origin master
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Repository name : blog</span>
+</span></span><span class=line><span class=cl>$ <span class=nb>cd</span> ..
+</span></span><span class=line><span class=cl>$ git add .
+</span></span><span class=line><span class=cl>$ git commit -m
+</span></span><span class=line><span class=cl>$ git push origin master
+</span></span></code></pre></div><br><p>2개의 레포지터리 관리는 복잡하고 귀찮으니 컨텐츠 배포를 자동화하는 스크립트를 작성한다.</p><p>블로그 루트 디렉토리 안에 <code>deploy.sh</code> 스크립트 파일을 만든다.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>.
+</span></span><span class=line><span class=cl>├── archetypes
+</span></span><span class=line><span class=cl>├── content
+</span></span><span class=line><span class=cl>├── data
+</span></span><span class=line><span class=cl>├── layouts
+</span></span><span class=line><span class=cl>├── public
+</span></span><span class=line><span class=cl>├── resources
+</span></span><span class=line><span class=cl>├── static
+</span></span><span class=line><span class=cl>├── deploy.sh &lt;<span class=o>==</span> 우리가 작성할 스크립트 파일
+</span></span><span class=line><span class=cl>└── themes
+</span></span><span class=line><span class=cl>    └── hugo-theme-codex
+</span></span></code></pre></div><br><p><code>deploy.sh</code> 의 내용은 아래와 같이 작성한다. 7번 라인에 <code>hugo -t &lt;자신이 사용하는 테마 이름></code> 은 자신의 환경에 맞게 변경해준다.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/bin/bash
+</span></span></span><span class=line><span class=cl><span class=cp></span>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> -e <span class=s2>&#34;\033[0;32mDeploying updates to GitHub...\033[0m&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Build the project.</span>
+</span></span><span class=line><span class=cl><span class=c1># hugo -t &lt;여러분의 테마&gt;</span>
+</span></span><span class=line><span class=cl>hugo -t hugo-theme-codex
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Go To Public folder, sub module commit</span>
+</span></span><span class=line><span class=cl><span class=nb>cd</span> public
+</span></span><span class=line><span class=cl><span class=c1># Add changes to git.</span>
+</span></span><span class=line><span class=cl>git add .
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Commit changes.</span>
+</span></span><span class=line><span class=cl><span class=nv>msg</span><span class=o>=</span><span class=s2>&#34;rebuilding site `date`&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=o>[</span> <span class=nv>$#</span> -eq <span class=m>1</span> <span class=o>]</span>
+</span></span><span class=line><span class=cl>  <span class=k>then</span> <span class=nv>msg</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$1</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>fi</span>
+</span></span><span class=line><span class=cl>git commit -m <span class=s2>&#34;</span><span class=nv>$msg</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Push source and build repos.</span>
+</span></span><span class=line><span class=cl>git push origin master
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Come Back up to the Project Root</span>
+</span></span><span class=line><span class=cl><span class=nb>cd</span> ..
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># blog 저장소 Commit &amp; Push</span>
+</span></span><span class=line><span class=cl>git add .
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nv>msg</span><span class=o>=</span><span class=s2>&#34;rebuilding site `date`&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=o>[</span> <span class=nv>$#</span> -eq <span class=m>1</span> <span class=o>]</span>
+</span></span><span class=line><span class=cl>  <span class=k>then</span> <span class=nv>msg</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$1</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>fi</span>
+</span></span><span class=line><span class=cl>git commit -m <span class=s2>&#34;</span><span class=nv>$msg</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>git push origin master
+</span></span></code></pre></div><br><h3 id=10-배포-실행 class="relative group">10. 배포 실행 <span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#10-%eb%b0%b0%ed%8f%ac-%ec%8b%a4%ed%96%89 aria-label=Anchor>#</a></span></h3><p>게시글을 작성 후 블로그에 게시하고 싶은 상황에서는 배포용 쉘스크립트인 <code>deploy.sh</code> 만 실행하면 된다.</p><br><p>배포용 쉘스크립트 실행을 위해 블로그 프로젝트 폴더의 루트 디렉토리로 이동한다.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>$ <span class=nb>pwd</span>
+</span></span><span class=line><span class=cl>/Users/ive/github_repos/blog
+</span></span></code></pre></div><br><p>배포용 쉘스크립트(<code>deploy.sh</code>)이 현재 디렉토리에 존재하는 지 확인한다.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>$ ls -lh
+</span></span><span class=line><span class=cl>total <span class=m>16</span>
+</span></span><span class=line><span class=cl>drwxr-xr-x   <span class=m>3</span> ive  staff    96B  <span class=m>7</span> <span class=m>30</span> 20:00 archetypes
+</span></span><span class=line><span class=cl>-rw-r--r--   <span class=m>1</span> ive  staff   2.5K  <span class=m>1</span>  <span class=m>2</span> 22:41 config.toml
+</span></span><span class=line><span class=cl>drwxr-xr-x   <span class=m>6</span> ive  staff   192B <span class=m>12</span>  <span class=m>7</span> 23:45 content
+</span></span><span class=line><span class=cl>-rwxr-xr-x@  <span class=m>1</span> ive  staff   585B  <span class=m>1</span>  <span class=m>2</span> 22:05 deploy.sh
+</span></span><span class=line><span class=cl>drwxr-xr-x   <span class=m>5</span> ive  staff   160B <span class=m>12</span>  <span class=m>8</span> 00:39 layouts
+</span></span><span class=line><span class=cl>drwxr-xr-x  <span class=m>16</span> ive  staff   512B  <span class=m>1</span>  <span class=m>6</span> 21:32 public
+</span></span><span class=line><span class=cl>drwxr-xr-x   <span class=m>4</span> ive  staff   128B  <span class=m>8</span>  <span class=m>1</span> 14:43 resources
+</span></span><span class=line><span class=cl>drwxr-xr-x   <span class=m>5</span> ive  staff   160B  <span class=m>1</span>  <span class=m>2</span> 23:22 static
+</span></span><span class=line><span class=cl>drwxr-xr-x   <span class=m>4</span> ive  staff   128B  <span class=m>7</span> <span class=m>30</span> 20:03 themes
+</span></span></code></pre></div><p><code>deploy.sh</code> 파일이 현재 경로에 존재한다.</p><br><p>그 다음 <code>bash</code> 명령어로 배포 스크립트 파일(<code>deploy.sh</code>)을 실행한다.<br>macOS 환경은 터미널에서 <code>bash</code> 명령어를 기본적으로 지원한다.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>$ bash deploy.sh
+</span></span><span class=line><span class=cl>bash deploy.sh
+</span></span><span class=line><span class=cl>Deploying updates to GitHub...
+</span></span><span class=line><span class=cl>Start building sites … 
+</span></span><span class=line><span class=cl>hugo v0.86.0+extended darwin/arm64 <span class=nv>BuildDate</span><span class=o>=</span>unknown
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>                   <span class=p>|</span> EN  
+</span></span><span class=line><span class=cl>-------------------+-----
+</span></span><span class=line><span class=cl>  Pages            <span class=p>|</span> <span class=m>14</span>  
+</span></span><span class=line><span class=cl>  Paginator pages  <span class=p>|</span>  <span class=m>0</span>  
+</span></span><span class=line><span class=cl>  Non-page files   <span class=p>|</span>  <span class=m>0</span>  
+</span></span><span class=line><span class=cl>  Static files     <span class=p>|</span> <span class=m>12</span>  
+</span></span><span class=line><span class=cl>  Processed images <span class=p>|</span>  <span class=m>0</span>  
+</span></span><span class=line><span class=cl>  Aliases          <span class=p>|</span>  <span class=m>0</span>  
+</span></span><span class=line><span class=cl>  Sitemaps         <span class=p>|</span>  <span class=m>1</span>  
+</span></span><span class=line><span class=cl>  Cleaned          <span class=p>|</span>  <span class=m>0</span>  
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>Total in <span class=m>33</span> ms
+</span></span><span class=line><span class=cl><span class=o>[</span>...<span class=o>]</span>
+</span></span><span class=line><span class=cl>remote: Resolving deltas: 100% <span class=o>(</span>5/5<span class=o>)</span>, completed with <span class=m>5</span> <span class=nb>local</span> objects.
+</span></span><span class=line><span class=cl>To https://github.com/iiivvveee/blog
+</span></span><span class=line><span class=cl>   fa10865..e13e834  master -&gt; master
+</span></span></code></pre></div><p>정상적으로 게시글이 배포 완료됐다.</p><br><h1 id=참고자료 class="relative group">참고자료 <span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%ec%b0%b8%ea%b3%a0%ec%9e%90%eb%a3%8c aria-label=Anchor>#</a></span></h1><p><a href=https://gohugo.io/getting-started/quick-start/>HUGO Quick Start 공식문서</a></p><p><a href=https://ialy1595.github.io/post/blog-construct-1/>블로그 구축기 1 (Hugo + github.io)</a></p><p><a href=https://gurumee92.github.io/2020/08/%EB%B8%94%EB%A1%9C%EA%B7%B8-%EA%B5%AC%EC%B6%95%EA%B8%B0-1-hugo-github%EC%9C%BC%EB%A1%9C-%EA%B0%9C%EC%9D%B8-%EB%B8%94%EB%A1%9C%EA%B7%B8-%EB%A7%8C%EB%93%A4%EA%B8%B0/>블로그 구축기 (1) Hugo + Github으로 개인 블로그 만들기</a></p><br><h1 id=더-나아가서 class="relative group">더 나아가서 <span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%eb%8d%94-%eb%82%98%ec%95%84%ea%b0%80%ec%84%9c aria-label=Anchor>#</a></span></h1><p><strong>댓글기능 추가하기</strong></p><p>깃허브 블로그는 댓글 기능을 기본적으로 지원하지 않는다.<br>Utterances 플러그인을 이용해서 블로그 댓글 기능을 추가하고 싶다면 <a href=https://seyslee.github.io/blog/installing-utterances-in-hugo/>이 글</a>을 참고하면 된다.</p></div></section><footer class="pt-8 max-w-prose print:hidden"><script src=https://utteranc.es/client.js repo=seyslee/seyslee.github.io issue-term=pathname label=blog-comment theme=github-dark crossorigin=anonymous async></script></footer></article><div class="absolute top-[110vh] ltr:right-0 rtl:left-0 w-12 pointer-events-none bottom-[-5.5rem]"><a href=#the-top class="w-12 h-12 sticky pointer-events-auto top-[calc(100vh-5rem)] bg-neutral/50 dark:bg-neutral-800/50 backdrop-blur rounded-full text-xl flex items-center justify-center text-neutral-700 dark:text-neutral hover:text-primary-600 dark:hover:text-primary-400" aria-label="Scroll to top" title="Scroll to top">&uarr;</a></div></main><footer class="py-10 print:hidden"><div class="flex justify-between"><div><p class="text-sm text-neutral-500 dark:text-neutral-400">&copy;
+2022
+Younsung Lee</p><p class="text-xs text-neutral-500 dark:text-neutral-400">Powered by <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500" href=https://gohugo.io/ target=_blank rel="noopener noreferrer">Hugo</a> & <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500" href=https://git.io/hugo-congo target=_blank rel="noopener noreferrer">Congo</a></p></div></div></footer></body></html>
