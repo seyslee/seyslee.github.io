@@ -1,4 +1,4 @@
-module github.com/seyslee/blog
+module github.com/seyslee/seyslee.github.io
 
 go 1.18
 
