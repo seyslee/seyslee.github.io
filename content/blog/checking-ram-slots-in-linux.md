@@ -12,7 +12,9 @@ toc: true
 
 # 개요
 
-리눅스 서버에서 메인보드의 메모리 슬롯 정보를 확인할 수 있다.
+리눅스 서버에서 명령어<sup>Command</sup>를 이용해 메인보드의 메모리 슬롯 정보를 확인할 수 있다.
+
+<br>
 
  **확인 가능한 핵심 정보**
 
@@ -21,11 +23,15 @@ toc: true
 - 증설 가능한 최대 메모리 용량
 - 메모리 제원정보 (Part Number, 규격, 사이즈 등)
 
+<br>
+
 # 환경
 
 - **OS** : CentOS Linux release 7.6.1810 (Core)
 - **Shell** : bash
 - **Package** : dmidecode 3.1
+
+<br>
 
 # 작업절차
 
@@ -38,6 +44,8 @@ dmidecode-3.1-2.el7.x86_64
 
 dmidecode 패키지가 설치되어 있는지 확인한다.
 
+<br>
+
 ### 2. 서버 메모리 확인
 
 ```bash
@@ -47,7 +55,10 @@ Mem:          31670        2020         237         310       29412       28841
 Swap:         32767           2       32765
 ```
 
+`-m`은 메모리 용량을 MB<sup>Megabytes</sup> 단위로 출력한다.  
 서버의 전체 메모리 용량은 32GB이다.
+
+<br>
 
 ### 3. 메인보드 메모리 슬롯 확인 (간단히)
 
@@ -107,9 +118,11 @@ Memory Device
 
 `No Module Installed` 는 빈 메모리 슬롯을 의미한다.
 
+<br>
+
 ### Tip. dmidecode -t 뒤의 숫자 의미
 
--t 옵션 뒤의 숫자는 Type Number 를 의미한다.  
+`-t` 옵션 뒤의 숫자는 Type Number 를 의미한다.  
 
 Type Number 값만 다르게 주면 메모리 뿐만 아니라 다양한 정보를 얻을 수 있다.  
 
@@ -171,8 +184,10 @@ DMI TYPES
 
 **메모리 슬롯 정보 확인시 자주 사용하는 Type Number**
 
-- 16 : Physical Memory Array
-- 17 : Memory Device
+- **16** : Physical Memory Array
+- **17** : Memory Device
+
+<br>
 
 ### 4. 메인보드 메모리 슬롯 확인 (자세히)
 
@@ -265,6 +280,8 @@ Memory Device
 [...]
 ```
 
+<br>
+
 ### 5. 메인보드가 최대 지원하는 메모리 용량 확인
 
 ```bash
@@ -301,3 +318,11 @@ Physical Memory Array
 각 Memory Array 당 전체 메모리 슬롯(`Number of Devices`)은 12개이다.  
 
 Memory Array가 총 2개이므로, 서버 전체에 꽂을 수 있는 메모리 용량은 6TB, 메모리 슬롯은 총 24개이다.
+
+<br>
+
+# 결론
+
+서버 관리자에게 가장 중요한 업무는 서버의 네트워크 구성과 서비스 흐름 정보, 제원<sup>Spec</sup>을 제대로 파악하는 일이다.  
+
+`dmidecode`는 다양한 하드웨어 정보를 수집할 수 있는 유용한 명령어이다. 실무에서 잘 활용만 한다면 보다 더 많은 하드웨어 정보를 수집할 수 있다는 사실을 명심하도록 하자.
