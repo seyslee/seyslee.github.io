@@ -1,7 +1,7 @@
 ---
 title: "Check the ECR permission"
 date: 2022-04-26T00:14:20+09:00
-lastmod: 2022-04-26T00:16:20+09:00
+lastmod: 2022-04-26T23:53:20+09:00
 slug: ""
 description: "Lambda function을 ECR 레포지터리에 연동하는 방법과 권한 문제가 발생했을 때 해결하는 법을 소개합니다."
 keywords: []
@@ -26,6 +26,8 @@ Lambda does not have permission to access the ECR image. Check the ECR permissio
 <br>
 
 # 원인
+에러 메세지에 이미 정답이 있었다. 이래서 로그의 중요성을 절대 간과해서도 의심해서도 안된다.  
+
 ECR<sup>Elastic Container Registry</sup>에 Lambda function 접근을 허용해주는 Permission이 등록되어 있지 않았다.
 
 Lambda function이 ECR에 접근해 컨테이너 이미지를 받아올 때, 권한이 거부되어 실패하는 것이다.
@@ -79,6 +81,8 @@ AWS Management Console에 로그인 한 다음, ECR<sup>Elastic Container Regist
 
 ![](./2.gif)
 
+<br>
+
 그후 Lambda function를 연결할 ECR 레포지터리를 선택한다.
 
 ![](./3.png)
@@ -120,11 +124,17 @@ Amaozn ECR의 컨테이너 이미지와 동일한 계정에 있는 Lambda Functi
 
 ![](./4.png)
 
-끝. 이후 람다에 롤을 부여해서 다시 생성해보면, 잘 생성될 것이다.
+<br>
+
+ECR에 권한을 부여한 다음, Lambda function에 롤을 부여해서 다시 생성해보면 문제없이 생성되는 걸 확인할 수 있다.
+
+![](./5.png)
+
+이것으로 작업 완료.
 
 <br>
 
 # 참고자료
 
 **AWS 공식문서**  
-https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-images.html#gettingstarted-images-permissions
+[Deploying Lambda functions as container images](https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-images.html#gettingstarted-images-permissions)
