@@ -1,7 +1,7 @@
 ---
 title: "VMware Tools 설치"
 date: 2021-08-30T00:54:12+09:00
-lastmod: 2021-10-25T20:18:20+09:00
+lastmod: 2022-04-27T23:32:20+09:00
 slug: ""
 description: "가상머신에 VMware Tools를 설치하여 원활하게 시스템 운영하기"
 keywords: []
@@ -15,6 +15,8 @@ toc: true
 
 가상머신에 VMware Tools 를 설치할 수 있다.
 
+<br>
+
 # 배경지식
 
 ### VMware Tools
@@ -24,12 +26,16 @@ VMware Tools 데몬은 가상머신의 IP, Hostname 등의 정보를 수집해 �
 
 원활한 가상화 시스템 운영을 위해서 모든 가상머신에 VMware Tools를 설치가 필요하다.
 
+<br>
+
 # 환경
 
 * **ESXi** : ESXi 5.x
 * **vSphere Client 관리자 계정**에 로그인되어 있어야 함
 * **가상머신의 ID** : root
 * **가상머신의 Shell** : bash
+
+<br>
 
 # 작업절차
 
@@ -43,13 +49,13 @@ Password: [패스워드 입력]
 #
 ```
 
-
+<br>
 
 ### 2. VMware Tools 설치 / 업그레이드 버튼 클릭
 
 vSphere Client 접속 → '가상머신' 오른쪽 마우스 클릭 → 'VMware Tools 설치 / 업그레이드' 버튼 클릭
 
-
+<br>
 
 ### 3. 리눅스 서버에 CD-ROM mount
 
@@ -58,7 +64,7 @@ vSphere Client 접속 → '가상머신' 오른쪽 마우스 클릭 → 'VMware 
 mount: block device /dev/sr0 is write-protected, mounting read-only
 ```
 
-
+<br>
 
 ### 4. VMware Tools 설치파일 복사
 
@@ -78,7 +84,7 @@ VMwareTools-9.0.10-1481436.tar.gz  manifest.txt
 # cp VMwareTools-9.0.10-1481436.tar.gz /tmp
 ```
 
-
+<br>
 
 ### 5. VMware Tools 설치파일 압축해제
 
@@ -89,7 +95,7 @@ vmware-tools-distrib/etc/scripts/vmware/
 vmware-tools-distrib/etc/scripts/vmware/network
 ```
 
-
+<br>
 
 ### 6. VMware Tools 설치
 
@@ -100,7 +106,7 @@ VMware Tools 설치시 방법은 2가지가 있다.
 
 각자 환경에 맞게 설치한다. 특별한 경우가 아니라면, 일반적으로 기본 설정값 설치를 해도 모니터링 및 정보수집 기능에 전혀 문제없다.
 
-
+<br>
 
 **방법1. 기본 설정값(Default) 설치**
 
@@ -111,9 +117,9 @@ FILES  INSTALL  bin  doc  etc  installer  lib  vmware-install.pi
 # ./vmware-install.pi -default
 ```
 
-VMware Tools 를 기본 설정값(`-default`)으로 설치한다.
+VMware Tools를 기본 설정값(`-default`)으로 설치한다.
 
-
+<br>
 
 **방법2. 커스텀 설치**
 
@@ -139,7 +145,7 @@ Found VMware Tools CDROM mounted at /mnt. Ejecting device /dev/sr0 ...
 
 VMware Tools가 정상적으로 설치됐을 때 마지막 문구.
 
-
+<br>
 
 ### 7. VMware Tools 동작여부 확인
 
@@ -150,7 +156,7 @@ root    19777   1  0 13:17  ?      00:00:00 /usr/sbin/vmtoolsd
 
 VMware Tools 데몬(`vmtoolsd`)이 정상 실행중인 걸 확인한다.
 
-
+<br>
 
 ```bash
 # vmtoolsd -v
@@ -158,3 +164,12 @@ VMware Tools daemon, version 9.0.10.29005 (build-1481436)
 ```
 
 VMware Tools 데몬이 버전 정보를 정상 반환하는 거 확인.
+
+작업 끝!
+
+<br>
+
+# 참고자료
+[VMware Tools 설치](https://docs.vmware.com/kr/VMware-Tools/11.3.0/com.vmware.vsphere.vmwaretools.doc/GUID-D8892B15-73A5-4FCE-AB7D-56C2C90BD951.html)  
+위 링크는 VMware 공식문서로 한국어로 친절하게 작성된 가이드다.  
+위 내용도 같이 참조하면 문제 해결에 도움이 된다.
