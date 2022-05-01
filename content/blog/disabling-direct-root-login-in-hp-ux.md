@@ -31,18 +31,22 @@ HP-UX 운영체제에서 SSH root 로그인 금지 설정을 할 수 있다.
 SSH 설정파일의 기본 경로는 `/opt/ssh/etc/sshd_config` 이다.  
 
 ```bash
-> vi /opt/ssh/etc/sshd_config
+$ vi /opt/ssh/etc/sshd_config
 [...]
 PermitRootLogin yes
 ```
 
 `PermitRootLogin yes` 를  `no` 로 변경
 
+<br>
+
 ```bash
-> vi /opt/ssh/etc/sshd_config
+$ vi /opt/ssh/etc/sshd_config
 [...]
 PermitRootLogin no
 ```
+
+<br>
 
 ### 2. SSH 서비스 중지
 
@@ -51,21 +55,27 @@ PermitRootLogin no
 SSH를 중지하더라도 이미 로그인 상태인 원격 세션은 끊기지 않는다.
 
 ```bash
-> /sbin/init.d/secsh stop
+$ /sbin/init.d/secsh stop
 HP-UX Secure Shell stopped
 ```
 
+<br>
+
 ### 3. SSH 서비스 시작
 
+SSH 서비스(`secsh`)를 다시 시작한다.
+
 ```bash
-> /sbin/init.d/secsh start
+$ /sbin/init.d/secsh start
 HP-UX Secure Shell started
 ```
+
+<br>
 
 ### 4. SSH 서비스 확인
 
 ```bash
-> ps -ef | grep ssh
+$ ps -ef | grep ssh
 ```
 
 <br>
