@@ -27,7 +27,7 @@ minikube를 통해 Tekton Pipeline과 Tekton Dashboard를 설치하고 데모를
 # 전제조건
 
 - minikube가 미리 설치되어 있어야 한다.
-- 
+
 <br>
 
 # 시작하기
