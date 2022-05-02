@@ -111,7 +111,7 @@ task.tekton.dev/hello created
 
 <br>
 
-정상 완료된 Task.
+`True`, `Succeeded`는 Task가 정상적으로 완료되었다는 의미이다.
 
 ```bash
 $ kubectl get taskrun hello-task-run
@@ -121,10 +121,15 @@ hello-task-run   True        Succeeded   29s         5s
 
 <br>
 
+실행된 Task의 결과(로그)를 확인해본다.
+
 ```bash
 $ kubectl logs --selector=tekton.dev/taskRun=hello-task-run
 Hello World
 ```
+
+실행한 Task 로그에 `Hello World`가 출력됐다.  
+Task가 정상 실행된 걸 확인할 수 있다.
 
 <br>
 
@@ -178,6 +183,9 @@ spec:
         name: goodbye
 ```
 
+<br>
+
+작성한 파일을 배포한다.
 ```bash
 $ kubectl apply --filename hello-goodbye-pipeline.yaml
 ```
@@ -217,7 +225,7 @@ $ tkn pipelinerun logs hello-goodbye-run -f -n default
 $ brew install tektoncd-cli
 ```
 
-로그에서 hello task와 goodbye task가 모두 정상 실행된 결과를 확인할 수 있다.  
+실행된 파이프라인 로그에서 hello task와 goodbye task가 모두 정상 실행된 결과를 확인할 수 있다.  
 ```bash
 [hello : echo] Hello World
 
