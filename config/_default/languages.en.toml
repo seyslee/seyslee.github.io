@@ -9,6 +9,7 @@ title = "seyslee"
 # logo = "img/logo.jpg"
 description = "seyslee"
 # copyright = "Copy, _right?_ :thinking_face:"
+attribution = false
 
 dateFormat = "Jan 2, 2006"
 
