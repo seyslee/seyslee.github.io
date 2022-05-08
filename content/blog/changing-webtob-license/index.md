@@ -1,6 +1,7 @@
 ---
 title: "WebtoB 라이센스 교체"
 date: 2021-10-08T07:22:30+09:00
+lastmod: 2022-05-08T21:35:55+09:00
 slug: ""
 description: "WebtoB 라이센스를 교체하는 방법을 설명합니다."
 keywords: []
@@ -16,45 +17,62 @@ WebtoB 라이센스를 교체하는 절차이다.
 
 어느날 개발팀으로부터 WebtoB 라이센스 교체 요청이 들어온 것이 발단이다.
 
+<br>
+
 # 배경지식
 
-**웹투비(WebtoB)**
-
+**웹투비(WebtoB)**  
 한국의 티맥스소프트에서 개발한 웹서버 소프트웨어.  
-
 기존 웹서버가 가지고 있는 구조적인 문제를 혁신적으로 개선해 성능 및 안정성에 탁월한 기능을 제공하는 차세대 웹서버 제품이다.  
-
 주로 WAS 프로그램인 Jeus와 함께 사용한다.
+
+<br>
 
 # 작업절차
 
 ### 1. 라이센스 다운로드
 
-WebtoB 라이센스는 티맥스소프트에서 운영하는 기술지원 페이지인 [Technet](https://technet.tmaxsoft.com/ko/front/main/main.do)에서 다운로드 받을 수 있다.
+WebtoB 라이센스는 티맥스소프트에서 운영하는 기술지원 페이지인 [Technet](https://technet.tmaxsoft.com/ko/front/main/main.do)에서 다운로드 받을 수 있다.  
+
+![](./1.png)
+
+<br>
 
 ### 2. 기존 라이센스 상태 확인
 
 **유저변경**
 
 ```bash
-# su - tmax
+$ su - tmax
 $
 ```
 
 이번 작업은 **tmax** 계정으로 진행해야한다.
 
+<br>
+
 **WebtoB 홈 디렉토리로 이동**
 
-WebtoB 디렉토리는 서버 환경마다 다를 수 있으며, WebtoB 홈 디렉토리 환경변수(`$WEBTOBDIR`) 또한 설정되어 있지 않을 수도 있다.
+WebtoB 홈 디렉토리는 서버 환경마다 다를 수 있다.  
+WebtoB 홈 디렉토리 환경변수(`$WEBTOBDIR`) 또한 설정되어 있지 않을 수도 있다.
 
 ```bash
 $ cd $WEBTOBDIR
 $ pwd
 /home/tmax/webtob
+```
+
+WebToB 설치 경로로 이동한 후, `license` 디렉토리로 들어간다.  
+
+```bash
 $ cd license
 ```
 
-**기존 라이센스 상태 확인**
+<br>
+
+**기존 라이센스 상태 확인**  
+
+license 디렉토리 안에서 `wsadmin` 명령어를 실행해서 라이센스 상태를 확인할 수 있다.  
 
 ```bash
 $ wsadmin -i license.dat
@@ -74,6 +92,8 @@ Unlimited license
 
 라이센스 만료일(`Expiration date`)을 보니 임시로 발급받은 데모 라이센스가 만료하기 직전이다.
 
+<br>
+
 ### 3. 라이센스 파일 업로드
 
 **기존 라이센스 파일명 변경**
@@ -84,8 +104,9 @@ $ mv license.dat license.dat.old
 ```
 
 기존 임시 라이센스 파일명은 `license.dat`이다.  
+`license.dat`을 `license.dat.old` 로 파일명 변경한다.
 
-`license.dat`을 `license.dat.old` 로 파일명 변경
+<br>
 
 **신규 라이센스 파일명 변경**
 
@@ -95,6 +116,8 @@ $ mv license.dat license.dat.old
 $ mv license_standard_new.dat license.dat
 ```
 
+<br>
+
 ### 4. 라이센스 파일 권한설정
 
 기존 WebtoB 라이센스 파일(`license.dat`)을 참고하여 소유자와 그룹명을 동일하게 맞춰준다.
@@ -102,6 +125,9 @@ $ mv license_standard_new.dat license.dat
 ```bash
 $ chown tmax:web license.dat
 ```
+라이센스 파일의 소유자는 `tmax`, 그룹은 `web`으로 설정한다.
+
+<br>
 
 ```bash
 $ ls -l
@@ -112,6 +138,8 @@ $ ls -l
 ```
 
 기존 라이센스 파일(`license.dat.old`)의 소유자, 그룹과 동일하게 설정되었다.
+
+<br>
 
 ### 5. 웹서버 환경설정 컴파일
 
@@ -127,11 +155,16 @@ Successfully created the configuration file (/home/tmax/webtob/config/wsconfig) 
 The host name of the running machine is testserver.
 ```
 
-### 6. 웹서버 재기동
+<br>
 
-**WebtoB 중지**
+### 6. WebtoB 재시작
 
-`wsdown` 명령어를 실행후 y키를 눌러서 WebtoB를 내린다.
+변경된 라이센스 환경설정을 적용하기 위해서는 WebtoB 서버를 내렸다가 올려야 한다.  
+
+<br>
+
+**WebtoB 중지**  
+`wsdown` 명령어를 실행후 y 키를 눌러서 WebtoB 서버를 내린다.  
 
 ```bash
 $ wsdown
@@ -146,8 +179,10 @@ WSDOWN for node(testserver) is starting:
         WSDOWN: WebtoB is down
 ```
 
-**WebtoB 시작**
+<br>
 
+**WebtoB 시작**  
+WebtoB 서버를 다시 올린다.  
 ```bash
 $ wsboot
 Booting WebtoB on node (testserver)
@@ -164,23 +199,23 @@ Starting SVR(htmls) at Wed Jun 23 13:50:48 2021
 
 WebtoB의 주요 프로세스인 wsm, htl, hth, htmls 가 정상적으로 구동된 걸 확인할 수 있다.
 
+<br>
+
 **WebtoB 주요 프로세스별 역할**
 
-- **WSM(WebtoB System Manager)**
-  
+- **WSM(WebtoB System Manager)**  
   전체적인 WebtoB 시스템의 운용 프로세스로써 시스템의 운영 정보를 관리하고, HTL/HTH 프로세스 및 모든 서버 프로세스들을 관리하는 프로세스이다. WebtoB 시스템을 기동할 때 WSM은 가장 먼저 메모리에 로드되고 시스템이 종료될 때에는 가장 나중에 종료된다.
 
-- **HTL(HTTP Listener)**
-  
+- **HTL(HTTP Listener)**  
   HTL은 클라이언트와 WebtoB 간의 연결을 관리하는 Listener 프로세스이다. 클라이언트가 처음 WebtoB에 접속할 때에는 HTL과 연결을 맺어 통신이 이루어진다. 하지만 서비스 요청이 있을 경우 내부적으로 HTH와 연결이 되어 모든 서비스 처리가 이루어진다.
 
-- **HTH(HTTP Handler)**
-  
+- **HTH(HTTP Handler)**  
   클라이언트 핸들러라고도 하며 실질적으로 클라이언트와 서버의 업무 처리 프로세스 사이를 중계하는 프로세스이다. HTH는 서버 프로세스들과의 통신을 통해 모든 실제적인 데이터의 흐름을 관리한다. 즉 클라이언트의 서비스 요청을 받아 그에 해당하는 업무를 처리하며 그 결과를 수신하여 다시 클라이언트에게 되돌려준다.
 
-- **HTMLS(HTML Server)**
-  
+- **HTMLS(HTML Server)**  
   HTML 요청을 처리하는 HTML 서버 프로세스이다.
+
+<br>
 
 ### 7. 라이센스 & 프로세스 상태 확인
 
@@ -201,7 +236,9 @@ License check by hostname: testserver
 32 CPU license
 ```
 
-Standard Edition, 32 CPU License 로 정상 적용 확인
+Standard Edition, 32 CPU License 로 정상 적용 확인.
+
+<br>
 
 **WebtoB 프로세스 상태 확인**
 
@@ -214,4 +251,8 @@ $ ps -ef | egrep 'htm|htl|hth|htmls'
     root  1579     1   0 13:50:49 pts/5       0:00 htl -l 0x2 -I webtob1_1577 -b 1577
 ```
 
-wsm, hth, htl, htmls 가 구동중인 걸 확인했다. 끝.
+wsm, hth, htl, htmls 프로세스가 구동중인 걸 확인했다.  
+
+<br>
+
+작업 끝.
