@@ -15,7 +15,7 @@ enableCodeCopy = true
 
 # mainSections = ["section1", "section2"]
 # robots = ""
-showScrollToTop = true
+showScrollToTop = false
 
 [homepage]
   layout = "page" # valid options: page, profile, custom
