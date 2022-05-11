@@ -1,7 +1,7 @@
 ---
 title: "EC2에서 ECR로 도커 이미지 푸시"
 date: 2022-05-05T23:01:10+09:00
-lastmod: 2022-05-05T23:02:15+09:00
+lastmod: 2022-05-11T14:05:15+09:00
 slug: ""
 description: "EC2에서 ECR로 도커 이미지 푸시하는 방법을 소개하는 글"
 keywords: []
@@ -12,7 +12,11 @@ toc: true
 ---
 
 # 개요
-EC2에서 ECR Private 레포지터리로 도커 이미지를 푸시하는 방법을 소개한다.
+EC2에서 ECR Private 레포지터리로 도커 이미지를 푸시하는 방법을 소개한다.  
+
+구성도로 표현하면 다음과 같다.  
+
+![](./1.png)
 
 <br>
 
@@ -99,7 +103,7 @@ Login Succeeded
 AWS Management Console에 로그인한다.  
 이미지를 업로드하기 위해 ECR Private 레포지터리를 미리 생성해놓는다.  
 
-![](./1.png)
+![](./2.png)
 
 현재는 이미지가 없이 비어있는 ECR 레포지터리이다.
 
@@ -175,7 +179,7 @@ latest: digest: sha256:18fxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 AWS Console 로그인 후 ECR Registry에서 이미지가 생성된 것을 확인할 수 있다.
 
-![](./2.png)
+![](./3.png)
 
 이걸로 작업완료.
 
