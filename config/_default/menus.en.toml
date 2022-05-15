@@ -11,12 +11,12 @@
 # ordered by weight from lowest to highest.
 
 [[main]]
-  name = "Post"
+  name = "post"
   pageRef = "blog"
   weight = 10
 
 [[main]]
-  name = "Tag"
+  name = "tag"
   pageRef = "tags"
   weight = 30
 
@@ -26,6 +26,6 @@
 # the copyright notice. Configure as per the main menu above.
 
 # [[footer]]
-#   name = "Tag"
-#   pageRef = "tags"
+#   name = "About"
+#   pageRef = "about"
 #   weight = 10
