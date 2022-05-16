@@ -1,0 +1,46 @@
+/* Slate scheme */
+:root {
+  --color-neutral: 255, 255, 255;
+
+  /* Gray */
+  --color-neutral-50: 249, 250, 251;
+  --color-neutral-100: 243, 244, 246;
+  --color-neutral-200: 229, 231, 235;
+  --color-neutral-300: 209, 213, 219;
+  --color-neutral-400: 156, 163, 175;
+  --color-neutral-500: 107, 114, 128;
+  --color-neutral-600: 75, 85, 99;
+  --color-neutral-700: 55, 65, 81;
+  --color-neutral-800: 31, 41, 55;
+  --color-neutral-900: 17, 24, 39;
+
+  /* Gray */
+  --color-primary-50: 249, 250, 251;
+  --color-primary-100: 243, 244, 246;
+  --color-primary-200: 229, 231, 235;
+  --color-primary-300: 209, 213, 219;
+  --color-primary-400: 156, 163, 175;
+  --color-primary-500: 107, 114, 128;
+  /* Disable 600+ because it is too dark in black theme */
+  /*
+  --color-primary-600: 75, 85, 99;
+  --color-primary-700: 55, 65, 81;
+  --color-primary-800: 31, 41, 55;
+  --color-primary-900: 17, 24, 39;
+  */
+
+  /* Blue */
+  --color-secondary-50: 239, 246, 255;
+  --color-secondary-100: 219, 234, 254;
+  --color-secondary-200: 191, 219, 254;
+  --color-secondary-300: 147, 197, 253;
+  --color-secondary-400: 96, 165, 250;
+  --color-secondary-500: 59, 130, 246;
+  /* Disable 600+ because it is too dark in black theme */
+  /*
+  --color-secondary-600: 37, 99, 235;
+  --color-secondary-700: 29, 78, 216;
+  --color-secondary-800: 30, 64, 175;
+  --color-secondary-900: 30, 58, 138;
+  */
+}
