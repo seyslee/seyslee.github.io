@@ -24,7 +24,7 @@ AWS CLI가 미리 설치되어 있어야 한다.
 <br>
 
 **AWS CLI 설치**  
-AWS CLI가 설치되어 있지 않을 경우, macOS 기준 brew로 설치한다.  
+AWS CLI가 설치되어 있지 않을 경우, macOS 패키지 관리자인 brew를 통해 설치할 수 있다.  
 ```bash
 $ brew install awscli
 ```
