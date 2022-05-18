@@ -11,12 +11,36 @@ math: false
 showTableOfContents: false  # Support only for congo theme
 showAuthor: false           # Support only for congo theme
 ---
-<img src="/seyslee_emoji.png"/>  
+
+<img src="/seyslee_emoji.png"/>
+
+<a href="https://hits.seeyoufarm.com"><img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=http%3A%2F%2Fseyslee.github.io%2Fabout%2F&count_bg=%23000000&title_bg=%23FCC624&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=true"/></a>
 
 ### Summary
 **Younsung Steve Lee**  
-***Cloud Engineer @Watcha***  
-`kubernetes` `aws` `python` `linux`
+***Cloud Engineer @Watcha***
+
+<table>
+    <th>
+      Skills
+    </th>
+    <td>
+      <img alt="k8s" src="https://img.shields.io/badge/kubernetes-✓-white?logo=kubernetes&logoColor=white&style=for-the-badge&labelColor=3776AB&color=494649" width="100%"/>
+    </td>
+    <td>
+      <img alt="aws" src="https://img.shields.io/badge/aws-✓-white?logo=amazonaws&logoColor=white&style=for-the-badge&labelColor=232F3E&color=494649" width="100%"/>
+    </td>
+    <td>
+      <img alt="python" src="https://img.shields.io/badge/python-✓-white?logo=python&logoColor=white&style=for-the-badge&labelColor=3776AB&color=494649" width="100%"/>
+    </td>
+    <td>
+      <img alt="linux" src="https://img.shields.io/badge/linux-✓-white?logo=linux&logoColor=white&style=for-the-badge&labelColor=FF9E2A&color=494649" width="100%"/>
+    </td>
+    <td>
+      <img alt="datadog" src="https://img.shields.io/badge/datadog-✓-white?logo=datadog&logoColor=white&style=for-the-badge&labelColor=632CA6&color=494649" width="100%"/>
+    </td>
+</table>
+
 - **Kubernetes**와 **Cloud Infrastructure**에 관심이 많습니다.
 - **아아**를 달고 삽니다 <sup>*Up to 3잔 / 1 day*</sup>
 - **전자책**<sup>Ridibooks</sup> 덕후
@@ -30,7 +54,7 @@ showAuthor: false           # Support only for congo theme
 - 오픈소스 커뮤니티에 기여하고, 테크와 관련된 글쓰는 일을 좋아합니다.
 - 애자일하게 생활하며 좋은 사람들과 함께 클라우드 엔지니어로 행복하게 일하고 있습니다.
 
-<br><br>
+<br>
 
 ### Experience
 2022/02 ― Present  
@@ -46,7 +70,7 @@ showAuthor: false           # Support only for congo theme
 - DNS 사내 강사 2년 연속 출강
 - 쉘스크립트 작성을 통한 OS 보안조치 자동화
 
-<br><br>
+<br>
 
 ### Certification
 
@@ -54,9 +78,8 @@ AWS Certified Solutions Architect - Associate
 CCNP Data Center  
 CCNP Enterprise  
 
-<br><br>
+<br>
 
 ### Contact
 
-{{< icon "github">}} [seyslee](https://github.com/seyslee)  
-{{< icon "email">}} [cysl@kakao.com](mailto:cysl@kakao.com)  
+{{< icon "github">}} [seyslee](https://github.com/seyslee)  {{< icon "email">}} [cysl@kakao.com](mailto:cysl@kakao.com)  
