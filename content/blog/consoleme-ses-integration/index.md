@@ -13,13 +13,13 @@ toc: true
 
 # 개요
 
-ConsoleMe는 AWS SES를 연동을 통해 메일 알림<sup>Email Notification</sup> 기능을 지원한다.  
+ConsoleMe는 기본적으로 AWS SES를 연동을 통해 메일 알림<sup>Email Notification</sup> 기능을 지원한다.  
 
 메일 알림을 받고 싶을 경우, ConsoleMe와 AWS SES간에 연동 설정하는 방법을 소개한다.  
 
 <br>
 
-구축할 ConsoleMe와 AWS SES 연동 아키텍처는 다음과 같다.
+ConsoleMe가 AWS SES를 통해 메일을 보내는 아키텍쳐는 다음과 같다.
 
 ![](./1.png)
 
@@ -46,36 +46,37 @@ ConsoleME EC2 인스턴스가 IAM Role을 Instance Profile로 사용하는 구�
 
 ```json
 {
-  "Statement": [
-    {
-      ... TRUNCATED ...
-    },
-    {
-        "Sid": "SendEmailNotificationFromConsoleMe",
-        "Effect": "Allow",
-        "Action": [
-            "ses:SendEmail",
-            "ses:SendRawEmail"
-        ],
-        "Resource": "arn:aws:ses:us-east-1:123456789012:identity/company-name.com",
-        "Condition": {
-            "StringLike": {
-                "ses:FromAddress": [
-                    "*@company-name.com"
-                ]
+    "Statement": [
+        {
+            ... TRUNCATED ...
+        },
+        {
+            "Sid": "SendEmailNotificationFromConsoleMe",
+            "Effect": "Allow",
+            "Action": [
+                "ses:SendEmail",
+                "ses:SendRawEmail"
+            ],
+            "Resource": "arn:aws:ses:us-east-1:123456789012:identity/company-name.com",
+            "Condition": {
+                "StringLike": {
+                    "ses:FromAddress": [
+                        "*@company-name.com"
+                    ]
+                }
             }
+        },
+        {
+            ... TRUNCATED ...
         }
-    },
-    {
-      ... TRUNCATED ...
-    }
-  ],
-  "Version": "2012-10-17"
+    ],
+    "Version": "2012-10-17"
 }
 ```
 
-ConsoleMe EC2는 메일 발송을 위해 `ses:SendEmail`과 `ses:SendRawEmail` 권한이 필요하다.  
-Resource 값에는 이전 과정에서 생성한 도메인 기반의 SES Identity의 아마존 리소스 주소(ARN)를 입력한다.
+ConsoleMe EC2는 메일 발송을 위해 `ses:SendEmail`과 `ses:SendRawEmail` 권한이 필요하다.
+
+`Resource` 값에는 이전 과정에서 생성한 도메인 기반의 SES Identity의 아마존 리소스 주소(ARN)를 입력한다.
 
 <br>
 
@@ -97,9 +98,9 @@ ses:
 **SES 설정 파라미터**
 - **support_reference** : 메일 내용 맨 아래에 표시되는 추가 안내 멘트.
 - **arn** : SES Identity의 아마존 리소스 주소.
-- **region** : AWS SES Identity의 리전 이름. region 설정을 생략할 경우, ConsoleMe에서 기본값인 us-east-1로 자동지정한다.
-- **consoleme.name** : 보내는 사람의 이름. 전자 메일 제목 맨 앞에 표시된다.
-- **consoleme.sender** : ConsoleMe가 이메일을 보낼 때 찍히는 발신자의 메일 주소
+- **region** : AWS SES Identity의 리전 이름. `region` 설정값을 생략할 경우, ConsoleMe에서 기본값인 us-east-1로 자동지정한다.
+- **consoleme.name** : 보내는 사람의 이름. 이메일 제목의 맨 앞에 표시된다.
+- **consoleme.sender** : ConsoleMe가 이메일을 보낼 때 찍히는 발신자의 메일 주소. `sender` 값에 입력한 메일 주소는 AWS SES의 인증을 받은 상태여야 한다.
 
 <br>
 
@@ -118,12 +119,10 @@ groups:
 
 <br>
 
-설정파일의 `fallback_policy_request_reviewers` 값은 [policies.py](https://github.com/Netflix/consoleme/blob/fc58b9a558235cf50a84d184bf6d160112502c0e/consoleme/lib/policies.py#L522-L541) 코드에서 참조한다.  
-
-`send_communications_new_comment` 함수는 새 코멘트 등록에 대한 알림 메일을 발송하는 함수다.  
+설정파일의 `fallback_policy_request_reviewers` 값은 `policies.py` 코드에서 참조한다.  
 
 ```python
-# policies.py
+# lib/policies.py
 async def send_communications_new_comment(
     extended_request: ExtendedRequestModel, user: str, to_addresses=None
 ):
@@ -145,6 +144,8 @@ async def send_communications_new_comment(
     )
 ```
 
+`policies.py` 코드에서 `send_communications_new_comment` 함수는 새 코멘트 등록에 대한 알림 메일을 발송하는 함수다.
+
 <br>
 
 ### 메일 테스트
@@ -164,12 +165,13 @@ ConsoleMe가 AWS SES를 통해 메일을 발송할 때 ConsoleMe 컨테이너가
 테스트 메일 발송하기 전에 ConsoleMe 도커 컨테이너에 로그 모니터링을 걸어놓고 발송 테스트를 해보자.
 
 ```bash
-$ docker logs -f CONSOLEME_CONTAINER_NAME_HERE | grep ses
+$ docker logs -f consoleme | grep ses
 ```
 
-내 경우 ConsoleMe EC2에서 사용하는 Instance Profile(IAM Role)에 SES 메일 발송<sup>`ses:SendEmail`</sup> 권한이 에러 발생을 경험했었다. 예제 로그는 다음과 같이 찍힌다.
+내 경우 ConsoleMe EC2에서 사용하는 Instance Profile(IAM Role)에 SES 메일 발송<sup>`ses:SendEmail`</sup> 권한이 잘못 설정되어 있어서 에러를 경험했다.
 
-에러가 발생한 전체 로그는 다음과 같다.
+`ses:SendEmail` 권한 에러 발생시 ConsoleMe 컨테이너가 출력하는 에러 로그는 다음과 같다.
+
 ```
 {
   "asctime": "2022-05-19T09:14:43Z+0000",
@@ -196,7 +198,7 @@ $ docker logs -f CONSOLEME_CONTAINER_NAME_HERE | grep ses
 
 <br>
 
-전체 에러 로그 내용 중 중요한 부분은 ConsoleMe EC2에서 사용하는 IAM Role에 `ses:SendEmail` 권한이 부여되어 있지 않아서 메일 발송이 안되었다.
+전체 에러 로그 내용 중 중요한 부분은 ConsoleMe EC2에서 사용하는 IAM Role에 `ses:SendEmail` 권한이 부여되어 있지 않아서 메일 발송이 안되었다는 내용이다.
 
 ```
 User `arn:aws:sts::123456789012:assumed-role/consoleme-instance-profile/i-0a123bcd4e5678901' is not authorized to perform `ses:SendEmail' on resource `arn:aws:ses:us-east-1:123456789012:identity/company-name.com'
@@ -251,14 +253,16 @@ Please contact us at consoleme@example.com if you have any questions or concerns
 
 <br>
 
-**ConsoleMe 메일 발송과 관련된 코드**
+### 관련 코드
 
-`lib/v2/requests.py`
+ConsoleMe 알림 메일 발송과 관련된 코드들.
 
-- [fallback_policy_request_reviewers 설정값을 참조하는 코드](https://github.com/Netflix/consoleme/blob/fc58b9a558235cf50a84d184bf6d160112502c0e/consoleme/lib/v2/requests.py#L2520-L2526)
+`lib/v2/requests.py`  
 
-`lib/policies.py`
+- [권한신청 상태 변경 시 메일발송 코드](https://github.com/Netflix/consoleme/blob/fc58b9a558235cf50a84d184bf6d160112502c0e/consoleme/lib/v2/requests.py#L2398-L2416)  
+- [새 코멘트 등록 시 메일발송 코드](https://github.com/Netflix/consoleme/blob/fc58b9a558235cf50a84d184bf6d160112502c0e/consoleme/lib/v2/requests.py#L2498-L2527)
 
-- [권한신청 상태 변경 시 메일발송 코드](https://github.com/Netflix/consoleme/blob/fc58b9a558235cf50a84d184bf6d160112502c0e/consoleme/lib/policies.py#L509-L519)
+`lib/policies.py`  
 
+- [권한신청 상태 변경 시 메일발송 코드](https://github.com/Netflix/consoleme/blob/fc58b9a558235cf50a84d184bf6d160112502c0e/consoleme/lib/policies.py#L509-L519)  
 - [새 코멘트 등록 시 메일발송 코드](https://github.com/Netflix/consoleme/blob/fc58b9a558235cf50a84d184bf6d160112502c0e/consoleme/lib/policies.py#L522-L541)
