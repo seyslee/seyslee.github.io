@@ -1,7 +1,7 @@
 ---
 title: "ConsoleMe SES 연동"
 date: 2022-05-20T22:36:10+09:00
-lastmod: 2022-05-20T22:36:15+09:00
+lastmod: 2022-05-21T00:08:15+09:00
 slug: ""
 description: "ConsoleMe 메일 알림을 지원하기 위해 AWS SES와 연동하는 방법을 소개한다."
 keywords: []
@@ -154,9 +154,13 @@ ConsoleMe는 다음과 같은 상황이 발생할 때 메일을 발송한다.
 1. 권한 신청<sup>request</sup> 페이지에서 새 댓글<sup>comment</sup>이 등록된 경우
 2. 권한 신청<sup>request</sup>의 상태가 취소<sup>cancel</sup>, 거부<sup>reject</sup>, 승인<sup>approve</sup> 중 하나로 변경된 경우
 
-권한 리퀘스트 페이지에서 테스트용 Comment를 남기거나 테스트용 권한 리퀘스트의 상태를 변경해보며 알림 메일이 잘 보내지는지 테스트 해본다.
+![](./3.png)
 
-메일을 발송하면 ConsoleMe 컨테이너가 로그를 찍는다.  
+권한 요청 페이지<sup>All Policy Requests</sup>에서 테스트용 Comment를 남기거나 테스트용 권한 리퀘스트의 상태를 변경해보며 알림 메일이 잘 보내지는지 테스트 해본다.
+
+<br>
+
+ConsoleMe가 AWS SES를 통해 메일을 발송할 때 ConsoleMe 컨테이너가 관련 로그를 찍는다.  
 테스트 메일 발송하기 전에 ConsoleMe 도커 컨테이너에 로그 모니터링을 걸어놓고 발송 테스트를 해보자.
 
 ```bash
@@ -202,6 +206,8 @@ User `arn:aws:sts::123456789012:assumed-role/consoleme-instance-profile/i-0a123b
 
 **메일 샘플**  
 
+ConsoleMe가 보내는 기본 메일 템플릿은 다음과 같다.  
+
 Request 상태 변경 시 알림 메일 샘플
 ```bash
 #====[메일 제목]====#
@@ -219,7 +225,7 @@ Please contact us at consoleme@example.com if you have any questions or concerns
 
 <br>
 
-Comment 등록 시 알림 메일 샘플
+새 코멘트 등록 시 알림 메일 샘플
 
 ```bash
 #====[메일 제목]====#
@@ -242,3 +248,17 @@ Please contact us at consoleme@example.com if you have any questions or concerns
 [[공식문서] ConsoleMe SES 연동 설정](https://hawkins.gitbook.io/consoleme/configuration/ses)
 
 [[공식문서] ConsoleMe EC2에서 사용하는 IAM 권한 설정](https://hawkins.gitbook.io/consoleme/prerequisites/required-iam-permissions/central-account-consolemeinstanceprofile)
+
+<br>
+
+**ConsoleMe 메일 발송과 관련된 코드**
+
+`lib/v2/requests.py`
+
+- [fallback_policy_request_reviewers 설정값을 참조하는 코드](https://github.com/Netflix/consoleme/blob/fc58b9a558235cf50a84d184bf6d160112502c0e/consoleme/lib/v2/requests.py#L2520-L2526)
+
+`lib/policies.py`
+
+- [권한신청 상태 변경 시 메일발송 코드](https://github.com/Netflix/consoleme/blob/fc58b9a558235cf50a84d184bf6d160112502c0e/consoleme/lib/policies.py#L509-L519)
+
+- [새 코멘트 등록 시 메일발송 코드](https://github.com/Netflix/consoleme/blob/fc58b9a558235cf50a84d184bf6d160112502c0e/consoleme/lib/policies.py#L522-L541)
