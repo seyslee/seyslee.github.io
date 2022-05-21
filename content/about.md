@@ -20,27 +20,6 @@ showAuthor: false           # Support only for congo theme
 **Younsung Steve Lee**  
 ***Cloud Engineer @Watcha***
 
-<table>
-    <th>
-      Skills
-    </th>
-    <td>
-      <img alt="k8s" src="https://img.shields.io/badge/kubernetes-✓-white?logo=kubernetes&logoColor=white&style=for-the-badge&labelColor=3776AB&color=494649" width="100%"/>
-    </td>
-    <td>
-      <img alt="aws" src="https://img.shields.io/badge/aws-✓-white?logo=amazonaws&logoColor=white&style=for-the-badge&labelColor=232F3E&color=494649" width="100%"/>
-    </td>
-    <td>
-      <img alt="python" src="https://img.shields.io/badge/python-✓-white?logo=python&logoColor=white&style=for-the-badge&labelColor=3776AB&color=494649" width="100%"/>
-    </td>
-    <td>
-      <img alt="linux" src="https://img.shields.io/badge/linux-✓-white?logo=linux&logoColor=white&style=for-the-badge&labelColor=FF9E2A&color=494649" width="100%"/>
-    </td>
-    <td>
-      <img alt="datadog" src="https://img.shields.io/badge/datadog-✓-white?logo=datadog&logoColor=white&style=for-the-badge&labelColor=632CA6&color=494649" width="100%"/>
-    </td>
-</table>
-
 - **Kubernetes**와 **Cloud Infrastructure**에 관심이 많습니다.
 - **아아**를 달고 삽니다 <sup>*Up to 3잔 / 1 day*</sup>
 - **전자책**<sup>Ridibooks</sup> 덕후
@@ -56,7 +35,7 @@ showAuthor: false           # Support only for congo theme
 
 <br>
 
-### Experience
+### Work Experience
 2022/02 ― Present  
 **Cloud Engineer** @[Watcha](https://watcha.team)  
 - 업무 병목 지점인 클라우드 권한 관리를 해결하고 사내 개발자 경험<sup>DX, Developer Experience</sup> 향상을 위해 클라우드 권한 신청/승인 플랫폼인 [ConsoleMe](https://github.com/Netflix/consoleme)를 구축하고 운영
@@ -71,6 +50,26 @@ showAuthor: false           # Support only for congo theme
 - 쉘스크립트 작성을 통한 OS 보안조치 자동화
 
 <br>
+
+### Skills
+
+<table>
+    <td>
+      <img alt="k8s" src="https://img.shields.io/badge/kubernetes-white?logo=kubernetes&logoColor=white&style=for-the-badge&labelColor=3776AB&color=3776AB" width="100%"/>
+    </td>
+    <td>
+      <img alt="aws" src="https://img.shields.io/badge/aws-white?logo=amazonaws&logoColor=white&style=for-the-badge&labelColor=232F3E&color=232F3E" width="100%"/>
+    </td>
+    <td>
+      <img alt="python" src="https://img.shields.io/badge/python-white?logo=python&logoColor=white&style=for-the-badge&labelColor=3776AB&color=3776AB" width="100%"/>
+    </td>
+    <td>
+      <img alt="linux" src="https://img.shields.io/badge/linux-white?logo=linux&logoColor=white&style=for-the-badge&labelColor=FF9E2A&color=FF9E2A" width="100%"/>
+    </td>
+    <td>
+      <img alt="datadog" src="https://img.shields.io/badge/datadog-white?logo=datadog&logoColor=white&style=for-the-badge&labelColor=632CA6&color=632CA6" width="100%"/>
+    </td>
+</table>
 
 ### Certification
 
