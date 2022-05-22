@@ -14,8 +14,6 @@ showAuthor: false           # Support only for congo theme
 
 <img src="/seyslee_emoji.png"/>
 
-<a href="https://hits.seeyoufarm.com"><img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=http%3A%2F%2Fseyslee.github.io%2Fabout%2F&count_bg=%23000000&title_bg=%23FCC624&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=true"/></a>
-
 ### Summary
 **Younsung Steve Lee**  
 ***Cloud Engineer @Watcha***
@@ -54,21 +52,23 @@ showAuthor: false           # Support only for congo theme
 ### Skills
 
 <table>
-    <td>
-      <img alt="k8s" src="https://img.shields.io/badge/kubernetes-white?logo=kubernetes&logoColor=white&style=for-the-badge&labelColor=3776AB&color=3776AB" width="100%"/>
-    </td>
-    <td>
-      <img alt="aws" src="https://img.shields.io/badge/aws-white?logo=amazonaws&logoColor=white&style=for-the-badge&labelColor=232F3E&color=232F3E" width="100%"/>
-    </td>
-    <td>
-      <img alt="python" src="https://img.shields.io/badge/python-white?logo=python&logoColor=white&style=for-the-badge&labelColor=3776AB&color=3776AB" width="100%"/>
-    </td>
-    <td>
-      <img alt="linux" src="https://img.shields.io/badge/linux-white?logo=linux&logoColor=white&style=for-the-badge&labelColor=FF9E2A&color=FF9E2A" width="100%"/>
-    </td>
-    <td>
-      <img alt="datadog" src="https://img.shields.io/badge/datadog-white?logo=datadog&logoColor=white&style=for-the-badge&labelColor=632CA6&color=632CA6" width="100%"/>
-    </td>
+    <tr>
+        <td>
+            <img alt="k8s" src="https://img.shields.io/badge/kubernetes-white?logo=kubernetes&logoColor=white&style=for-the-badge&labelColor=3776AB&color=3776AB"/>
+        </td>
+        <td>
+            <img alt="aws" src="https://img.shields.io/badge/aws-white?logo=amazonaws&logoColor=white&style=for-the-badge&labelColor=232F3E&color=232F3E"/>
+        </td>
+        <td>
+            <img alt="python" src="https://img.shields.io/badge/python-white?logo=python&logoColor=white&style=for-the-badge&labelColor=3776AB&color=3776AB"/>
+        </td>
+        <td>
+            <img alt="linux" src="https://img.shields.io/badge/linux-white?logo=linux&logoColor=white&style=for-the-badge&labelColor=FF9E2A&color=FF9E2A"/>
+        </td>
+        <td>
+            <img alt="datadog" src="https://img.shields.io/badge/datadog-white?logo=datadog&logoColor=white&style=for-the-badge&labelColor=632CA6&color=632CA6"/>
+        </td>
+    </tr>
 </table>
 
 ### Certification
