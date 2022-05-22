@@ -12,7 +12,7 @@ showTableOfContents: false  # Support only for congo theme
 showAuthor: false           # Support only for congo theme
 ---
 
-<img src="/seyslee_emoji.png"/>
+<img src="./seyslee_emoji.png"/>
 
 ### Summary
 **Younsung Steve Lee**  
@@ -34,11 +34,17 @@ showAuthor: false           # Support only for congo theme
 <br>
 
 ### Work Experience
+
+![](./64x64_watcha.jpg)
+
 2022/02 ― Present  
-**Cloud Engineer** @[Watcha](https://watcha.team)  
+**Cloud Engineer** @[Watcha](https://watcha.team)
+
 - 업무 병목 지점인 클라우드 권한 관리를 해결하고 사내 개발자 경험<sup>DX, Developer Experience</sup> 향상을 위해 클라우드 권한 신청/승인 플랫폼인 [ConsoleMe](https://github.com/Netflix/consoleme)를 구축하고 운영
 
 <br>
+
+![](./64x41_kdn.jpg)
 
 2013/12 ― 2022/02  
 **System Engineer** @[KDN](https://www.kdn.com/)  
