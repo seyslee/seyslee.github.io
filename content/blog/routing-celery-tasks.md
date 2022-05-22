@@ -31,7 +31,7 @@ Celery worker의 Queue를 설정하는 방법을 소개합니다.
 **Task 파일 수정**  
 `app.conf.task_queues` 설정을 통해 테스크 이름에 따라 큐를 분류할 수 있다.
 
-```python {.celery_tasks.py linenos=false, hl_lines=["8-11"], linenostart=1}
+```python
 # celery_tasks.py
 from celery import Celery
 from kombu import Queue
@@ -75,7 +75,7 @@ $ celery -A celery_tasks worker -Q urgent_tasks -l INFO
 ### 특정 테스크에만 큐 지정하기
 
 `@app.task` 데코레이터에 `queue='QUEUE_NAME'` 파라미터를 지정하는 방법도 있다.
-```python {linenos=false, hl_lines=1, linenostart=1}
+```python
 @app.task(queue='normal_tasks')
 def normal_task(x):
 	time.sleep(x)
