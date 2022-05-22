@@ -44,7 +44,7 @@ showAuthor: false           # Support only for congo theme
 
 <br>
 
-![](./64x41_kdn.jpg)
+![](./64x46_kdn.jpg)
 
 2013/12 ― 2022/02  
 **System Engineer** @[KDN](https://www.kdn.com/)  
