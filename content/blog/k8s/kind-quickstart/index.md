@@ -1,7 +1,7 @@
 ---
 title: "kind 쿠버네티스 구축"
 date: 2021-12-06T21:28:15+09:00
-lastmod: 2021-12-06T21:28:33+09:00
+lastmod: 2022-05-27T23:58:33+09:00
 slug: ""
 description: "kind(kubernetes in docker)를 설치한 후 로컬 환경에서 쿠버네티스 클러스터를 구축하는 방법을 설명합니다."
 keywords: []
@@ -16,11 +16,23 @@ macOS 환경에서 kind를 설치한 후 간편하게 로컬 쿠버네티스 환
 
 <br>
 
+<img src="./0.png" width="50%">
 
+**kind**
 
-### kind
+[kind](https://kind.sigs.k8s.io/)는 Kubernetes IN Docker의 줄임말로 도커 컨테이너를 이용해 손쉽게 로컬 환경에서 kubernetes 클러스터를 구축할 수 있는 소프트웨어이다. 비슷한 소프트웨어로는 minikube, k3s 등이 있다. 로컬 환경에서 쿠버네티스 관련 개발하거나 쿠버네티스 클러스터 실습이 필요할 경우 kind를 이용하면 간편하고 빠르게 확인할 수 있다.
 
-[kind](https://kind.sigs.k8s.io/)는 Kubernetes IN Docker의 줄임말로 도커 컨테이너를 이용해 손쉽게 로컬 환경에서 kubernetes 클러스터를 구축할 수 있는 소프트웨어이다. 비슷한 소프트웨어로는 minikube, k3s 등이 있다. 로컬 환경에서 쿠버네티스 관련 개발하거나 쿠버네티스 클러스터 실습이 필요할 경우 kind를 이용하면 간편하고 빠르게 확인할 수 있다.  
+<br>
+
+**아키텍쳐**
+
+kind의 아키텍처는 다음과 같다.
+
+![](./1.png)
+
+kind가 생성한 1대의 쿠버네티스 노드는 알고보면 1개의 도커 컨테이너다.
+
+**출처** : https://kind.sigs.k8s.io/docs/design/initial/
 
 <br>
 
@@ -34,11 +46,20 @@ macOS 환경에서 kind를 설치한 후 간편하게 로컬 쿠버네티스 환
 
 <br>
 
+# 전제조건
 
+macOS용 패키지 관리자인 brew가 미리 설치되어 있어야 한다.
+
+<br>
 
 # 본론
 
+## 단일 클러스터
+
 ### 1. docker 설치
+
+kind로 쿠버네티스 클러스터를 생성하려면 먼저 docker desktop이 설치되어 있어야 한다.  
+brew로 docker desktop을 설치한다.
 
 ```bash
 $ brew install --cask docker
@@ -94,7 +115,7 @@ docker 안정화 버전(`stable`) `20.10.11`이 설치된 상태이다.
 
 <br>
 
-![Launchpad에서 설치된 도커 확인](./1.jpg)
+![Launchpad에서 설치된 도커 확인](./2.jpg)
 
 런치패드에서 확인해본 결과 도커 아이콘이 새로 생성되었다.  
 
@@ -105,6 +126,9 @@ docker 안정화 버전(`stable`) `20.10.11`이 설치된 상태이다.
 ### 2. kind 설치
 
 #### 설치
+
+kind도 docker desktop과 동일하게 brew를 이용해 최신버전을 설치한다.
+
 ```bash
 $ brew install kind
 Running `brew update --preinstall`...
@@ -132,7 +156,7 @@ Hide these hints with HOMEBREW_NO_ENV_HINTS (see `man brew`)
 
 
 
-#### 버전확인
+#### 버전 확인
 kind를 설치 완료한 후 버전을 확인해본다.
 ```bash
 $ kind version
@@ -183,10 +207,13 @@ kubectl cluster-info --context kind-kind
 
 Have a question, bug, or feature request? Let us know! https://kind.sigs.k8s.io/#community 🙂
 ```
-`kind` 라는 이름의 Kubernetes cluster 가 생성됐다. cluster를 생성할 때 이름을 따로 지정해주지 않으면 default로 `kind`라는 이름으로 생성된다. 
+
+`kind` 라는 이름의 Kubernetes cluster가 생성됐다.  
+cluster를 생성할 때 이름을 따로 지정해주지 않으면 기본값으로 `kind`라는 이름으로 생성된다.
+
 <br>
 
-
+생성할 클러스터의 이름을 정할 수도 있다.
 
 ```bash
 $ kind create cluster --name kind-2
@@ -233,10 +260,10 @@ CoreDNS is running at https://127.0.0.1:61332/api/v1/namespaces/kube-system/serv
 To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'.
 ```
 `kind-kind-2` 클러스터를 조작하기 위해서는 context를 `kind-kind-2`로 변경한다.  
-이제 현재 context 상태를 확인해보자.  
+
 <br>
 
-
+이제 현재 context 상태를 확인해보자.
 
 ``` bash
 $ kubectl config get-contexts
@@ -245,11 +272,9 @@ CURRENT   NAME             CLUSTER          AUTHINFO         NAMESPACE
           kind-kind        kind-kind        kind-kind
 *         kind-kind-2      kind-kind-2      kind-kind-2
 ```
-현재(`CURRENT`) context 값이 `kind-kind-2`로 변경되었다.  
+현재 context 값이 `kind-kind-2`로 변경되었다.  
 
 <br>
-
-
 
 ### 7. 클러스터 상태 확인
 
@@ -261,7 +286,8 @@ NAME                   STATUS   ROLES                  AGE   VERSION
 kind-2-control-plane   Ready    control-plane,master   64s   v1.21.1
 ```
 
-1대의 control-plane(`kind-2-control-plane`) 노드가 생성되었다. 현재 이 노드의 상태는 정상 동작중(`Ready`)이다.  
+1대의 control-plane(`kind-2-control-plane`) 노드가 생성되었다.  
+현재 이 노드의 상태는 정상 동작중(`Ready`)이다.
 
 <br>
 
@@ -328,17 +354,17 @@ No kind clusters found.
 
 <br>
 
-
-
 # 응용
 
-### 멀티노드 클러스터 구축
+## 멀티 클러스터
+
+### 생성
 
 멀티노드는 단일 노드가 아닌 여러 대의 노드가 구성된 클러스터 환경을 의미한다.  
 
 멀티노드 운영을 위해서는 호스트 환경의 리소스(CPU, Memory)가 많이 필요하기 때문에 해당 실습 전에 미리 Docker deskop의 리소스 제한(Resources)을 풀도록 한다. 도커에 할당하는 메모리 용량은 최소 8GB를 권장한다.  
 
-![](./2.png)
+![](./3.png)
 
 <br>
 
@@ -363,16 +389,26 @@ nodes:
 
 <br>
 
+#### 클러스터 생성
 
-
-#### 생성
-
-작성한 클러스터 yaml 파일을 적용하여 클러스터를 생성한다.  
-
-미리 작성한 설정파일(`.yaml`)을 기반으로 클러스터를 생성할 때에는 `--config <설정파일 이름>` 옵션을 사용하도록 하자.  
+작성한 클러스터 yaml 파일을 적용하여 클러스터를 생성한다.
 
 ```bash
-$ kind create cluster --config kind-multi-node-clusters.yaml --name multinode
+kind create cluster \
+--config kind-multi-node-clusters.yaml \
+--name multinode
+```
+
+미리 작성한 매니페스트 파일(`.yaml`)을 사용해서 클러스터를 생성할 때에는 `--config <설정파일 이름>` 옵션을 사용하면 된다.
+
+<br>
+
+클러스터 생성이 완료되는 데에 약 1분 정도 소요된다.
+
+```bash
+$ kind create cluster \
+--config kind-multi-node-clusters.yaml \
+--name multinode
 Creating cluster "multinode" ...
  ✓ Ensuring node image (kindest/node:v1.21.1) 🖼
  ✓ Preparing nodes 📦 📦 📦
@@ -387,15 +423,20 @@ You can now use your cluster with:
 kubectl cluster-info --context kind-multinode
 
 Thanks for using kind! 😊
-```
-
-클러스터 노드가 control-plane 1대, worker node 2대로 총 3대이기 때문에 구성하는 데에 약 1분 소요된다.  
-
-`--name` 옵션을 사용해서 클러스터의 이름을 `multinode`로 설정한다.  
+``` 
 
 <br>
 
+`multinode` 클러스터 생성이 완료되면 자동적으로 context가 새로 생성된 클러스터로 변경된다.
 
+```bash
+$ kubectl config current-context
+kind-multinode
+```
+
+현재 위치한 context는 `kind-multinode`이다.
+
+<br>
 
 #### 노드 확인
 
@@ -408,22 +449,57 @@ multinode-worker2         Ready    <none>                 4m1s    v1.21.1
 ```
 
 3대의 노드 상태가 모두 정상 동작중(`Ready`)이다.  
+- ROLES 값에 `control-plane,master`가 있으면 Master Node다.
+- ROLES 값이 `<none>`이면 Worker Node다.
+- 물론 `NAME`에 붙은 control-plane과 worker로도 구분 가능하다.
 
 <br>
 
+### 정리
 
+멀티노드 클러스터 실습이 끝났다면 클러스터 환경을 정리<sup>clean-up</sup>한다.  
+
+kind 클러스터 전체 목록을 확인한다.
+```bash
+$ kind get clusters
+kind
+multinode
+```
+
+<br>
+
+`multinode` 클러스터를 삭제한다.
+```bash
+$ kind delete cluster --name multinode
+Deleting cluster "multinode" ...
+```
+
+<br>
+
+`multinode` 클러스터가 삭제되었다.
+```bash
+$ kind get clusters
+kind
+```
+
+<br>
 
 # 결론
 
 멀티노드 실습을 마지막으로 kind의 설치 및 사용법에 대한 포스팅을 마치겠다.  
 
-2021년 12월 6일 기준으로 Apple Silicon이 탑재된 맥북은 아직 출시된 지 얼마 지나지 않아서 호환성이 박살난 상태로, virtualbox 조차 지원되지 않아 쿠버네티스 실습을 하는 데에 제한이 있다. 만약 macOS에서 docker 컨테이너가 아닌 virtualbox 환경과 같은 가상화 클러스터로 구성하고 싶다면 mac 전용 하이퍼바이저인 hyperkit을 활용하도록 하자.  
-
-나도 여러 방면에서 kubernetes 구축 방법을 찾아보고 있지만 버그와 아직 막막한 M1의 호환성에 막혀 절망하고 있는 중이다. 시간이 해결해주면 참 좋을 것 같은데..  
-
 <br>
 
+**M1 호환성 문제**
 
+2021년 12월 6일 기준으로 Apple Silicon<sup>M1</sup>이 탑재된 맥북은 아직 출시된 지 얼마 지나지 않아서 호환성이 박살난 상태로, Virtual Box 설치를 지원하지 않아 쿠버네티스 실습을 하는 데에 제한이 있다.
+
+만약 macOS에서 docker 컨테이너가 아닌 virtualbox 환경과 같은 가상화 클러스터로 구성하고 싶다면 macOS 전용 하이퍼바이저인 hyperkit을 활용하도록 하자.  
+
+나도 여러 방면에서 kubernetes 구축 방법을 찾아보고 있지만 버그와 아직 막막한 M1의 호환성에 막혀 절망하고 있는 중이다.  
+M1 호환성 문제는 시간이 차차 해결해줄 거라고 예상한다.
+
+<br>
 
 # 참고자료
 
