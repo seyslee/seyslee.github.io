@@ -1,5 +1,5 @@
 ---
-title: "나만의 EKS Cluster 만들기"
+title: "EKS Cluster 생성"
 date: 2022-05-30T23:00:15+09:00
 lastmod: 2022-05-30T23:41:33+09:00
 slug: ""
