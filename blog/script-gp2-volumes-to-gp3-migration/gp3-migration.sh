@@ -5,10 +5,11 @@
 # 2022-06-02
 #
 # [Author]
-# Younsung Lee
+# Younsung Lee (cysl@kakao.com)
 #
 # [Description]
 # Change all gp2 volumes to gp3 in specific region
+# Prerequisite: You have to install `jq`, FIRST.
 #==================================================
 
 region='ap-northeast-2'
@@ -17,10 +18,10 @@ aws_cmd_path=$(which aws)
 # Step 1. Find all gp2 volumes within the given region
 echo "[i] Start finding all gp2 volumes in ${region}"
 volume_ids=$(
-  ${aws_cmd_path} ec2 describe-volumes \
-  --region "${region}" \
-  --filters Name=volume-type,Values=gp2 | \
-  jq -r '.Volumes[].VolumeId'
+    ${aws_cmd_path} ec2 describe-volumes \
+    --region "${region}" \
+    --filters Name=volume-type,Values=gp2 | \
+    jq -r '.Volumes[].VolumeId'
 )
 
 echo "[i] List up all gp2 volume in ${region}"
