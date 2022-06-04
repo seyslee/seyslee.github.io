@@ -11,33 +11,33 @@ math: false
 toc: true
 ---
 
-# 개요
+## 개요
 
 ConsoleMe는 기본적으로 AWS SES를 연동을 통해 메일 알림<sup>Email Notification</sup> 기능을 지원한다.  
 
 메일 알림을 받고 싶을 경우, ConsoleMe와 AWS SES간에 연동 설정하는 방법을 소개한다.  
 
-<br>
+&nbsp;
 
 ConsoleMe가 AWS SES를 통해 메일을 보내는 아키텍쳐는 다음과 같다.
 
-![](./1.png)
+![메일 발송 아키텍처](./1.png)
 
-<br>
+&nbsp;
 
-# 설정방법
+## 설정방법
 
 ### SES 생성
 
 먼저 도메인 주소의 SES Identity를 생성한다.  
 이미 생성해서 사용하고 있는 SES Identity가 있을 경우, AWS SES 생성 과정은 건너 뛰면 된다.
 
-![](./2.png)
+![SES Identity 생성 화면](./2.png)
 
 위 사진처럼 반드시 Identity type을 Domain으로 설정해서 생성해야한다.  
-생성한 도메인 기반의 SES Identity는 인증을 받은 상태여야 한다. 
+생성한 도메인 기반의 SES Identity는 인증을 받은 상태여야 한다.
 
-<br>
+&nbsp;
 
 ### IAM 설정
 
@@ -78,11 +78,12 @@ ConsoleMe EC2는 메일 발송을 위해 `ses:SendEmail`과 `ses:SendRawEmail` �
 
 `Resource` 값에는 이전 과정에서 생성한 도메인 기반의 SES Identity의 아마존 리소스 주소(ARN)를 입력한다.
 
-<br>
+&nbsp;
 
 ### Config 수정
 
-**SES 설정**
+#### SES 설정
+
 ```yaml
 # SES configuration is necessary for ConsoleMe to send e-mails to your users. ConsoleMe sends e-mails to notify
 # administrators and requesters about policy requests applicable to them.
@@ -95,16 +96,17 @@ ses:
     sender: bob@company-name.com
 ```
 
-**SES 설정 파라미터**
+#### SES 설정 파라미터
+
 - **support_reference** : 메일 내용 맨 아래에 표시되는 추가 안내 멘트.
 - **arn** : SES Identity의 아마존 리소스 주소.
 - **region** : AWS SES Identity의 리전 이름. `region` 설정값을 생략할 경우, ConsoleMe에서 기본값인 us-east-1로 자동지정한다.
 - **consoleme.name** : 보내는 사람의 이름. 이메일 제목의 맨 앞에 표시된다.
 - **consoleme.sender** : ConsoleMe가 이메일을 보낼 때 찍히는 발신자의 메일 주소. `sender` 값에 입력한 메일 주소는 AWS SES의 인증을 받은 상태여야 한다.
 
-<br>
+&nbsp;
 
-**관리자 메일링 리스트 설정**  
+#### 관리자 메일링 리스트 설정
 
 ConsoleMe 설정파일에서 `fallback_policy_request_reviewers` 그룹에 포함된 메일 목록은 ConsoleMe 메일 알람을 받을 관리자 메일링 리스트를 의미한다.
 
@@ -117,7 +119,7 @@ groups:
     - carol@company-name.com
 ```
 
-<br>
+&nbsp;
 
 설정파일의 `fallback_policy_request_reviewers` 값은 `policies.py` 코드에서 참조한다.  
 
@@ -146,7 +148,7 @@ async def send_communications_new_comment(
 
 `policies.py` 코드에서 `send_communications_new_comment` 함수는 새 코멘트 등록에 대한 알림 메일을 발송하는 함수다.
 
-<br>
+&nbsp;
 
 ### 메일 테스트
 
@@ -159,7 +161,7 @@ ConsoleMe는 다음과 같은 상황이 발생할 때 메일을 발송한다.
 
 권한 요청 페이지<sup>All Policy Requests</sup>에서 테스트용 Comment를 남기거나 테스트용 권한 리퀘스트의 상태를 변경해보며 알림 메일이 잘 보내지는지 테스트 해본다.
 
-<br>
+&nbsp;
 
 ConsoleMe가 AWS SES를 통해 메일을 발송할 때 ConsoleMe 컨테이너가 관련 로그를 찍는다.  
 테스트 메일 발송하기 전에 ConsoleMe 도커 컨테이너에 로그 모니터링을 걸어놓고 발송 테스트를 해보자.
@@ -196,7 +198,7 @@ $ docker logs -f consoleme | grep ses
 }
 ```
 
-<br>
+&nbsp;
 
 전체 에러 로그 내용 중 중요한 부분은 ConsoleMe EC2에서 사용하는 IAM Role에 `ses:SendEmail` 권한이 부여되어 있지 않아서 메일 발송이 안되었다는 내용이다.
 
@@ -204,7 +206,7 @@ $ docker logs -f consoleme | grep ses
 User `arn:aws:sts::123456789012:assumed-role/consoleme-instance-profile/i-0a123bcd4e5678901' is not authorized to perform `ses:SendEmail' on resource `arn:aws:ses:us-east-1:123456789012:identity/company-name.com'
 ```
 
-<br>
+&nbsp;
 
 **메일 샘플**  
 
@@ -225,7 +227,7 @@ Please contact us at consoleme@example.com if you have any questions or concerns
 #=================#
 ```
 
-<br>
+&nbsp;
 
 새 코멘트 등록 시 알림 메일 샘플
 
@@ -243,15 +245,15 @@ Please contact us at consoleme@example.com if you have any questions or concerns
 #=================#
 ```
 
-<br>
+&nbsp;
 
-# 참고자료
+## 참고자료
 
 [[공식문서] ConsoleMe SES 연동 설정](https://hawkins.gitbook.io/consoleme/configuration/ses)
 
 [[공식문서] ConsoleMe EC2에서 사용하는 IAM 권한 설정](https://hawkins.gitbook.io/consoleme/prerequisites/required-iam-permissions/central-account-consolemeinstanceprofile)
 
-<br>
+&nbsp;
 
 ### 관련 코드
 
