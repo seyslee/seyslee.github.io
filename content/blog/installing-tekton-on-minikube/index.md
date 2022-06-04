@@ -1,7 +1,7 @@
 ---
 title: "Tekton 설치"
 date: 2022-05-02T21:17:15+09:00
-lastmod: 2022-05-02T21:18:33+09:00
+lastmod: 2022-06-05T02:21:33+09:00
 slug: ""
 description: "minikube 환경에서 Tekton pipeline과 Tekton Dashboard를 설치하고 데모를 진행하는 방법을 소개합니다."
 keywords: []
@@ -11,26 +11,29 @@ math: false
 toc: true
 ---
 
-# 개요
+## 개요
+
 minikube를 통해 Tekton Pipeline과 Tekton Dashboard를 설치하고 데모를 구성해본다.  
 
-<br>
+&nbsp;
 
-# 환경
+## 환경
+
 - **OS**: macOS Monterey 12.3.1
 - **Shell**: zsh
 - **minikube v1.25.2**
 - **Homebrew 3.4.9**
 
-<br>
+&nbsp;
 
-# 전제조건
+## 전제조건
 
 - minikube가 미리 설치되어 있어야 한다.
 
-<br>
+&nbsp;
 
-# 시작하기
+## 시작하기
+
 ### 1. Task 데모
 
 미니큐브 클러스터를 생성한다.
@@ -56,7 +59,7 @@ $ minikube start
 🏄  끝났습니다! kubectl이 "minikube" 클러스터와 "default" 네임스페이스를 기본적으로 사용하도록 구성되었습니다.
 ```
 
-<br>
+&nbsp;
 
 kubectl을 사용하여 클러스터가 성공적으로 생성되었는지 확인할 수 있다.
 
@@ -68,9 +71,10 @@ CoreDNS is running at https://127.0.0.1:57074/api/v1/namespaces/kube-system/serv
 To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'.
 ```
 
-<br>
+&nbsp;
 
 tekton pipeline을 설치한다.
+
 ```bash
 $ kubectl apply --filename \
 https://storage.googleapis.com/tekton-releases/pipeline/latest/release.yaml
@@ -83,7 +87,7 @@ tekton-pipelines-controller-55487dcfb8-vww2f   1/1     Running   0          31s
 tekton-pipelines-webhook-794864555f-g9fnm      1/1     Running   0          31s
 ```
 
-<br>
+&nbsp;
 
 `hello-world.yaml` 파일을 아래와 같이 작성한다.
 ```bash
@@ -100,7 +104,7 @@ spec:
         echo "Hello World"
 ```
 
-<br>
+&nbsp;
 
 작성한 `hello-world.yaml` 파일을 배포한다.
 
@@ -109,7 +113,7 @@ $ kubectl apply -f hello-world.yaml
 task.tekton.dev/hello created
 ```
 
-<br>
+&nbsp;
 
 `True`, `Succeeded`는 Task가 정상적으로 완료되었다는 의미이다.
 
@@ -119,7 +123,7 @@ NAME             SUCCEEDED   REASON      STARTTIME   COMPLETIONTIME
 hello-task-run   True        Succeeded   29s         5s
 ```
 
-<br>
+&nbsp;
 
 실행된 Task의 결과(로그)를 확인해본다.
 
@@ -131,7 +135,7 @@ Hello World
 실행한 Task 로그에 `Hello World`가 출력됐다.  
 Task가 정상 실행된 걸 확인할 수 있다.
 
-<br>
+&nbsp;
 
 ### 2. Pipeline 데모
 
@@ -153,7 +157,7 @@ spec:
         echo "Goodbye World!"
 ```
 
-<br>
+&nbsp;
 
 작성한 `goodbye-world.yaml` 파일을 배포한다.
 
@@ -162,10 +166,11 @@ $ kubectl apply --filename goodbye-world.yaml
 task.tekton.dev/goodbye created
 ```
 
-<br>
+&nbsp;
 
 **Pipeline 생성**  
 `hello-goodbye-pipeline.yaml` 파일을 작성한다.
+
 ```yaml
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
@@ -183,17 +188,19 @@ spec:
         name: goodbye
 ```
 
-<br>
+&nbsp;
 
 작성한 파일을 배포한다.
+
 ```bash
 $ kubectl apply --filename hello-goodbye-pipeline.yaml
 ```
 
-<br>
+&nbsp;
 
 PipelineRun 개체로 파이프라인을 인스턴스화한다.  
-`hello-goodbye-pipeline-run.yaml`이라는 새 파일을 아래와 같이 작성한다.  
+`hello-goodbye-pipeline-run.yaml`이라는 새 파일을 아래와 같이 작성한다.
+
 ```yaml
 apiVersion: tekton.dev/v1beta1
 kind: PipelineRun
@@ -204,7 +211,7 @@ spec:
     name: hello-goodbye
 ```
 
-<br>
+&nbsp;
 
 작성한 파일을 배포한다.
 
@@ -213,42 +220,51 @@ $ kubectl apply --filename hello-goodbye-pipeline-run.yaml
 pipelinerun.tekton.dev/hello-goodbye-run created
 ```
 
-<br>
+&nbsp;
+
+Tekton CLI를 사용해서 `hello-goodbye-run` Pipelien Run의 로그를 확인한다.
 
 ```bash
 $ tkn pipelinerun logs hello-goodbye-run -f -n default
 ```
-참고로 `tkn` 명령어를 사용하려면 tektoncd-cli 설치가 필요하다.
 
+#### tektoncd-cli 설치
+
+참고로 `tkn` 명령어를 사용하려면 tektoncd-cli 설치가 필요하다.  
 `brew` 명령어로 `tektoncd-cli`를 설치할 수 있다.
+
 ```bash
 $ brew install tektoncd-cli
 ```
 
-실행된 파이프라인 로그에서 hello task와 goodbye task가 모두 정상 실행된 결과를 확인할 수 있다.  
+실행된 파이프라인 로그에서 hello task와 goodbye task가 모두 정상 실행된 결과를 확인할 수 있다.
+
 ```bash
+$ tkn pipelinerun logs hello-goodbye-run -f -n default
 [hello : echo] Hello World
 
 [goodbye : goodbye] Goodbye World!
 
 ```
 
-<br>
+&nbsp;
 
 ### 3. Tekton Dashboard 설치
 
 Tekton Dashboard는 Tekton을 관리하기 편하게 해주는 Web UI이다.  
 
-<br>
+&nbsp;
 
 최신 버전의 Tekton Dashboard를 설치하려면 아래 명령어를 실행한다.
+
 ```bash
 $ kubectl apply --filename https://github.com/tektoncd/dashboard/releases/latest/download/tekton-dashboard-release.yaml
 ```
 
-<br>
+&nbsp;
 
 `tekton-dashboard-xxx` Pod가 새로 생성된 걸 확인할 수 있다.
+
 ```bash
 $ kubectl get pods --namespace tekton-pipelines
 NAME                                           READY   STATUS    RESTARTS   AGE
@@ -257,16 +273,18 @@ tekton-pipelines-controller-55487dcfb8-vww2f   1/1     Running   0          8m21
 tekton-pipelines-webhook-794864555f-g9fnm      1/1     Running   0          8m21s
 ```
 
-<br>
+&nbsp;
 
 Tekton Dashboard에 접속하기 위해 포트를 설정한다.
+
 ```bash
 $ kubectl proxy --port=8080
 ```
 
-<br>
+&nbsp;
 
 그 다음 웹 브라우저에서 아래 주소를 입력해 Tekton Dashboard로 접속 가능하다.
+
 ```
 http://localhost:8080/api/v1/namespaces/tekton-pipelines/services/tekton-dashboard:http/proxy/#/clustertasks
 ```
@@ -277,16 +295,16 @@ http://localhost:8080/api/v1/namespaces/tekton-pipelines/services/tekton-dashboa
 $ kubectl --namespace tekton-pipelines port-forward svc/tekton-dashboard 9097:9097
 ```
 
-<br>
+&nbsp;
 
-위 명령어가 실행된 후 웹 브라우저를 열고 http://localhost:9097로 접속하면 Tekton Dashboard 화면이 나타난다.
+위 명령어가 실행된 후 웹 브라우저를 열고 <http://localhost:9097>로 접속하면 Tekton Dashboard 화면이 나타난다.
 
-![](./1.png)
+![Tekton Dashboard 화면](./1.png)
 
 끝!
 
-<br>
+&nbsp;
 
-# 참고자료
+## 참고자료
 
 [Tekton 공식문서](https://tekton.dev/docs/getting-started/tasks/)
