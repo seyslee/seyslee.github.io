@@ -11,27 +11,29 @@ math: false
 toc: true
 ---
 
-# 개요
+## 개요
 
-AWS CLI 명령어로 특정 EC2 인스턴스 타입이 어디 가용영역<sup>AZ, Availiability Zone</sup>에서 지원하는지 확인하는 방법을 소개한다.
+AWS CLI 명령어를 사용해서 특정 EC2 인스턴스 타입이 어디 가용영역<sup>AZ, Availiability Zone</sup>에서 지원하는지 확인하는 방법을 소개합니다.
 
 <br>
 
-# 전제조건
+## 전제조건
 
 AWS CLI가 미리 설치되어 있어야 한다.  
 
 <br>
 
 **AWS CLI 설치**  
-AWS CLI가 설치되어 있지 않을 경우, macOS 패키지 관리자인 brew를 통해 설치할 수 있다.  
+AWS CLI가 설치되어 있지 않을 경우, macOS 패키지 관리자인 brew를 통해 쉽게 설치할 수 있습니다.
+
 ```bash
 $ brew install awscli
 ```
 
 <br>
 
-**설치 후 AWS CLI 동작 확인**  
+설치 후 AWS CLI 명령어가 잘 동작하는지 확인합니다.
+
 ```bash
 $ aws --version
 aws-cli/2.7.0 Python/3.9.12 Darwin/21.4.0 source/arm64 prompt/off
@@ -39,7 +41,7 @@ aws-cli/2.7.0 Python/3.9.12 Darwin/21.4.0 source/arm64 prompt/off
 
 <br>
 
-# 확인방법  
+## 확인방법  
 
 ### 명령어 형식
 
@@ -49,12 +51,14 @@ $ aws ec2 describe-instance-type-offerings \
 --location-type availability-zone \
 --region <REGION>
 ```
-`INSTANCE-TYPE`과 `REGION` 값은 각자 상황에 맞게 변경해서 실행한다.
+
+`INSTANCE-TYPE`과 `REGION` 값은 각자 상황에 맞게 변경해서 실행합니다.
 
 <br>
 
 ### 명령어 예시
 
+**예제 1**  
 `g4dn.xlarge` 인스턴스 타입(GPU)이 도쿄 리전<sup>`ap-northeast-1`</sup>의 어떤 가용영역<sup>AZ, Availiability Zone</sup>에서 지원하는지 확인하는 명령어
 
 ```bash
@@ -87,6 +91,7 @@ $ aws ec2 describe-instance-type-offerings \
 
 <br>
 
+**예제 2**  
 `t3.medium` 인스턴스 타입이 서울 리전<sup>`ap-northeast-2`</sup>의 어떤 가용영역<sup>AZ, Availiability Zone</sup>에서 지원하는지 확인하는 명령어
 
 ```bash
@@ -125,7 +130,7 @@ $ aws ec2 describe-instance-type-offerings \
 
 <br>
 
-# 참고자료
+## 참고자료
 
 Example 3: To check whether an instance type is supported 섹션을 참고  
 [AWS CLI Command Reference - describe-instance-type-offerings](https://docs.aws.amazon.com/cli/latest/reference/ec2/describe-instance-type-offerings.html#examples)

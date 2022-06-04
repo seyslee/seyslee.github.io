@@ -11,7 +11,7 @@ math: false
 toc: true
 ---
 
-# 개요
+## 개요
 
 EC2 인스턴스의 표준시를 변경하는 방법을 소개합니다.
 
@@ -21,14 +21,14 @@ EC2 인스턴스의 표준시를 변경하는 방법을 소개합니다.
 
 <br>
 
-# 환경
+## 환경
 
 - **OS** : Amazon Linux 2
 - **Shell** : bash
 
 <br>
 
-# 설정방법
+## 설정방법
 
 Amazon Linux 2 인스턴스는 기본적으로 UTC<sup>협정 세계시</sup> 표준 시간대로 설정됩니다.
 
@@ -53,7 +53,8 @@ VERSION_ID="2"
 PRETTY_NAME="Amazon Linux 2"
 ...
 ```
-운영체제 버전이 `Amazon Linux 2`입니다.
+
+인스턴스의 OS 버전이 `Amazon Linux 2`입니다.
 
 <br>
 
@@ -80,7 +81,8 @@ NTP synchronized: yes
 
 <br>
 
-**타임존 목록 확인**
+**타임존 목록 확인**  
+전체 타임존 목록 중 Seoul로 검색합니다.
 
 ```bash
 $ timedatectl list-timezones | grep -i seoul
@@ -89,8 +91,7 @@ Asia/Seoul
 
 <br>
 
-**타임존 변경**
-
+**타임존 변경**  
 타임존을 `Asia/Seoul`로 변경합니다.
 
 ```bash
@@ -128,7 +129,7 @@ Tue May 31 17:59:01 KST 2022
 
 <br>
 
-**중요**
+### 타임존 설정의 유지
 
 위 과정에서 조치한 EC2 타임존 설정은 영구적용이기 때문에 EC2 인스턴스가 리부팅된 후에도 계속 유지됩니다.
 
@@ -137,7 +138,11 @@ $ uptime
  19:49:56 up 0 min,  0 users,  load average: 0.13, 0.03, 0.01
 ```
 
+현재 EC2 인스턴스의 업타임을 보면 방금 전 리부팅된 상태입니다.
+
 <br>
+
+리부팅이 완료된 후 타임존을 확인합니다.
 
 ```bash
 $ timedatectl
@@ -151,11 +156,11 @@ NTP synchronized: yes
       DST active: n/a
 ```
 
-EC2 인스턴스를 리부팅한 뒤에도 여전히 `Time zone` 값이 `Asia/Seoul (KST, +0900)` 입니다.
+EC2 인스턴스를 리부팅한 뒤에도 여전히 `Time zone` 값이 `Asia/Seoul (KST, +0900)` 로 설정된 걸 확인할 수 있습니다.
 
 <br>
 
-# 참고자료
+## 참고자료
 
 **AWS 공식문서**  
 [Amazon Linux의 표준 시간대 변경](https://docs.aws.amazon.com/ko_kr/AWSEC2/latest/UserGuide/set-time.html#change_time_zone)
