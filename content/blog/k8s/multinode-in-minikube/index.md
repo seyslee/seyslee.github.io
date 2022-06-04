@@ -10,13 +10,14 @@ tags: ["devops", "kubernetes"]
 math: false
 toc: true
 ---
-# 개요
+
+## 개요
 
 minikube를 이용해 3대의 노드(1 master node + 2 worker node)를 생성해서 Kubernetes 클러스터 구성하는 방법을 설명한다.
 
 <br>
 
-# 환경
+## 환경
 
 * **Hardware** : macBook Pro (13", M1, 2020)
 * **OS** : macOS Monterey 12.0.1
@@ -26,19 +27,17 @@ minikube를 이용해 3대의 노드(1 master node + 2 worker node)를 생성해
 
 <br>
 
+## 본론
 
+### 1. 멀티노드 생성
 
-# 본론
-
-### 1. 멀티노드 생성  
+![Kubernetes cluster architecture](./1.png)
 
 **옵션설명**
 
-`--nodes=<노드 수>` : 생성할 노드의 수를 지정한다. Default 값은 1개. 나는 4개까지만 시도해봤는데, 맥북에 아직 문제는 없다.
-
-`-p <프로파일명>` : 프로파일(Profile)을 따로 지정해서 작업영역을 분리한다. multinode-lab 프로파일을 따로 만들어 작업영역을 구분짓고, 노드 3대를 생성한다.  
-
-`--driver=<드라이버 이름>` : 어떤 가상환경에 노드를 생성할 것인지 결정한다. 따로 드라이버를 지정하지 않으면 기본적으로 minikube에서 탐색한 후 알아서 지정해 생성해준다. 드라이버의 경우 각자 실행환경에 따라 다를 수 있다. (e.g. `minikube start --driver=docker`)
+* `--nodes=<노드 수>` : 생성할 노드의 수를 지정한다. Default 값은 1개. 나는 4개까지만 시도해봤는데, 맥북에 아직 문제는 없다.
+* `-p <프로파일명>` : 프로파일(Profile)을 따로 지정해서 작업영역을 분리한다. multinode-lab 프로파일을 따로 만들어 작업영역을 구분짓고, 노드 3대를 생성한다.
+* `--driver=<드라이버 이름>` : 어떤 가상환경에 노드를 생성할 것인지 결정한다. 따로 드라이버를 지정하지 않으면 기본적으로 minikube에서 탐색한 후 알아서 지정해 생성해준다. 드라이버의 경우 각자 실행환경에 따라 다를 수 있다. (e.g. `minikube start --driver=docker`)
 
 ```bash
 $ minikube start --nodes=3 -p multinode-lab
@@ -79,11 +78,9 @@ $ minikube start --nodes=3 -p multinode-lab
 
 minikube는 노드를 생성하면서 네트워크 플러그인(CNI, Container Network Interface)까지 자동 구성해준다.  
 
-노드 1대당 호스트 머신의 2 CPU, 약 2GB의 메모리가 할당된다. 
+노드 1대당 호스트 머신의 2 CPU, 약 2GB의 메모리가 할당된다.
 
 <br>
-
-
 
 ### 2. 노드 리스트 확인
 
@@ -93,14 +90,13 @@ multinode-lab	192.168.58.2
 multinode-lab-m02	192.168.58.3
 multinode-lab-m03	192.168.58.4
 ```
+
 3대의 멀티노드로 구성되었다.
 
 - Master Node 1대 : `multinode-lab`
 - Worker Node 2대 : `multinode-lab-m02`, `multinode-lab-m03`
 
 <br>
-
-
 
 ### 3. 노드 상태 확인 (minikube)
 
@@ -128,8 +124,6 @@ kubelet: Running
 
 <br>
 
-
-
 ### 4. 노드 상태 확인 (kubernetes)
 
 `kubectl` 명령어로 쿠버네티스 클러스터 노드의 상태를 확인해보자.
@@ -141,13 +135,12 @@ multinode-lab       Ready    control-plane,master   3m32s   v1.22.3
 multinode-lab-m02   Ready    <none>                 3m10s   v1.22.3
 multinode-lab-m03   Ready    <none>                 2m43s   v1.22.3
 ```
+
 kubernetes에서도 노드 3대가 정상적으로 인식되었다.  
 
 노드의 `ROLES` 값이 `control-plane,master`이면 마스터 노드, `<none>`이면 워커노드이다.  
 
 <br>
-
-
 
 ### 5. deployment 구성
 
@@ -182,8 +175,6 @@ spec:
 
 <br>
 
-
-
 **deployment 생성**
 
 ```bash
@@ -195,8 +186,6 @@ deployment.apps/nginx-deployment created
 
 <br>
 
-
-
 ```bash
 $ kubectl get po -o wide
 NAME                                READY   STATUS              RESTARTS   AGE   IP       NODE                NOMINATED NODE   READINESS GATES
@@ -205,11 +194,12 @@ nginx-deployment-5d59d67564-8zhz7   0/1     ContainerCreating   0          8s   
 nginx-deployment-5d59d67564-f2wdw   0/1     ContainerCreating   0          8s    <none>   multinode-lab-m02   <none>           <none>
 ```
 
-3개의 Pod가 생성(`ContainerCreating`)중이다. 잠시 기다리면 상태가 `Running`으로 바뀌며 pod 생성이 완료된다.
+3개의 Pod가 생성(`ContainerCreating`)중이다.  
+잠시 기다리면 상태가 `Running`으로 바뀌며 pod 생성이 완료된다.
+
+![Deployment, replicaset and pods](./2.png)
 
 <br>
-
-
 
 이제 3대 pod가 여러 노드에 분산되어 배포되었는지 여부를 확인한다.
 
@@ -225,8 +215,6 @@ nginx-deployment-5d59d67564-f2wdw   1/1     Running   0          2m16s   10.244.
 
 <br>
 
-
-
 ### 6. minikube 종료
 
 minikube는 실습환경의 리소스(CPU, 메모리)를 많이 점유하고 사용한다. 지속적으로 켜놓는 건 랩탑 상태에 좋지 않기 때문에 minikube 실습이 끝난 후에는 반드시 종료해주자.
@@ -241,15 +229,15 @@ $ minikube stop -p multinode-lab
 🛑  Powering off "multinode-lab-m03" via SSH ...
 🛑  3 nodes stopped.
 ```
+
 3대의 노드가 정상 종료되었다.
 
 <br>
 
-
-
 **노드상태 확인**
 
 노드 3대의 상태를 확인해본다.
+
 ```bash
 $ minikube status -p multinode-lab
 multinode-lab
@@ -275,8 +263,6 @@ kubelet: Stopped
 
 <br>
 
-
-
 ### 실습환경 전체 삭제
 
 실습환경 구축 중에 중지, 시작이 안되거나 오류가 지속 발생한다면 생성된 실습환경 설정과 파일을 완전히 삭제한 후 구축 과정을 처음부터 다시 시도하는 것도 하나의 방법이다.  
@@ -296,4 +282,6 @@ $ minikube delete --all --profile='multinode-lab'
 🔥  모든 프로필이 성공적으로 삭제되었습니다
 ```
 
-위 명령어는 도커에 올라간 가상 노드 전체를 삭제하고 관련 설정과 파일까지 모두 삭제한다. 쿠버네티스 실습환경에서 계속 에러가 날 경우, 위 방법으로 완전삭제하고 다시 구성하면 해결되는 에러도 많다.
+위 명령어는 도커에 올라간 가상 노드 전체를 삭제하고 관련 설정과 파일까지 모두 삭제한다.
+
+쿠버네티스 실습환경에서 계속 에러가 날 경우, 위 방법으로 완전삭제하고 다시 구성하면 해결되는 에러도 많다.
