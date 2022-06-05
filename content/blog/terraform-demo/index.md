@@ -1,7 +1,7 @@
 ---
 title: "테라폼으로 EC2 Instance 생성하기 데모"
 date: 2022-02-22T01:34:00+09:00
-lastmod: 2022-02-22T01:34:00+09:00
+lastmod: 2022-06-05T14:37:00+09:00
 slug: ""
 description: "테라폼을 이용해서 인프라 자동화를 구현해보자. 이 데모를 통해 서울 리전에 EC2 Instance 배포 후 삭제를 직접 진행한다."
 keywords: []
@@ -11,39 +11,45 @@ math: false
 toc: true
 ---
 
-# 개요
-테라폼을 통해 인프라 자동화, 코드로서 인프라<sup>IaC, Infrastructure as Code</sup>를 맛보기로 체험해보자.  
-테라폼 파일을 적용해서 1대의 EC2 Instance를 자동 생성하고 삭제해본다.  
+## 개요
 
-<br>
+테라폼을 통해 인프라 자동화, 코드로서 인프라<sup>IaC, Infrastructure as Code</sup>를 맛보기로 체험해보겠습니다.  
+테라폼 파일을 적용해서 1대의 EC2 Instance를 자동 생성하고 삭제해보겠습니다.  
 
-# 배경지식
+&nbsp;
+
+## 배경지식
+
 **테라폼<sup>Terraform</sup>**  
-하시코프<sup>Hashicorp</sup>에서 오픈소스로 개발중인 클라우드 인프라스트럭처 자동화를 지향하는 코드로서의 인프라스트럭처<sup>Infrastructure as Code, IaC</sup> 도구이다.  
+하시코프<sup>Hashicorp</sup>에서 오픈소스로 개발중인 클라우드 인프라스트럭처 자동화를 지향하는 코드로서의 인프라스트럭처<sup>Infrastructure as Code, IaC</sup> 도구입니다.
 
-IaC는 코드로 인프라스트럭처를 관리한다는 개념으로 테라폼에서는 하시코프 설정 언어<sup>HCL, Hashicorp Configuration Language</sup>을 사용해 클라우드 리소스를 선언한다.
+IaC는 코드로 인프라스트럭처를 관리한다는 개념으로 테라폼에서는 하시코프 설정 언어<sup>HCL, Hashicorp Configuration Language</sup>을 사용해 클라우드 리소스를 선언합니다.
 
-<br>
+&nbsp;
 
-# 전제조건
-macOS용 패키지 관리자인 Homebrew가 미리 설치되어 있어야 한다.  
+## 전제조건
 
-[Homebrew 설치방법](https://brew.sh/index_ko)  
+macOS용 패키지 관리자인 Homebrew가 미리 설치되어 있어야 합니다.  
+[Homebrew 설치방법](https://brew.sh/index_ko)
 
-<br>
+&nbsp;
 
-# 환경
+## 환경
+
 - **Hardware** : MacBook Pro 13", M1, 2020
 - **OS** : macOS Monterey 12.2.1
 - **Shell** : zsh
 - **Terraform** : v1.1.6
 - **Homebrew** : 3.3.16
 
-<br>
+&nbsp;
 
-# 방법
+## 방법
+
 ### 1. 테라폼 설치
-macOS 패키지 관리자인 brew를 이용해 terraform을 설치한다.
+
+macOS 패키지 관리자인 brew를 이용해 terraform을 설치합니다.
+
 ```bash
 $ brew install terraform
 ==> Auto-updated Homebrew!
@@ -62,39 +68,50 @@ Disable this behaviour by setting HOMEBREW_NO_INSTALL_CLEANUP.
 Hide these hints with HOMEBREW_NO_ENV_HINTS (see `man brew`).
 ```
 
-`terraform` 명령어 동작상태를 확인한다.
+`terraform` 명령어 동작상태를 확인합니다.
+
 ```bash
 $ terraform version
 Terraform v1.1.6
 on darwin_arm64
 ```
-arm64용 Terraform v1.1.6이 설치되었다.
 
-<br>
+arm64용 Terraform v1.1.6이 설치되었습니다.
 
-### 2. 테라폼 계정 생성
+&nbsp;
 
-AWS Management Console에 로그인 후 테라폼 전용 IAM 계정(User)을 생성한다.
-![](./1.png)
+### 2. IAM User 생성
 
-Terraform을 이용해서 인스턴스를 생성하려면 Access Key와 Secrey Key가 필요하므로, 2개의 키 값을 반드시 메모해둔다. 
+AWS Management Console에 로그인합니다.
 
-<br>
+IAM으로 들어가서 테라폼 전용 IAM User를 생성합니다.  
+User에 Policy로 AdministratorAccess를 부여합니다.
+
+![Access Key 화면](./1.png)
+
+Terraform을 이용해서 인스턴스를 생성하려면 Access Key와 Secrey Key가 필요하므로, 2개의 키 값을 반드시 메모해둡니다.
+
+&nbsp;
 
 ### 3. 테라폼 파일 작성
-terraform 파일을 2개 작성한다. 테라폼 파일의 확장자 이름은 `.tf` 이다.
 
-```
+terraform 코드를 2개 작성합니다.  
+테라폼 파일의 확장자는 `.tf` 입니다.
+
+```bash
 terraform-study
 ├── instance.tf
 └── version.tf
 ```
 
-- **instance.tf** : 서울 리전<sup>ap-northeast-2</sup>에 1개의 EC2 Instance를 생성하는 파일.
-- **version.tf** : 테라폼 버전과 클라우드 프로바이더 버전의 제한을 거는 파일.
+- **instance.tf** : 서울 리전<sup>ap-northeast-2</sup>에 1개의 EC2 Instance를 생성하는 파일. `instance.tf`에는 Provider의 리전 정보, Access Key, Secret Key가 선언됩니다.
+- **version.tf** : 테라폼 버전의 제한을 거는 파일입니다.
+
+&nbsp;
 
 #### instance.tf
-```bash
+
+```json
 $ cat instance.tf
 provider "aws" {
   access_key = "ACCESS_KEY_HERE"
@@ -107,37 +124,45 @@ resource "aws_instance" "example" {
   instance_type = "t2.micro"
 }
 ```
-IAM 유저를 새로 만들면서 발급된 `access_key`, `secret_key` 값을 넣어준다.  
 
-<u>`access_key`와 `secret_key` 값은 AWS 계정, 패스워드와 동일한 역할을 하기 때문에 절대 깃허브 레포지터리에 올려서도 안되고, 다른 사람들에게 공유해서도 안된다.</u> 만약 다른 사람이 해당 키 값들을 획득하면 AWS의 모든 권한을 탈취해서 전체 리전에 모든 리소스를 배포하는 사고가 발생해서 몇만 달러라는 거액을 청구받을 수도 있다. (구글링을 해보면 알겠지만 이런 사고가 생각보다 많이 발생한다.) `access_key`와 `secret_key` 키 값은 본인만 갖고 있자!  
+IAM 유저를 새로 만들면서 발급된 `access_key`, `secret_key` 값을 넣어줍니다.
 
-위 코드에서 `ami`는 AMI<sup>Amazon Machine Image</sup>의 ID를 의미하는 변수이다.  
+**주의사항**  
+`access_key`와 `secret_key` 값은 AWS 계정, 패스워드와 동일한 역할을 하기 때문에 절대 깃허브 레포지터리에 올려서도 안되고, 다른 사람들에게 공유해서도 안됩니다.
 
-![](2.jpg)
+만약 다른 사람이 해당 키 값들을 획득하면 AWS의 모든 권한을 탈취해서 전체 리전에 모든 리소스를 배포하는 사고가 발생해서 몇만 달러라는 거액을 청구받을 수 있습니다.
+구글링을 해보면 알겠지만 이런 사고가 생각보다 많이 발생합니다.  
+`access_key`와 `secret_key` 키 값은 본인만 갖고 있어야 한다는 점을 꼭 명심하세요!
 
-Ubuntu OS가 설치된 AMI<sup>Amazon Machine Image</sup> ID는 [Amazon EC2 AMI Locator](https://cloud-images.ubuntu.com/locator/ec2/) 사이트에서 검색이 가능하다.  
+위 코드에서 `ami`는 AMI<sup>Amazon Machine Image</sup>의 ID를 의미하는 변수입니다.  
 
-<br>
+![Amazon EC2 AMI Locator 홈페이지 화면](2.jpg)
+
+Ubuntu OS가 설치된 AMI<sup>Amazon Machine Image</sup> ID는 [Amazon EC2 AMI Locator](https://cloud-images.ubuntu.com/locator/ec2/) 사이트에서 검색이 가능합니다.
+
+&nbsp;
 
 #### version.tf
 
-`version.tf` 파일은 테라폼 버전 0.12 이상에서만 해당 테라폼 코드가 실행되도록 제한하는 파일이다. 테라폼 버전과 프로바이더 버전에 따라서 테라폼 코드 실행결과가 다를 수가 있어서 일관된 결과를 얻기 위해 버전 제한을 걸었다.  
+`version.tf` 파일은 테라폼 버전 0.12 이상에서만 해당 테라폼 코드가 실행되도록 제한하는 파일입니다.  
+테라폼 버전과 프로바이더 버전에 따라서 테라폼 코드 실행결과가 다를 수가 있어서 일관된 결과를 얻기 위해 버전 제한을 걸었습니다.
 
-```bash
+```json
 $ cat versions.tf
 terraform {
   required_version = ">= 0.12"
 }
 ```
 
-<br>
+&nbsp;
 
 ### 4. 테라폼 초기화
+
 ```bash
 $ terraform init
 ```
 
-`terraform init` 명령어를 실행하면 클라우드 제공자 플러그인<sup>Provier plugin</sup>을 찾는다.
+`terraform init` 명령어를 실행하면 클라우드 제공자 플러그인<sup>Provier plugin</sup>을 탐색한 후 설치합니다.
 
 ```bash
 $ terraform init
@@ -164,7 +189,7 @@ If you ever set or change modules or backend configuration for Terraform,
 rerun this command to reinitialize your working directory. If you forget, other
 ```
 
-terraform 초기화가 시작되면서 자동으로 최신 버전의 AWS 플러그인 v4.2.0이 설치되었다.
+terraform 초기화가 시작되면서 자동으로 최신 버전의 AWS 플러그인 v4.2.0이 설치되었습니다.
 
 ```bash
 ...
@@ -173,10 +198,21 @@ terraform 초기화가 시작되면서 자동으로 최신 버전의 AWS 플러�
 ...
 ```
 
-<br>
-
+&nbsp;
 
 ### 5. 테라폼 적용
+
+미리 생성될 리소스 정보를 확인합니다.  
+작성한 코드에 문제가 있으면 `terraform plan`이 에러가 발생하고 실행되지 않습니다.
+
+```bash
+$ terraform plan
+```
+
+&nbsp;
+
+변경될 내용을 미리 확인한 후에는 실제 적용합니다.
+
 ```bash
 $ terraform apply
 ```
@@ -296,11 +332,15 @@ Do you want to perform these actions?
 
   Enter a value:
 ```
-엄청난 양의 생성계획(Plan) 정보가 출력된다. 여기서 `(known after apply)`는 말그대로 실제 적용 후에 확인 가능한 값이라는 뜻이다.
 
-<br>
+엄청난 양의 생성계획(Plan) 정보가 출력됩니다.  
+여기서 `(known after apply)`는 말그대로 실제 적용 후에 확인 가능한 값임을 의미합니다.  
+그래서 실무에서는 plan에서 이상이 발견되지 않아도 apply 후에는 문제가 발생하는 일이 간혹 있습니다.
 
-실행 여부를 묻는 질문에 `yes` 를 입력 후 [Enter]
+&nbsp;
+
+실행 여부를 묻는 질문에 `yes` 를 입력하고 [Enter]를 칩니다.
+
 ```bash
   Enter a value: yes
 
@@ -311,20 +351,23 @@ aws_instance.example: Creation complete after 21s [id=i-082bf1d8b3de239c8]
 
 Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
 ```
-마지막 라인에 1개의 리소스가 정상 생성되었다(`1 added`)고 결과가 출력되었다.
 
-<br>
+마지막 라인에 1개의 리소스가 정상 생성되었다(`1 added`)고 결과가 나옵니다.
 
-AWS Management Console에서도 EC2 Instance 1대가 새로 생성되었는지 확인해본다.
+&nbsp;
 
-![](./3.jpg)
+AWS Management Console에서도 EC2 Instance 1대가 새로 생성되었는지 확인해보겠습니다.
 
-EC2 Instance 1대가 생성된 후 정상 동작중(`Running`)이다.
+![EC2가 생성된 화면](./3.jpg)
 
-<br>
+서울 리전에 EC2 Instance 1대가 생성된 후 정상 동작중(`Running`)입니다.
+
+&nbsp;
 
 ### 6. 삭제
-EC2 Instance를 계속 켜놓으면 비용이 발생한다. 이제 Terraform으로 생성한 EC2 Instance를 다시 삭제해보자.
+
+EC2 Instance를 계속 켜놓으면 비용이 발생합니다.  
+이제 Terraform으로 생성한 EC2 Instance를 다시 삭제해보겠습니다.
 
 ```bash
 $ terraform destroy
@@ -343,7 +386,7 @@ Terraform will perform the following actions:
   # aws_instance.example will be destroyed
   - resource "aws_instance" "example" {
       - ami                                  = "ami-0dd97ebb907cf9366" -> null
-      - arn                                  = "arn:aws:ec2:ap-northeast-2:516381095819:instance/i-082bf1d8b3de239c8" -> null
+      - arn                                  = "arn:aws:ec2:ap-northeast-2:111111111111:instance/i-082bf1d8b3de239c8" -> null
       - associate_public_ip_address          = true -> null
       - availability_zone                    = "ap-northeast-2a" -> null
       - cpu_core_count                       = 1 -> null
@@ -418,13 +461,13 @@ Do you really want to destroy all resources?
   Enter a value:
 ```
 
-삭제를 실행하면 대량의 상태 정보가 바뀔 것을 미리 알려주면서, 정말로 실행할 것인지 묻는다.  
-`yes` 입력 후 [Enter] 키를 입력한다.
+삭제를 실행하면 대량의 상태 정보가 바뀔 것을 미리 알려주면서, 정말로 실행할 것인지 묻습니다.  
+`yes` 입력 후 [Enter] 키를 입력합니다.
 
-<br>
+&nbsp;
 
-EC2 Instance 1대를 제거하는 데 약 40초 걸렸다.  
-EC2 Instance를 만들면서 추가적으로 생성된 다른 자원들이 생각보다 많기 때문이다. (EBS, Security Group, ENI 등)
+EC2 Instance 1대를 제거하는 데 약 40초 걸렸습니다.  
+EC2 Instance를 만들면서 추가적으로 생성된 다른 리소스들이 많기 때문입니다. (EBS, Security Group, ENI 등)
 
 ```bash
   Enter a value: yes
@@ -437,17 +480,19 @@ aws_instance.example: Destruction complete after 40s
 
 Destroy complete! Resources: 1 destroyed.
 ```
-마지막 줄에 1개의 리소스가 정상 삭제되었다고 나온다. (`1 destroyed.`)
 
-<br>
+마지막 줄에 1개의 리소스가 정상 삭제되었다고 나옵니다. (`1 destroyed.`)
 
-![](./4.png)
+&nbsp;
 
-AWS Management Console에서 확인해봐도 EC2 Instance가 삭제(`Terminated`)된 것을 볼 수 있다.
+![Terminated된 EC2 화면](./4.png)
 
-<br>
+AWS Management Console에서 확인해봐도 EC2 Instance가 삭제(`Terminated`)된 것을 볼 수 있습니다.
 
-# 결론
+&nbsp;
 
-코드로 인프라를 관리하면 일관성 있는 상태를 유지하고, 이력 관리도 편하며, 인프라 배포/관리를 자동화할 수 있다.  
-편하게 일하고 싶은 Cloud Engineer라면 인프라 구축 자동화 툴인 Terraform을 꼭 배워놓자!
+## 결론
+
+코드로 인프라를 관리하면 일관성 있는 상태를 유지하고, 이력 관리도 편하며, 인프라 배포/관리를 자동화할 수 있습니다.  
+편하게 일하고 싶은 Cloud Engineer라면 인프라 구축 자동화 툴인 Terraform을 꼭 배워놓도록 합시다.
+
