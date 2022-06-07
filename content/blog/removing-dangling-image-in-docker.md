@@ -1,9 +1,9 @@
 ---
 title: "Docker dangling 이미지 삭제"
 date: 2022-01-05T04:18:20+09:00
-lastmod: 2022-01-05T04:43:40+09:00
+lastmod: 2022-06-07T21:15:40+09:00
 slug: ""
-description: "도커에서 태그가 <none>으로 표기된 dangling 이미지를 명령어로 확인, 삭제하는 방법을 소개합니다."
+description: "도커에서 태그가 <none>으로 표기된 dangling 이미지를 명령어로 확인하고 삭제하는 방법을 소개합니다."
 keywords: []
 draft: false
 tags: ["devops", "docker"]
@@ -11,16 +11,15 @@ math: false
 toc: true
 ---
 
-# 개요
+## 개요
 
-도커에서 `<none>` 태그가 붙은 이미지(dangling image)들이 많이 쌓인 상황일 경우, 명령어를 통해 한 번에 dangling image를 정리하는 방법을 설명합니다.  
+도커에서 `<none>` 태그가 붙은 이미지<sup>dangling image</sup>들이 많이 쌓인 상황일 경우, 명령어를 통해 한 번에 dangling image를 정리하는 방법을 설명합니다.  
 
-<br>
+&nbsp;
 
-# 발단
+## 발단
 
 도커를 사용하던 중 `<none>` 태그가 붙은 쓸모없는 이미지들이 쌓여버렸다.  
-
 4개의 도커 이미지 정리가 필요하다.  
 
 ```bash
@@ -42,40 +41,39 @@ gradle                                 jdk8-alpine   8017d8c2ba74   2 years ago 
 node                                   4.6           e834398209c1   5 years ago      646MB
 ```
 
-<br>
+&nbsp;
 
-# 환경
+## 환경
 
 - **Architecture** : x86_64
-
 - **OS** : Ubuntu 20.04.3 LTS
-
 - **Shell** : bash
-
 - **Docker** : version 20.10.12, build e91ed57
 
-<br>
+&nbsp;
 
-# TL;DR
+## TL;DR
 
-시간이 없는 분들을 위해서 조치방법만 요약합니다.  
-
-자세한 내용은 아래 **해결방법**에 있습니다.  
+시간이 없는 분들을 위해서 조치방법만 요약한 내용입니다.  
+자세한 해결방법은 아래 [해결방법](#해결방법)을 참조하세요.
 
 ```bash
 # 이미지 목록 조회
 $ docker images
+
 # dangling 이미지 삭제
 $ docker rmi $(docker images -f "dangling=true" -q)
-# 위 명령어가 실행 안될 경우는 강제(-f)로 삭제 시도
+
+# 위 명령어가 실행 안될 경우는 강제 삭제(-f, --force) 시도
 $ docker rmi -f $(docker images -f "dangling=true" -q)
+
 # 삭제 결과 확인
 $ docker images
 ```
 
-<br>
+&nbsp;
 
-# 해결방법
+## 해결방법
 
 ### 1. 이미지 확인
 
@@ -104,21 +102,20 @@ node                                   4.6           e834398209c1   5 years ago 
 
 Docker에서는 이런 이미지를 댕글링 이미지(dangling image)라고 부른다.  
 
-<br>
+&nbsp;
 
-동일한 태그를 가진 Docker 이미지가 빌드될 경우, 기존에 있던 이미지는 삭제되지는 않고, tag가 `<none>`으로 변경된 상태로 남아 있는다. 댕글링 이미지는 태그가 지정된 이미지와 관련이 없는 불필요한 레이어이다.  
+#### Dangling Image
 
-<br>
+댕글링 이미지는 같은 이름과 태그의 새 이미지로 덮어쓸 때 생성된다.  
+동일한 태그를 가진 Docker 이미지가 빌드될 경우, 기존에 있던 이미지는 삭제되지는 않고 tag가 `<none>`으로 변경된 상태로 남아 있는다.  
+댕글링 이미지는 태그가 지정된 이미지와 관련이 없는 불필요한 레이어이기 때문에 정리가 필요하다.
 
-
-
-댕글링 이미지는 더 이상 이미지 빌드에 사용하지 못하고 디스크 공간만 소비할 뿐이다.  
-
-관리적 측면에서도 `docker images` 명령어로 도커 이미지를 확인하는 상황에서 헷갈리게 만든다.  
+- 댕글링 이미지는 더 이상 이미지 빌드에 사용하지 못하고 디스크 공간만 차지할 뿐이다.
+- 관리적 측면에서도 `docker images` 명령어로 도커 이미지를 확인하는 상황에서 헷갈리게 만든다.
 
 이런 여러가지 이유로 주기적으로 댕글링 이미지(dangling image)를 정리할 필요가 있다.  
 
-<br>
+&nbsp;
 
 ### 2. 삭제 전 IMAGE ID 확인
 
@@ -130,19 +127,17 @@ a52cae4543de
 0bd92a6415d2
 ```
 
-<none> 태그가 붙어있던 도커 이미지의 Image ID만 출력된다.  
+`<none>` 태그가 붙은 도커 이미지의 Image ID만 출력된다.  
 
-<br>
+**명령어 옵션**  
+`-f <Key=Value>` : 이미지를 조회할 때 특정 조건(filter)을 걸어서 조건에 해당되는 이미지만 출력한다.  
+`-q` (`--quiet`) : 이미지 ID만 출력한다.
 
-**명령어 옵션**
-
-- `-f <Key=Value>` : 이미지를 조회할 때 특정 조건(filter)을 걸어서 조건에 해당되는 이미지만 출력한다.
-
-- `-q` (`--quiet`) : 이미지 ID만 출력한다.
-
-<br>
+&nbsp;
 
 ### 3. 이미지 삭제
+
+`<none>` 태그가 붙은 dangling된 이미지들만 필터링해서 삭제한다.
 
 ```bash
 $ docker rmi $(docker images -f "dangling=true" -q)
@@ -162,13 +157,12 @@ Deleted: sha256:ac00a7709991e802542a5ef86251f01e1aced9369d6bbcc9dbcae9fa1f8f3a21
 Deleted: sha256:254da0fd6eee155fdd01d19c02efde3ed476d495925c02ddd463147978d7df84
 ```
 
-명령어를 실행하면 dangling된 이미지들만 선별해서 삭제한다.
+&nbsp;
 
-<br>
+#### 특정 컨테이너 이미지가 삭제 안될 경우
 
-#### 삭제 중 에러가 발생한다면
-
-**에러 메세지** : `image is being used by stopped container ...`   
+**증상**  
+컨테이너 이미지 삭제 과정에서 `image is being used by stopped container ...` 에러 메세지와 함께 특정 이미지가 삭제되지 않는다.
 
 ```bash
 $ docker rmi $(docker images -f "dangling=true" -q)
@@ -189,12 +183,11 @@ Deleted: sha256:254da0fd6eee155fdd01d19c02efde3ed476d495925c02ddd463147978d7df84
 Error response from daemon: conflict: unable to delete 7e989628d966 (cannot be forced) - image is being used by stopped container 234d5e511f5f
 ```
 
-<br>
+**원인**  
+해당 이미지를 중지된 상태(stopped container)의 컨테이너가 참조하고 있어서 삭제가 불가능하다는 의미이다.  
 
-**원인** : 해당 이미지를 중지된 상태(stopped container)의 컨테이너가 사용중이어서 삭제가 불가능하다는 의미이다.  
-
-
-**해결방법** : 도커 이미지 삭제 명령어(`docker rmi`)를 실행할 때 `-f`(강제로 삭제) 옵션을 주면 된다.  
+**조치방법**  
+도커 이미지를 삭제 명령어인 `docker rmi`를 실행할 때 강제 삭제<sup>`-f`, `--force`</sup> 옵션을 주면 된다.  
 
 ```bash
 $ docker rmi -f $(docker images -f "dangling=true" -q)
@@ -207,7 +200,7 @@ Deleted: sha256:e00dfa43e425da0e1a3d3493b40cb6a298cf3ab82621531f4a87edb0542d4ece
 
 아까 삭제 실패했던 이미지가 `-f` 옵션을 주니까 삭제 처리된다.  
 
-<br>
+&nbsp;
 
 ### 4. 이미지 삭제결과 확인
 
@@ -227,3 +220,5 @@ node                                   4.6           e834398209c1   5 years ago 
 ```
 
 이것으로 `<none>` 태그가 붙은 dangling 이미지들이 모두 삭제되었다.  
+
+조치 완료.
