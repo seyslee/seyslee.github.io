@@ -236,7 +236,7 @@ output "ip" {
 ```
 
 인스턴스 타입으로는 `t3.micro`를 사용하겠습니다.  
-`output`으로 생성된 EC2의 Public IP가 출력되도록 설정했습니다.
+`output`으로 생성한 EC2 인스턴스의 Public IP가 출력되도록 설정했습니다.
 
 &nbsp;
 
