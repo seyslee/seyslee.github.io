@@ -31,14 +31,6 @@ Transfer Family 사용자가 SFTP 서버에 로그인할 때는 ID, Password 방
 ## 환경
 
 - **Terraform v1.2.3**
-
-  실습에 사용한 Provider 버전은 다음과 같습니다.
-
-  | Provider Name | Version                         | Description |
-  |---------------|---------------------------------|----------|
-  | `aws`         | registry.terraform.io/hashicorp/aws v4.19.0 | 전반적인 AWS 인프라 배포에 사용 |
-  | `null`        | registry.terraform.io/hashicorp/null v3.1.1 | SFTP 서버의 Hostname 설정에 사용 |
-
 - **AWS CLI 2.7.7**
 - **Shell** : zsh + oh-my-zsh
 - **OS** : macOS Monterey 12.4 (M1 Pro)
@@ -121,12 +113,51 @@ AWS CLI의 권한이 부여된 상태에서 아래 테라폼 명령어를 실행
 
 ```bash
 $ terraform init
-$ terraform plan
 ```
+
+&nbsp;
+
+`terraform init` 명령어를 수행하면 생성되는 `.terraform.lock.hcl` 파일에서 설정된 Terraform Provider 버전 정보를 확인할 수 있습니다.
+
+```bash
+$ cat .terraform.lock.hcl
+# This file is maintained automatically by "terraform init".
+# Manual edits may be lost in future updates.
+
+provider "registry.terraform.io/hashicorp/aws" {
+  version     = "4.19.0"
+  constraints = "~> 4.0"
+  ...
+}
+
+provider "registry.terraform.io/hashicorp/null" {
+  version     = "3.1.1"
+  constraints = "~> 3.1"
+  ...
+}
+```
+
+이 시나리오에서 terraform provider는 2개를 사용합니다.
+
+- **hashicorp/aws** v4.19.0
+- **hashicorp/null** v3.1.1
+
+`aws` 프로바이더는 AWS 리소스 배포에 사용합니다.  
+`null` 프로바이더는 SFTP Server의 Custom Hostname 설정에 사용합니다.  
+null provider는 사용자의 로컬 터미널에서 AWS CLI를 실행해 SFTP Server에 Custom Hostname를 추가합니다.  
+자세한 내용은 `sftp-server-hostname.tf` 파일에서 확인 가능합니다.
+
+&nbsp;
 
 `terraform plan` 명령어로 배포될 리소스들의 정보를 확인합니다.
 
-이후 배포를 실시합니다.
+```
+$ terraform plan
+```
+
+&nbsp;
+
+이후 리소스 배포를 실시합니다.
 
 ```bash
 $ terraform apply
