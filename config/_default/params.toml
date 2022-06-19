@@ -23,7 +23,7 @@ showScrollToTop = false
 
 [article]
   showDate = true
-  showDateUpdated = true
+  showDateUpdated = false
   showAuthor = false
   showBreadcrumbs = false
   showDraftLabel = true
