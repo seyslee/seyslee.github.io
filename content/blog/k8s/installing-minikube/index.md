@@ -264,6 +264,8 @@ minikube 노드 1대가 실행중입니다.
 파드<sup>Pod</sup>는 쿠버네티스에서 가장 최소한의 오브젝트 단위입니다.  
 1개의 파드는 최소 1개 이상의 컨테이너<sup>Container</sup>로 구성됩니다.
 
+![Kubernetes Architecture](./4.png)
+
 &nbsp;
 
 **YAML 작성**  
