@@ -24,7 +24,7 @@ minikube를 이용해 3대의 노드(1 master node + 2 worker node)를 생성해
 * **Hardware** : macBook Pro (16", M1 Pro, 2021)
 * **OS** : macOS Monterey 12.4
 * **minikube v1.26.0**
-* **Docker Desktop**
+* **Docker Desktop 4.8.2 (79419)**
 
 노드 3대를 생성할 예정이기 때문에 하드웨어의 메모리 리소스가 최소 8GB 이상은 되어야 안정적으로 실습할 수 있습니다.
 
@@ -33,12 +33,16 @@ minikube를 이용해 3대의 노드(1 master node + 2 worker node)를 생성해
 ## 전제조건
 
 * minikube가 설치되어 있어야 합니다.
+
 * docker desktop이 설치되어 있어야 합니다.
+
 * kubectl이 설치되어 있어야 합니다.
+
+이 글에서는 필수 패키지 설치에 대한 가이드는 다루지 않습니다.
 
 &nbsp;
 
-## 본론
+## 실습하기
 
 ### 1. 멀티노드 생성
 
@@ -57,7 +61,10 @@ $ minikube start \
 
 `--driver='docker'` : 도커를 하이퍼바이저로 사용합니다.  
 `--profile='multinode-lab'` : `multinode-lab`이라는 이름의 프로파일을 생성합니다.  
-`--cni='calico` : 컨테이너 네트워크 인터페이스를 `calico`로 지정합니다.  
+`--cni='calico` : 컨테이너 네트워크 인터페이스를 `calico`로 지정합니다.
+
+* auto, bridge, calico, cilium, flannel, kindnet 중 하나를 선택할 수 있습니다.
+
 `--kubernetes-version='stable'` : 노드에 설치되는 쿠버네티스 버전을 안정화된 버전으로 지정합니다.  
 `--nodes=3` : 노드 3대로 구성된 클러스터를 생성합니다.
 
@@ -96,12 +103,15 @@ kubelet: Running
 `kubectl` 명령어를 사용해서도 쿠버네티스 클러스터 노드의 상태를 확인할 수 있습니다.
 
 ```bash
-$ kubectl get no
-NAME                STATUS   ROLES                  AGE     VERSION
-multinode-lab       Ready    control-plane,master   3m32s   v1.22.3
-multinode-lab-m02   Ready    <none>                 3m10s   v1.22.3
-multinode-lab-m03   Ready    <none>                 2m43s   v1.22.3
+$ kubectl get node
+NAME                STATUS   ROLES           AGE   VERSION
+multinode-lab       Ready    control-plane   37m   v1.24.1
+multinode-lab-m02   Ready    <none>          36m   v1.24.1
+multinode-lab-m03   Ready    <none>          36m   v1.24.1
 ```
+
+컨트롤 플레인 1대와 워커노드 2대로 구성된 걸 확인할 수 있습니다.  
+전체 노드에는 2022년 6월 기준으로 안정화 버전인 kubernetes `v1.24.1`이 설치되었습니다.
 
 &nbsp;
 
@@ -154,6 +164,8 @@ deployment.apps/nginx-deployment created
 
 &nbsp;
 
+#### 상태확인
+
 nginx 파드 상태를 확인합니다.  
 3개의 nginx 파드가 생성되고 있습니다.
 
@@ -164,6 +176,8 @@ nginx-deployment-84df99548d-csxnp   0/1     ContainerCreating   0          8s
 nginx-deployment-84df99548d-fmnx9   0/1     ContainerCreating   0          8s
 nginx-deployment-84df99548d-nsmsf   0/1     ContainerCreating   0          8s
 ```
+
+&nbsp;
 
 잠시 기다리면 상태가 `Running`으로 바뀌며 pod 생성이 완료됩니다.  
 
@@ -176,7 +190,9 @@ nginx-deployment-84df99548d-nsmsf   1/1     Running   0          2m19s   10.244.
 ```
 
 여기서 중요한 사실은 여러 노드에 걸쳐 3대의 파드가 배포된다는 사실입니다.  
-`NODE` 컬럼을 확인해보면 발견할 수 있습니다.
+`NODE` 컬럼을 보면 파드가 어디 노드에 배포되었는지 확인할 수 있습니다.
+
+&nbsp;
 
 현재 이 실습환경은 Control Plane이 NoSchedule 상태가 아니라서, Control Plane인 `multinode-lab` 노드에도 파드가 1개 배포되었습니다.
 
@@ -190,13 +206,15 @@ multinode-lab-m03   Ready    <none>          11m   v1.24.1
 
 &nbsp;
 
-### 5. service 배포
+### 4. service 배포
 
 파드에서 실행중인 nginx 웹을 외부에 노출시키려면 service 리소스가 필요합니다.
 
 #### service yaml 작성
 
-```bash
+service를 생성하기 위해 매니페스트를 작성합니다.
+
+```yaml
 $ cat <<EOF >> ./nginx-service.yaml
 apiVersion: v1
 kind: Service
@@ -209,9 +227,15 @@ spec:
   ports:
     - targetPort: 80
       port: 80
+      # nodePort is Optional field
+      # By default and for convenience,
+      # the Kubernetes control plane will allocate
+      # a port from a range (default: 30000-32767)
       nodePort: 30080
 EOF
 ```
+
+&nbsp;
 
 #### service 배포
 
@@ -221,6 +245,8 @@ EOF
 $ kubectl apply -f nginx-service.yaml
 service/nginx-service created
 ```
+
+&nbsp;
 
 nginx-service가 생성되었습니다.
 
@@ -235,9 +261,9 @@ nginx-service   NodePort    10.107.245.50   <none>        80:30080/TCP   2m16s
 
 &nbsp;
 
-### 6. 접속 테스트
+### 5. 접속 테스트
 
-minikube의 터널링 기능을 통해 로컬 환경에서 nginx 파드로 접속합니다.
+`minikube`로 접속 가능한 서비스 목록을 확인합니다.
 
 ```bash
 $ minikube service list \
@@ -251,9 +277,12 @@ $ minikube service list \
 |-------------|---------------|--------------|-----|
 ```
 
-nginx-service는 default 네임스페이스에 있으며 nginx 파드의 80 포트로 연결 됩니다.
+`nginx-service`는 `default` 네임스페이스에 있으며 nginx 파드의 `80` 포트로 연결됩니다.
 
-nginx-service로 접속 시도합니다.
+&nbsp;
+
+minikube의 터널링 기능을 통해 로컬 환경에서 `nginx-service`로 접속합니다.  
+`nginx-service`는 외부에서 들어온 사용자를 nginx 파드의 80 포트로 연결해줍니다.
 
 ```bash
 $ minikube service nginx-service \
@@ -278,16 +307,20 @@ $ minikube service nginx-service \
 ❗  Because you are using a Docker driver on darwin, the terminal needs to be open to run it.
 ```
 
-명령어를 실행하면 자동으로 기본 브라우저가 열리며 nginx 파드에 접속됩니다.
+&nbsp;
+
+명령어가 실행된 후 자동으로 기본 브라우저가 열리며 nginx 파드에 접속됩니다.
 
 ![nginx index page](./3.png)
 
 &nbsp;
 
-### 7. minikube 종료
+## 실습환경 정리
+
+### 방법 1. minikube 종료
 
 minikube는 실습환경의 CPU, 메모리 리소스를 많이 점유합니다.  
-지속적으로 minikube 클러스터를 켜놓는 건 하드웨어에 좋지 않고 배터리 소모도 심하기 때문에 minikube 실습이 끝난 후에는 반드시 종료해줍니다.
+minikube 클러스터를 계속 켜놓는 건 하드웨어에 부담이 많이 가고 배터리 소모도 심하기 때문에 minikube 실습이 끝난 후에는 반드시 종료 또는 삭제해줍니다.
 
 ```bash
 $ minikube stop -p multinode-lab
@@ -304,8 +337,9 @@ $ minikube stop -p multinode-lab
 
 &nbsp;
 
-**노드상태 확인**  
-노드 3대의 상태를 확인해본다.
+#### 노드상태 확인
+
+`minikube` 명령어로 노드 3대의 상태를 확인해봅니다.
 
 ```bash
 $ minikube status -p multinode-lab
@@ -328,28 +362,52 @@ kubelet: Stopped
 
 ```
 
-`multinode-lab`, `multinode-lab-m02`, `multinode-lab03` 노드가 모두 정상 종료(`Stopped`)되었습니다.  
-생성한 리소스는 남아있기 때문에 다시 클러스터를 시작하면 그대로 실습 환경을 다시 사용할 수 있습니다.
+`multinode-lab`, `multinode-lab-m02`, `multinode-lab-m03` 노드가 모두 정상 종료(`Stopped`)되었습니다.
+
+이전에 생성한 리소스는 남아있기 때문에 다시 클러스터를 시작하면 그대로 실습 환경을 이어서 사용할 수 있습니다.
 
 &nbsp;
 
-### 실습환경 전체 삭제
+### 방법 2. minikube 삭제
 
-클러스터의 모든 노드와 리소스를 삭제합니다.
+minikube 클러스터를 더 이상 사용할 필요가 없을 경우, 클러스터의 모든 노드와 리소스를 삭제하면 됩니다.
 
 ```bash
-$ minikube delete --all --profile='multinode-lab'
-🔥  docker 의 "minikube" 를 삭제하는 중 ...
-🔥  /Users/ive/.minikube/machines/minikube 제거 중 ...
-💀  "minikube" 클러스터 관련 정보가 모두 삭제되었습니다
+$ minikube delete --profile='multinode-lab'
+```
+
+삭제가 정상적으로 완료되었을 경우 메세지는 다음과 같이 표시됩니다.
+
+```bash
 🔥  docker 의 "multinode-lab" 를 삭제하는 중 ...
-🔥  /Users/ive/.minikube/machines/multinode-lab 제거 중 ...
-🔥  /Users/ive/.minikube/machines/multinode-lab-m02 제거 중 ...
-🔥  /Users/ive/.minikube/machines/multinode-lab-m03 제거 중 ...
+🔥  /Users/steve/.minikube/machines/multinode-lab 제거 중 ...
+🔥  /Users/steve/.minikube/machines/multinode-lab-m02 제거 중 ...
+🔥  /Users/steve/.minikube/machines/multinode-lab-m03 제거 중 ...
 💀  "multinode-lab" 클러스터 관련 정보가 모두 삭제되었습니다
 🔥  모든 프로필이 성공적으로 삭제되었습니다
 ```
 
-위 명령어는 도커에 올라간 가상 노드 전체를 삭제하고 관련 설정과 파일까지 모두 삭제한다.
+&nbsp;
 
-쿠버네티스 실습환경에서 계속 에러가 날 경우, 위 방법으로 완전삭제하고 다시 구성하면 해결되는 에러도 많다.
+minikube의 전체 프로파일 리스트를 확인합니다.
+
+```bash
+$ minikube profile list
+```
+
+3대의 노드로 구성했던 `multinode-lab` 프로파일이 삭제된 걸 확인할 수 있습니다.
+
+```bash
+🤹  Exiting due to MK_USAGE_NO_PROFILE: No minikube profile was found.
+💡  권장:
+
+    You can create one using 'minikube start'.
+
+```
+
+&nbsp;
+
+## 마치며
+
+지금까지 `minikube`로 멀티노드를 구성하고 서비스를 배포해보는 실습을 진행해보았습니다.  
+끝까지 읽어주셔서 감사합니다.
