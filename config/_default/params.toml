@@ -17,6 +17,9 @@ enableCodeCopy = true
 # robots = ""
 showScrollToTop = false
 
+[footer]
+  showThemeAttribution = false
+
 [homepage]
   layout = "page" # valid options: page, profile, custom
   showRecent = false
