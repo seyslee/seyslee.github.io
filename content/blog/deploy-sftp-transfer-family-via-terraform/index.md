@@ -54,7 +54,7 @@ Transfer Family 사용자가 SFTP 서버에 로그인할 때는 ID, Password 방
 #### 다운로드
 
 실습에 필요한 테라폼 코드 전체를 다운로드 받습니다.  
-[다운로드](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/seyslee/piki/tree/main/docs/terraform-set/aws-transfer-family/terraform-codes)
+[다운로드](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/seyslee/piki/tree/main/docs/terraform/terraform-set/aws-transfer-family/terraform-codes)
 
 #### 코드 구조
 
