@@ -7,17 +7,17 @@
 
 colorScheme = "hipster"
 defaultAppearance = "dark" # valid options: light or dark
-autoSwitchAppearance = false
-showAppearanceSwitcher = false
 
 enableSearch = false
 enableCodeCopy = true
 
 # mainSections = ["section1", "section2"]
 # robots = ""
-showScrollToTop = false
 
 [footer]
+  showScrollToTop = false
+  autoSwitchAppearance = false
+  showAppearanceSwitcher = false
   showThemeAttribution = false
 
 [homepage]
