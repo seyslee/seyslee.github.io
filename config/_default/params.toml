@@ -38,7 +38,7 @@ enableCodeCopy = true
   invertPagination = false
   showReadingTime = false
   showTableOfContents = true
-  showTaxonomies = false
+  showTaxonomies = true
   showWordCount = false
   # sharingLinks = ["facebook", "twitter", "pinterest", "reddit", "linkedin", "email"]
 
