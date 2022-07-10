@@ -37,6 +37,8 @@ minikube 클러스터 환경에 Argo Workflows를 설치해보고 데모를 실�
 
 &nbsp;
 
+## 실습하기
+
 ### 클러스터 생성
 
 `minikube`가 미리 설치되어 있어야 합니다.
