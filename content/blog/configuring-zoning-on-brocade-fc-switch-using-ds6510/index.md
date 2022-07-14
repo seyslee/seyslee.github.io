@@ -31,6 +31,12 @@ Brocade 제조사의 SAN Switch 장비에서 WWN Zoning 설정 후 적용할 수
 Serial Cable을 이용한 연결 또는 SSH 기본포트(TCP/22)로 접속합니다.  
 Brocade DS6510 모델의 경우, SSH 포트로 디폴트 TCP/22를 사용합니다.
 
+#### Brocade 6510 전면부 사진
+
+![DS6510](./1.png)
+
+시리얼로 연결해야 할 경우, 전면부에 위치한 RS-232 port (RJ-45)에 시리얼 케이블을 연결합니다.
+
 &nbsp;
 
 ### 2. Alias 생성
