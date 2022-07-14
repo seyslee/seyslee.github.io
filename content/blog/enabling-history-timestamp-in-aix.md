@@ -10,21 +10,24 @@ tags: ["os", "unix", "aix"]
 math: false
 toc: true
 ---
-# 개요
+
+## 개요
+
 IBM AIX의 ksh에서 명령어 실행기록(history)에 실행시간을 표시하도록 설정합니다.
 
-<br>
+&nbsp;
 
+## 환경
 
-# 환경
 - **OS** : IBM AIX 7.2.0.0
 - **Shell** : ksh
 
-<br>
+&nbsp;
 
+## 문제점
 
-# 문제점
-명령어 실행기록에 실행시간(Timestamp)가 표기되지 않는다.
+명령어 실행기록에 실행시간(Timestamp)가 표시되지 않아 불편합니다.
+
 ```shell
 $ fc -t
 [...]
@@ -32,24 +35,25 @@ $ fc -t
 642     ? :: vi /etc/environments
 643     ? :: fc -t
 ```
-명령어 실행시간(time field)이 물음표로 표시되어 정확한 명령어 실행시간을 확인할 수 없다.  
 
+`fc`는 명령어 실행 기록을 보여주는 명령어입니다.  
+`-t`는 실행시간을 같이 표시하는 옵션입니다.
 
+더 자세한 사용법은 [IBM 공식문서](https://www.ibm.com/docs/en/aix/7.2?topic=f-fc-command)를 참고하세요.
+
+&nbsp;
 
 ### 명령어 실행 시간의 중요성
 
-시스템 엔지니어가 장애처리(Troubleshooting) 시 명령어 실행시간을 통해 장애 원인을 발견하는 경우가 종종 있다.
-
+시스템 엔지니어가 장애처리(Troubleshooting) 시 명령어 실행시간을 통해 장애 원인을 발견하는 경우가 종종 있다.  
 서버 환경에서는 사람에 의해 유발되는 장애(Human Fault)가 생각보다 많이 발생하기 때문이다.
 
-무엇보다 명령어 실행 시간을 체크하는 일은 장애처리시 간단하면서도 관리자에게 많은 정보를 제공해주기 때문에,  
+무엇보다 명령어 실행 시간을 체크하는 일은 장애처리 시 간단하면서도 관리자에게 많은 정보를 제공해주기 때문에, 실행한 명령어에 실행시간까지 기록하도록 설정해놓는다면 장기적인 관점에서 서버 관리가 더 편해진다.
 
-실행한 명령어에 실행시간까지 기록하도록 설정해놓는다면 장기적인 관점에서 서버 관리가 더 편해진다.
+&nbsp;
 
-<br>
+## 설정방법
 
-
-# 해결법
 IBM AIX 5.3 버전 이후부터 ksh에서 timestamp 기능을 지원한다.
 환경설정(`/etc/environment`) 파일에 새 값을 추가해 명령어 기록에 시간을 표기할 수 있다.
 
@@ -57,21 +61,22 @@ IBM AIX 5.3 버전 이후부터 ksh에서 timestamp 기능을 지원한다.
 
 ```shell
 $ cat /etc/environment
-[...] 
+...
 PATH=/usr/bin:/etc:/usr/sbin:/usr/ucb:/usr/bin/X11:/sbin:/usr/java7_64/jre/bin:/usr/java7_64/bin
 TZ=Asia/Seoul
 LANG=en_US
 LOCPATH=/usr/lib/nls/loc
 ```
+
 기존에는 `EXTENDED_HISTORY` 파라미터가 없다.
 
-
-
+&nbsp;
 
 ### 2. environment 파일 수정
+
 ```shell
 $ cat /etc/environment
-[...]
+...
 PATH=/usr/bin:/etc:/usr/sbin:/usr/ucb:/usr/bin/X11:/sbin:/usr/java7_64/jre/bin:/usr/java7_64/bin
 TZ=Asia/Seoul
 LANG=en_US
@@ -81,29 +86,20 @@ EXTENDED_HISTORY=ON
 vi 편집기로 `/etc/environment` 파일을 열고 맨 아랫줄에 `EXTENDED_HISTORY` 파라미터에 `ON` 값을 추가한다.  
 `/etc/environment` 파일에 `EXTENDED_HISTORY` 파라미터를 추가하면 전체 계정에 해당 설정이 적용된다.
 
-
+&nbsp;
 
 ### 3. 로그아웃 후 재로그인
+
 ```shell
 $ exit
 ```
 
-
+&nbsp;
 
 ### 4. 명령어 실행기록 확인
 
 ```shell
 $ fc -t
-662     2021/10/23 10:16:58 :: cat .sh_history | more
-663     2021/10/23 10:17:07 :: ls
-664     2021/10/23 10:17:16 :: vi .sh_history
-665     2021/10/23 10:17:36 :: vi .sh_history
-666     2021/10/23 10:17:38 :: ls
-667     2021/10/23 10:17:39 :: fc -t
-668     2021/10/23 10:17:44 :: vi .sh_history
-669     2021/10/23 10:17:53 :: fc -t
-670     2021/10/23 10:24:09 :: fc -t
-671     2021/10/23 10:24:12 :: id
 672     2021/10/23 10:24:13 :: clear
 673     2021/10/23 10:24:15 :: fc -t
 674     2021/10/23 10:24:18 :: clear
@@ -111,8 +107,13 @@ $ fc -t
 676     2021/10/23 10:24:24 :: clear
 677     2021/10/23 10:24:28 :: fc -t
 ```
-이제 명령어 실행시간이 표시된다.
-`history -t` 명령어도 `fc -t` 명령어와 완전 동일한 기능을 하니 기호에 맞춰 사용하면 된다.
+
+이제 명령어 실행시간이 표시되는 걸 확인할 수 있습니다.
+
+&nbsp;
+
+`history -t` 명령어도 `fc -t` 명령어와 완전 동일한 기능을 합니다.  
+자신에게 더 익숙한 명령어를 사용하면 됩니다.
 
 ```shell
 $ history -t
