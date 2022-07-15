@@ -1,7 +1,7 @@
 ---
 title: "EC2 인스턴스 타입이 지원하는 AZ 확인"
 date: 2022-05-09T19:56:48+09:00
-lastmod: 2022-05-16T23:57:44+09:00
+lastmod: 2022-07-16T00:02:44+09:00
 slug: ""
 description: "특정 EC2 인스턴스 타입이 어디 가용영역(Availiability Zone)에서 지원하는지 AWS CLI 명령어를 통해 확인하는 방법"
 keywords: []
@@ -47,9 +47,9 @@ aws-cli/2.7.0 Python/3.9.12 Darwin/21.4.0 source/arm64 prompt/off
 
 ```bash
 $ aws ec2 describe-instance-type-offerings \
---filters Name=instance-type,Values=<INSTANCE-TYPE> \
---location-type availability-zone \
---region <REGION>
+  --filters Name=instance-type,Values=<INSTANCE-TYPE> \
+  --location-type availability-zone \
+  --region <REGION>
 ```
 
 `INSTANCE-TYPE`과 `REGION` 값은 각자 상황에 맞게 변경해서 실행합니다.
@@ -63,9 +63,9 @@ $ aws ec2 describe-instance-type-offerings \
 
 ```bash
 $ aws ec2 describe-instance-type-offerings \
---filters Name=instance-type,Values=g4dn.xlarge \
---location-type availability-zone \
---region ap-northeast-1
+  --filters Name=instance-type,Values=g4dn.xlarge \
+  --location-type availability-zone \
+  --region ap-northeast-1
 {
     "InstanceTypeOfferings": [
         {
@@ -96,9 +96,9 @@ $ aws ec2 describe-instance-type-offerings \
 
 ```bash
 $ aws ec2 describe-instance-type-offerings \
---filters Name=instance-type,Values=t3.medium \
---location-type availability-zone \
---region ap-northeast-2
+  --filters Name=instance-type,Values=t3.medium \
+  --location-type availability-zone \
+  --region ap-northeast-2
 {
     "InstanceTypeOfferings": [
         {
