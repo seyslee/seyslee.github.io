@@ -50,18 +50,18 @@ minikube를 이용해 3대의 노드(1 master node + 2 worker node)를 생성해
 
 ```bash
 $ minikube start \
---driver='docker' \
---profile='multinode-lab' \
---cni='calico' \
---kubernetes-version='stable' \
---nodes=3
+  --driver='docker' \
+  --profile='multinode-lab' \
+  --cni='calico' \
+  --kubernetes-version='stable' \
+  --nodes=3
 ```
 
 #### 명령어 옵션 설명
 
 `--driver='docker'` : 도커를 하이퍼바이저로 사용합니다.  
 `--profile='multinode-lab'` : `multinode-lab`이라는 이름의 프로파일을 생성합니다.  
-`--cni='calico` : 컨테이너 네트워크 인터페이스를 `calico`로 지정합니다.
+`--cni='calico'` : 컨테이너 네트워크 인터페이스를 `calico`로 지정합니다.
 
 * auto, bridge, calico, cilium, flannel, kindnet 중 하나를 선택할 수 있습니다.
 
@@ -122,7 +122,7 @@ multinode-lab-m03   Ready    <none>          36m   v1.24.1
 현재 경로에 `nginx-deploy.yaml` 파일을 생성합니다.
 
 ```yaml
-$ cat <<EOF >> ./nginx-deploy.yaml
+$ cat << EOF >> ./nginx-deploy.yaml
 apiVersion: apps/v1
 kind: Deployment            # 타입은 Deployment
 metadata:
@@ -215,7 +215,7 @@ multinode-lab-m03   Ready    <none>          11m   v1.24.1
 service를 생성하기 위해 매니페스트를 작성합니다.
 
 ```yaml
-$ cat <<EOF >> ./nginx-service.yaml
+$ cat << EOF >> ./nginx-service.yaml
 apiVersion: v1
 kind: Service
 metadata:
@@ -267,7 +267,7 @@ nginx-service   NodePort    10.107.245.50   <none>        80:30080/TCP   2m16s
 
 ```bash
 $ minikube service list \
---profile multinode-lab
+  --profile multinode-lab
 |-------------|---------------|--------------|-----|
 |  NAMESPACE  |     NAME      | TARGET PORT  | URL |
 |-------------|---------------|--------------|-----|
@@ -286,7 +286,7 @@ minikube의 터널링 기능을 통해 로컬 환경에서 `nginx-service`로 �
 
 ```bash
 $ minikube service nginx-service \
---profile multinode-lab
+  --profile multinode-lab
 ```
 
 정상 실행된 결과는 다음과 같이 출력됩니다.
