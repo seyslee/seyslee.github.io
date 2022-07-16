@@ -23,9 +23,10 @@ M1 CPU를 사용하는 macOS에서 `minikube`를 설치해 kubernetes 실습 환
 
 - **Hardware** : MacBook Pro (16", M1 Pro, 2021)
 - **OS** : macOS Monterey 12.4
+- **Shell** : zsh + oh-my-zsh
 - **패키지 관리자** : Homebrew 3.3.2
 - **설치대상**
-  - **Docker Desktop v4.1.1**
+  - **Docker Desktop v4.10.1**
   - **minikube v1.25.2**
 
 &nbsp;
@@ -67,7 +68,20 @@ cask 목록에 docker가 설치된 걸 확인할 수 있습니다.
 
 런치패드에도 Docker 아이콘이 생성되었습니다.
 
-![런치패드의 도커 아이콘](./0.png)
+![런치패드의 도커 아이콘](./1.png)
+
+&nbsp;
+
+이제 도커 데스크탑에서 쿠버네티스 기능을 활성화합니다.  
+minikube 클러스터를 도커 환경에서 생성하고 운영하기 위한 목적입니다.
+
+상단바 → Docker 아이콘 → Preferences
+
+![Docker Desktop 설정화면 1](./2.png)
+
+Containers / Apps → Enable Kubernetes 체크 → Apply & Restart
+
+![Docker Desktop 설정화면 2](./3.png)
 
 &nbsp;
 
@@ -99,29 +113,29 @@ commit: 362d5fdc0a3dbee389b3d3f1034e8023e72bd3a7
 
 &nbsp;
 
-### 3. minikube 실행
+### 3. 쿠버네티스 클러스터 생성
 
 로컬에 1대의 노드로 구성된 쿠버네티스 클러스터를 생성합니다.
 
 ```bash
 $ minikube start \
- --cni='calico' \
- --driver='docker' \
- --kubernetes-version='stable'
+  --cni='calico' \
+  --driver='docker' \
+  --nodes=1 \
+  --kubernetes-version='stable'
 ```
 
 **명령어 옵션 설명**  
 `--cni` : 컨테이너 네트워크 인터페이스를 지정합니다.  
 `--driver` : 쿠버네티스 클러스터를 구동할 하이퍼바이저를 지정합니다.  
+`--node` : 생성할 쿠버네티스 노드 수량. 기본값은 1대입니다.  
 `--kubernetes-version` : 생성되는 노드의 쿠버네티스 버전을 지정합니다.  
 
 &nbsp;
 
+minikube 클러스터가 정상적으로 생성된 경우, 다음과 같은 아웃풋이 출력됩니다.
+
 ```bash
-$ minikube start \
- --cni='calico' \
- --driver='docker' \
- --kubernetes-version='stable'
 😄  Darwin 12.4 (arm64) 의 minikube v1.25.2
 ✨  유저 환경 설정 정보에 기반하여 docker 드라이버를 사용하는 중
 👍  minikube 클러스터의 minikube 컨트롤 플레인 노드를 시작하는 중
@@ -175,9 +189,13 @@ $ minikube profile list
 
 **docker 확인**
 
-![Docker 컨테이너 화면](./2.png)
+```bash
+$ docker ps
+CONTAINER ID   IMAGE                                 COMMAND                  CREATED          STATUS          PORTS                                                                                                                        NAMES
+a4eda4df4ff2   gcr.io/k8s-minikube/kicbase:v0.0.32   "/usr/local/bin/entr…"   28 seconds ago   Up 27 seconds   0.0.0.0:56021->22/tcp, 0.0.0.0:56022->2376/tcp, 0.0.0.0:56026->5000/tcp, 0.0.0.0:56027->8443/tcp, 0.0.0.0:56023->32443/tcp   minikube
+```
 
-도커에서 실행되는 minikube 컨테이너를 확인할 수 있습니다.
+도커에서 실행되는 minikube 노드를 확인할 수 있습니다.
 
 &nbsp;
 
@@ -243,7 +261,7 @@ $ minikube dashboard
 자동으로 브라우저 창이 열리면서 Kubernetes dashboard로 이동됩니다.  
 아직 아무것도 배포하지 않은 초기화 상태의 클러스터라 표시할 내용이 없습니다.
 
-![minikube dashboard 초기화면](./3.png)
+![minikube dashboard 초기화면](./5.png)
 
 &nbsp;
 
@@ -264,7 +282,7 @@ minikube 노드 1대가 실행중입니다.
 파드<sup>Pod</sup>는 쿠버네티스에서 가장 최소한의 오브젝트 단위입니다.  
 1개의 파드는 최소 1개 이상의 컨테이너<sup>Container</sup>로 구성됩니다.
 
-![Kubernetes Architecture](./4.png)
+![Kubernetes Architecture](./6.png)
 
 &nbsp;
 
@@ -272,7 +290,7 @@ minikube 노드 1대가 실행중입니다.
 현재 경로에 `sample-pod.yaml` 파일을 생성합니다.
 
 ```bash
-$ cat <<EOF > ./sample-pod.yaml
+$ cat << EOF > ./sample-pod.yaml
 apiVersion: v1
 kind: Pod
 metadata:
@@ -455,6 +473,55 @@ The connection to the server localhost:8080 was refused - did you specify the ri
 
 ## 더 나아가서
 
-1대의 노드가 아닌 여러대의 노드로 실습해보고 싶다면 아래 글도 읽어보는 걸 추천합니다.
+### 멀티노드 구성하기
+
+싱글 노드가 아닌 여러 대의 노드로 구성된 클러스터에서 실습해보고 싶다면 아래 글도 읽어보는 걸 추천합니다.
 
 [minikube 멀티노드 구성](https://seyslee.github.io/blog/k8s/multinode-in-minikube/)
+
+&nbsp;
+
+### 자동완성 설정
+
+minikube 명령어의 자동완성 기능을 영구적으로 설정하는 방법입니다.  
+쉘 설정파일에 minikube 자동완성 기능을 디폴트로 사용하도록 설정 내용을 추가합니다.
+
+사용자가 사용하는 쉘 종류에 따라서 설정 방법이 약간씩 다릅니다.
+
+```bash
+# for zsh users
+$ cat << EOF >> ~/.zshrc
+# minikube autocompletion
+source <(minikube completion zsh)
+EOF
+```
+
+```bash
+# for bash users
+$ cat << EOF >> ~/.bashrc
+# minikube autocompletion
+source <(minikube completion bash)
+EOF
+```
+
+&nbsp;
+
+새로 추가한 `minikube completion` 설정 내용을 바로 적용하기 위해서 아래 명령어를 실행합니다.
+
+```bash
+# for zsh users
+$ source ~/.zshrc
+```
+
+```bash
+# for bash users
+$ source ~/.bashrc
+```
+
+또는 현재 사용중인 터미널을 닫았다가 열어도 적용됩니다.
+
+&nbsp;
+
+이제 `minikube` 명령어를 사용할 때 [tab]키를 이용해서 어떤 명령어와 옵션이 있는지 실시간으로 확인할 수 있습니다.
+
+![minikube 자동완성 데모](./7.gif)
