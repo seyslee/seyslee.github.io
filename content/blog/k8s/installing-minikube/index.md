@@ -35,6 +35,8 @@ M1 CPU를 사용하는 macOS에서 `minikube`를 설치해 kubernetes 실습 환
 
 ### 1. Docker 설치
 
+#### 설치
+
 minikube를 사용하기 위해서는 로컬 머신에 docker desktop을 먼저 설치해야합니다.  
 macOS용 패키지 관리자인 Homebrew를 이용해 `docker`를 쉽게 설치할 수 있습니다.
 
@@ -72,16 +74,20 @@ cask 목록에 docker가 설치된 걸 확인할 수 있습니다.
 
 &nbsp;
 
+#### 쿠버네티스 기능 활성화
+
 이제 도커 데스크탑에서 쿠버네티스 기능을 활성화합니다.  
 minikube 클러스터를 도커 환경에서 생성하고 운영하기 위한 목적입니다.
 
-상단바 → Docker 아이콘 → Preferences
+상단바 → Docker Desktop 아이콘 → Preferences
 
 ![Docker Desktop 설정화면 1](./2.png)
 
 Containers / Apps → Enable Kubernetes 체크 → Apply & Restart
 
 ![Docker Desktop 설정화면 2](./3.png)
+
+쿠버네티스 기능 활성화를 설정하는 과정에서 문제가 발생할 경우, [Docker 공식문서](https://docs.docker.com/desktop/kubernetes/#enable-kubernetes)를 참고하세요.
 
 &nbsp;
 
@@ -128,7 +134,7 @@ $ minikube start \
 **명령어 옵션 설명**  
 `--cni` : 컨테이너 네트워크 인터페이스를 지정합니다.  
 `--driver` : 쿠버네티스 클러스터를 구동할 하이퍼바이저를 지정합니다.  
-`--node` : 생성할 쿠버네티스 노드 수량. 기본값은 1대입니다.  
+`--nodes` : 생성할 쿠버네티스 노드 수량. 기본값은 1대입니다.  
 `--kubernetes-version` : 생성되는 노드의 쿠버네티스 버전을 지정합니다.  
 
 &nbsp;
@@ -176,18 +182,19 @@ Profile 이름을 지정하지 않을 경우 기본 Profile인 `minikube`가 생
 
 ```bash
 $ minikube profile list
-|----------|-----------|---------|--------------|------|---------|---------|-------|
-| Profile  | VM Driver | Runtime |      IP      | Port | Version | Status  | Nodes |
-|----------|-----------|---------|--------------|------|---------|---------|-------|
-| minikube | docker    | docker  | 192.168.49.2 | 8443 | v1.23.3 | Running |     1 |
-|----------|-----------|---------|--------------|------|---------|---------|-------|
+|----------|-----------|---------|--------------|------|---------|---------|-------|--------|
+| Profile  | VM Driver | Runtime |      IP      | Port | Version | Status  | Nodes | Active |
+|----------|-----------|---------|--------------|------|---------|---------|-------|--------|
+| minikube | docker    | docker  | 192.168.49.2 | 8443 | v1.24.1 | Running |     1 | *      |
+|----------|-----------|---------|--------------|------|---------|---------|-------|--------|
 ```
 
 &nbsp;
 
 ### 4. minikube 상태 확인
 
-**docker 확인**
+**docker 확인**  
+도커 컨테이너로 실행되는 minikube 노드를 확인합니다.
 
 ```bash
 $ docker ps
@@ -195,7 +202,7 @@ CONTAINER ID   IMAGE                                 COMMAND                  CR
 a4eda4df4ff2   gcr.io/k8s-minikube/kicbase:v0.0.32   "/usr/local/bin/entr…"   28 seconds ago   Up 27 seconds   0.0.0.0:56021->22/tcp, 0.0.0.0:56022->2376/tcp, 0.0.0.0:56026->5000/tcp, 0.0.0.0:56027->8443/tcp, 0.0.0.0:56023->32443/tcp   minikube
 ```
 
-도커에서 실행되는 minikube 노드를 확인할 수 있습니다.
+여기서 결국 minikube 클러스터를 구성하는 노드의 실체는 도커 컨테이너라는 사실을 알 수 있습니다.
 
 &nbsp;
 
@@ -265,13 +272,15 @@ $ minikube dashboard
 
 &nbsp;
 
+쿠버네티스 노드 정보를 확인합니다.
+
 ```bash
 $ kubectl get node -o wide
-NAME       STATUS   ROLES                  AGE   VERSION   INTERNAL-IP    EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION      CONTAINER-RUNTIME
-minikube   Ready    control-plane,master   15m   v1.23.3   192.168.49.2   <none>        Ubuntu 20.04.2 LTS   5.10.104-linuxkit   docker://20.10.12
+NAME       STATUS   ROLES           AGE     VERSION   INTERNAL-IP    EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION      CONTAINER-RUNTIME
+minikube   Ready    control-plane   8m36s   v1.24.1   192.168.49.2   <none>        Ubuntu 20.04.4 LTS   5.10.104-linuxkit   docker://20.10.17
 ```
 
-minikube 노드 1대가 실행중입니다.  
+control-plane 노드 1대가 실행중입니다. 해당 노드의 쿠버네티스 버전은 `v1.24.1`이고 CRI는 dockershim(`docker://20.10.17`)을 사용중입니다.  
 노드가 1대일 경우 `control-plane` 역할과 `worker node` 역할을 같이 수행하게 됩니다.
 
 &nbsp;
