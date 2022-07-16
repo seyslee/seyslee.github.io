@@ -111,14 +111,14 @@
 </span></span></span><span class=line><span class=cl><span class=s>apiVersion: v1
 </span></span></span><span class=line><span class=cl><span class=s>kind: Pod
 </span></span></span><span class=line><span class=cl><span class=s>metadata:
-</span></span></span><span class=line><span class=cl><span class=s> name: myapp-pod
-</span></span></span><span class=line><span class=cl><span class=s> labels:
-</span></span></span><span class=line><span class=cl><span class=s>   app: myapp
+</span></span></span><span class=line><span class=cl><span class=s>  name: myapp-pod
+</span></span></span><span class=line><span class=cl><span class=s>  labels:
+</span></span></span><span class=line><span class=cl><span class=s>    app: myapp
 </span></span></span><span class=line><span class=cl><span class=s>spec:
-</span></span></span><span class=line><span class=cl><span class=s> containers:
-</span></span></span><span class=line><span class=cl><span class=s> - name: myapp-container
-</span></span></span><span class=line><span class=cl><span class=s>   image: busybox
-</span></span></span><span class=line><span class=cl><span class=s>   command: [&#39;sh&#39;, &#39;-c&#39;, &#39;echo Hello Kubernetes! &amp;&amp; sleep 3600&#39;]
+</span></span></span><span class=line><span class=cl><span class=s>  containers:
+</span></span></span><span class=line><span class=cl><span class=s>  - name: myapp-container
+</span></span></span><span class=line><span class=cl><span class=s>    image: busybox
+</span></span></span><span class=line><span class=cl><span class=s>    command: [&#39;sh&#39;, &#39;-c&#39;, &#39;echo Hello Kubernetes! &amp;&amp; sleep 3600&#39;]
 </span></span></span><span class=line><span class=cl><span class=s>EOF</span>
 </span></span></code></pre></div><p><code>sample-pod.yaml</code>은 1개의 파드를 배포하는 매니페스트입니다.<br>파드에 들어있는 <code>busybox</code> 컨테이너는 <code>Hello Kubernetes!</code> 메세지를 출력하고 3600초 후 종료되도록 동작합니다.</p><p> </p><p>작성한 매니페스트를 사용해서 파드를 배포합니다.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>$ kubectl apply -f sample-pod.yaml
 </span></span><span class=line><span class=cl>pod/myapp-pod created
