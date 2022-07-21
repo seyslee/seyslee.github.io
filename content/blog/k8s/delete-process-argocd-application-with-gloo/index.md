@@ -136,8 +136,8 @@ Gloo Edge에서 사용하는 주요 리소스에는 `Gateway`, `VirtualService`,
 $ kubectl get svc -n gloo-system -l 'app=gloo'
 NAME               TYPE           CLUSTER-IP       EXTERNAL-IP                                                                          PORT(S)                               AGE
 ...
-gateway            ClusterIP      10.100.165.195   <none>                                                                               443/TCP                               119d
-gateway-proxy      LoadBalancer   10.100.203.89    k8s-gloosyst-gatewayp-84d8500f92-1608f38444117bc6.elb.ap-northeast-2.amazonaws.com   80:32541/TCP,443:30089/TCP            119d
+gateway            ClusterIP      11.222.333.444   <none>                                                                               443/TCP                               123d
+gateway-proxy      LoadBalancer   11.222.333.44    k8s-gloosyst-xxxxxxxx-xxxxxxxxx-xxxxxxxxxxxxxxxxx.elb.ap-northeast-2.amazonaws.com   80:11111/TCP,443:22222/TCP            123d
 ...
 ```
 
