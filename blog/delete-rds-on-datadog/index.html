@@ -1,0 +1,135 @@
+<!doctype html><html lang=en dir=ltr class=scroll-smooth data-default-appearance=dark data-auto-appearance=true><head><meta charset=utf-8><meta http-equiv=content-language content="en"><meta name=viewport content="width=device-width,initial-scale=1"><meta http-equiv=x-ua-compatible content="ie=edge"><title>데이터독 RDS 삭제 &#183; seyslee</title><meta name=title content="데이터독 RDS 삭제 &#183; seyslee"><meta name=description content="seyslee"><link rel=canonical href=https://seyslee.github.io/blog/delete-rds-on-datadog/><link type=text/css rel=stylesheet href=/css/main.bundle.min.fff8ff4cdbe2bf80930c53b6e47a6d9826b914a8623246481ff09ff52ea48fcfb403d9ba1dc7bbc800a7ecb15298c468838a661dd8ebb3e9f46fdca239b38a30.css integrity="sha512-//j/TNviv4CTDFO25HptmCa5FKhiMkZIH/Cf9S6kj8+0A9m6Hce7yACn7LFSmMRog4pmHdjrs+n0b9yiObOKMA=="><script type=text/javascript src=/js/appearance.min.badab316c9287a5a42a843e4eb45da65bb3d194a5a0f5fa4a3e516160e67df0b8c65f4f19a8e146436e29d583699e6cb41d6bbe99e05e1dbaa877763bad9f8e2.js integrity="sha512-utqzFskoelpCqEPk60XaZbs9GUpaD1+ko+UWFg5n3wuMZfTxmo4UZDbinVg2mebLQda76Z4F4duqh3djutn44g=="></script>
+<script defer type=text/javascript id=script-bundle src=/js/main.bundle.min.9947db70e5b36e741e53f8531bd734741b3fc7a688f7b5d749fc5433c48efc252f47bdf44e471570a550fc051b87712799014040e6349b38d64448b94e84e45a.js integrity="sha512-mUfbcOWzbnQeU/hTG9c0dBs/x6aI97XXSfxUM8SO/CUvR730TkcVcKVQ/AUbh3EnmQFAQOY0mzjWREi5ToTkWg==" data-copy=Copy data-copied=Copied></script>
+<link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=manifest href=/site.webmanifest><meta property="og:title" content="데이터독 RDS 삭제"><meta property="og:description" content="데이터독 APM 서비스에서 Aurora RDS를 안전하게 삭제하는 방법을 소개합니다."><meta property="og:type" content="article"><meta property="og:url" content="https://seyslee.github.io/blog/delete-rds-on-datadog/"><meta property="article:section" content="blog"><meta property="article:published_time" content="2022-07-22T23:09:10+09:00"><meta property="article:modified_time" content="2022-07-22T23:50:15+09:00"><meta property="og:site_name" content="seyslee"><meta name=twitter:card content="summary"><meta name=twitter:title content="데이터독 RDS 삭제"><meta name=twitter:description content="데이터독 APM 서비스에서 Aurora RDS를 안전하게 삭제하는 방법을 소개합니다."><script type=application/ld+json>[{"@context":"https://schema.org","@type":"Article","articleSection":"Blogs","name":"데이터독 RDS 삭제","headline":"데이터독 RDS 삭제","description":"데이터독 APM 서비스에서 Aurora RDS를 안전하게 삭제하는 방법을 소개합니다.","abstract":"개요 # 어느날 개발팀으로부터 AWS RDS에서 DB 클러스터를 삭제해달라는 요청이 왔습니다.","inLanguage":"en","url":"https:\/\/seyslee.github.io\/blog\/delete-rds-on-datadog\/","author":{"@type":"Person","name":"Younsung Lee"},"copyrightYear":"2022","dateCreated":"2022-07-22T23:09:10\u002b09:00","datePublished":"2022-07-22T23:09:10\u002b09:00","dateModified":"2022-07-22T23:50:15\u002b09:00","keywords":["aws","monitoring"],"mainEntityOfPage":"true","wordCount":"827"}]</script><meta name=author content="Younsung Lee"><link href=mailto:ivecloudblack@gmail.com rel=me><link href=https://github.com/seyslee rel=me></head><body class="flex flex-col h-screen px-6 m-auto text-lg leading-7 bg-neutral text-neutral-900 sm:px-14 md:px-24 lg:px-32 dark:bg-neutral-800 dark:text-neutral max-w-7xl"><div id=the-top class="absolute flex self-center"><a class="px-3 py-1 text-sm -translate-y-8 rounded-b-lg bg-primary-200 dark:bg-neutral-600 focus:translate-y-0" href=#main-content><span class="font-bold ltr:pr-2 rtl:pl-2 text-primary-600 dark:text-primary-400">&darr;</span>Skip to main content</a></div><header class="py-6 font-semibold sm:py-10 text-neutral-900 dark:text-neutral print:hidden"><nav class="flex justify-between"><div><a class="decoration-primary-500 hover:underline hover:decoration-2 hover:underline-offset-2" rel=me href=/>seyslee</a></div><ul class="flex flex-col list-none ltr:text-right rtl:text-left sm:flex-row"><li class="mb-1 sm:mb-0 ltr:sm:mr-7 ltr:sm:last:mr-0 rtl:sm:ml-7 rtl:sm:last:ml-0"><a class="decoration-primary-500 hover:underline hover:decoration-2 hover:underline-offset-2" href=/blog/ title=Blogs>post</a></li><li class="mb-1 sm:mb-0 ltr:sm:mr-7 ltr:sm:last:mr-0 rtl:sm:ml-7 rtl:sm:last:ml-0"><a class="decoration-primary-500 hover:underline hover:decoration-2 hover:underline-offset-2" href=/tags/ title=Tags>tag</a></li></ul></nav></header><div class="relative flex flex-col grow"><main id=main-content class=grow><article><header class=max-w-prose><h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">데이터독 RDS 삭제</h1><div class="mt-8 mb-12 text-base text-neutral-500 dark:text-neutral-400 print:hidden"><div class="flex flex-row flex-wrap items-center"><time datetime="2022-07-22 23:09:10 +0900 +0900">Jul 22, 2022</time></div></div></header><section class="flex flex-col max-w-full mt-0 prose lg:flex-row dark:prose-invert"><div class="order-first px-0 lg:max-w-xs ltr:lg:pl-8 rtl:lg:pr-8 lg:order-last"><div class="ltr:pl-5 rtl:pr-5 toc lg:sticky lg:top-10 print:hidden"><details open class="mt-0 overflow-hidden rounded-lg rtl:pr-5 ltr:pl-5 ltr:-ml-5 rtl:-mr-5"><summary class="block py-1 text-lg font-semibold cursor-pointer rtl:pr-5 ltr:pl-5 ltr:-ml-5 rtl:-mr-5 text-neutral-800 dark:text-neutral-100 lg:hidden bg-neutral-100 dark:bg-neutral-700">Table of Contents</summary><div class="py-2 border-dotted ltr:border-l rtl:border-r rtl:pr-5 ltr:pl-5 ltr:-ml-5 rtl:-mr-5 border-neutral-300 dark:border-neutral-600"><nav id=TableOfContents><ul><li><ul><li><a href=#개요>개요</a></li><li><a href=#환경>환경</a></li><li><a href=#조치방법>조치방법</a><ul><li><a href=#데잍터독-ec2-접속>데잍터독 EC2 접속</a></li><li><a href=#datadog-에이전트-설정-확인>Datadog 에이전트 설정 확인</a></li><li><a href=#datadog-에이전트-설정-변경>Datadog 에이전트 설정 변경</a></li><li><a href=#datadog-에이전트-재시작>Datadog 에이전트 재시작</a></li><li><a href=#테스트>테스트</a></li><li><a href=#cloud-siem의-알람-발생-가능성>Cloud SIEM의 알람 발생 가능성</a></li></ul></li><li><a href=#결론>결론</a></li></ul></li></ul></nav></div></details></div></div><div class="min-w-0 min-h-0 max-w-prose"><h2 id=개요 class="relative group">개요 <span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%ea%b0%9c%ec%9a%94 aria-label=Anchor>#</a></span></h2><p>어느날 개발팀으로부터 AWS RDS에서 DB 클러스터를 삭제해달라는 요청이 왔습니다.<br>AWS 콘솔에 로그인해서 RDS 인스턴스를 삭제하려던 중, 해당 RDS가 데이터독 APM의 모니터링 대상인 걸 발견했습니다.</p><p>이런 경우에는 데이터독 에이전트 설정파일에서 먼저 등록된 RDS 호스트를 삭제한 다음, AWS 콘솔에서 RDS 인스턴스를 삭제하는 방식으로 진행해야 합니다.</p><p>이 글에서는 데이터독 APM 모니터링에서 RDS를 제외시키고, 안전하게 RDS를 삭제하는 방법을 소개합니다.</p><p> </p><h2 id=환경 class="relative group">환경 <span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%ed%99%98%ea%b2%bd aria-label=Anchor>#</a></span></h2><p>데이터독으로 RDS 메트릭을 수집하는 아키텍쳐는 다음과 같습니다.</p><p><figure><img class="my-0 rounded-md" src=./1.png alt="데이터독 아키텍쳐"></figure></p><p>메트릭 수집대상인 각각의 RDS에는 <code>datadog</code>이라는 DB 계정이 생성된 상태입니다.<br>이에 대한 정보는 datadog-agent의 RDS 설정파일에서도 확인할 수 있습니다.</p><ul><li><strong>EC2 운영체제</strong> : Ubuntu 20.04</li><li><strong>RDS</strong> : Aurora MySQL</li><li><strong>Datadog Agent 7.36.1</strong> <a href=https://github.com/DataDog/datadog-agent>Github</a></li></ul><p> </p><p><strong>APM 수집을 위해 EC2가 필요한 이유</strong><br>데이터독에서 Aurora 호스트를 모니터링하려면, EC2와 같은 인프라에 Datadog 에이전트를 설치하고, 각 DB 인스턴스 엔드포인트에 원격으로 연결하도록 구성하는 작업이 별도로 필요합니다.</p><p>데이터독 에이전트는 데이터베이스에서 실행할 필요가 없으며 데이터베이스와 연결하기만 하면 됩니다.</p><p>2022년 7월 기준으로 RDS 메트릭 수집을 위한 전용 인프라로 Host(EC2 Instance를 의미), Docker, Kubernetes 3가지 방식을 지원합니다.</p><p>더 자세한 사항은 <a href="https://docs.datadoghq.com/database_monitoring/setup_mysql/aurora/?tab=mysql56#install-the-agent">데이터독 공식문서</a>에서 확인할 수 있습니다.</p><p> </p><h2 id=조치방법 class="relative group">조치방법 <span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%ec%a1%b0%ec%b9%98%eb%b0%a9%eb%b2%95 aria-label=Anchor>#</a></span></h2><h3 id=데잍터독-ec2-접속 class="relative group">데잍터독 EC2 접속 <span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%eb%8d%b0%ec%9e%8d%ed%84%b0%eb%8f%85-ec2-%ec%a0%91%ec%86%8d aria-label=Anchor>#</a></span></h3><p>RDS 메트릭 수집 전용 EC2에 SSH 또는 SSM Session Manager를 이용해서 접속합니다.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>$ aws ssm start-session <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>  --target &lt;YOUR_DATADOG_INSTANCE_ID&gt; <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>  --region ap-northeast-2
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>Starting session with SessionId: alice-12e3d456babd7b890
+</span></span><span class=line><span class=cl>This session is encrypted using AWS KMS.
+</span></span></code></pre></div><p>제 경우 SSM Session Manager를 통해 데이터독 RDS 전용 EC2에 접속 완료되었습니다.</p><p> </p><h3 id=datadog-에이전트-설정-확인 class="relative group">Datadog 에이전트 설정 확인 <span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#datadog-%ec%97%90%ec%9d%b4%ec%a0%84%ed%8a%b8-%ec%84%a4%ec%a0%95-%ed%99%95%ec%9d%b8 aria-label=Anchor>#</a></span></h3><p>데이터독 에이전트 설정파일의 기본 경로는 다음과 같습니다.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>$ <span class=nb>pwd</span>
+</span></span><span class=line><span class=cl>/etc/datadog-agent/conf.d/mysql.d
+</span></span></code></pre></div><p> </p><p>모니터링 대상인 Aurora DB 호스트 여러 대가 데이터독 에이전트 설정파일에 <code>instances</code>로 등록되어 있는 걸 확인할 수 있습니다.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>$ <span class=nb>cd</span> /etc/datadog-agent/conf.d/mysql.d/
+</span></span><span class=line><span class=cl>$ cat conf.yaml
+</span></span><span class=line><span class=cl>init_config:
+</span></span><span class=line><span class=cl>    ...
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>instances:
+</span></span><span class=line><span class=cl>  - host: DB_1.ap-northeast-2.rds.amazonaws.com
+</span></span><span class=line><span class=cl>    username: datadog
+</span></span><span class=line><span class=cl>    password: &lt;DATADOG_USER_PASSWORD_IN_RDS&gt;
+</span></span><span class=line><span class=cl>    port: <span class=m>3306</span>
+</span></span><span class=line><span class=cl>    tags:
+</span></span><span class=line><span class=cl>      - dbinstanceidentifier:xxx-instance-1
+</span></span><span class=line><span class=cl>    dbm: <span class=nb>true</span>
+</span></span><span class=line><span class=cl>    options:
+</span></span><span class=line><span class=cl>      disable_innodb_metrics: <span class=nb>true</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  - host: DB_2.ap-northeast-2.rds.amazonaws.com
+</span></span><span class=line><span class=cl>    username: datadog
+</span></span><span class=line><span class=cl>    password: &lt;DATADOG_USER_PASSWORD_IN_RDS&gt;
+</span></span><span class=line><span class=cl>    port: <span class=m>3306</span>
+</span></span><span class=line><span class=cl>    tags:
+</span></span><span class=line><span class=cl>      - dbinstanceidentifier:xxx-instance-1
+</span></span><span class=line><span class=cl>    dbm: <span class=nb>true</span>
+</span></span><span class=line><span class=cl>    options:
+</span></span><span class=line><span class=cl>      disable_innodb_metrics: <span class=nb>true</span>
+</span></span><span class=line><span class=cl>...
+</span></span></code></pre></div><p>이 예제 시나리오에서는 DB2 RDS를 삭제하는 상황을 가정합니다.</p><p> </p><h3 id=datadog-에이전트-설정-변경 class="relative group">Datadog 에이전트 설정 변경 <span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#datadog-%ec%97%90%ec%9d%b4%ec%a0%84%ed%8a%b8-%ec%84%a4%ec%a0%95-%eb%b3%80%ea%b2%bd aria-label=Anchor>#</a></span></h3><p>데이터독 에이전트 설정파일을 수정하기 전에 미리 백업합니다.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>$ <span class=c1># Current path is /etc/datadog-agent/conf.d/mysql.d/</span>
+</span></span><span class=line><span class=cl>$ cp conf.yaml conf.yaml.20220722
+</span></span></code></pre></div><p> </p><p>데이터독 설정파일에서 DB2 호스트에 대한 설정 영역을 주석처리 하거나 삭제합니다.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>$ cat conf.yaml
+</span></span><span class=line><span class=cl>init_config:
+</span></span><span class=line><span class=cl>    ...
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>instances:
+</span></span><span class=line><span class=cl>  - host: DB_1.ap-northeast-2.rds.amazonaws.com
+</span></span><span class=line><span class=cl>    username: datadog
+</span></span><span class=line><span class=cl>    password: &lt;DATADOG_USER_PASSWORD_IN_RDS&gt;
+</span></span><span class=line><span class=cl>    port: <span class=m>3306</span>
+</span></span><span class=line><span class=cl>    tags:
+</span></span><span class=line><span class=cl>      - dbinstanceidentifier:xxx-instance-1
+</span></span><span class=line><span class=cl>    dbm: <span class=nb>true</span>
+</span></span><span class=line><span class=cl>    options:
+</span></span><span class=line><span class=cl>      disable_innodb_metrics: <span class=nb>true</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Note: DB2 is deleted on 2022-07-22 by alice</span>
+</span></span><span class=line><span class=cl><span class=c1>#       due to project dropped.</span>
+</span></span><span class=line><span class=cl><span class=c1>#  - host: DB_2.cizdrumfhqc6.ap-northeast-2.rds.amazonaws.com</span>
+</span></span><span class=line><span class=cl><span class=c1>#    username: datadog</span>
+</span></span><span class=line><span class=cl><span class=c1>#    password: &lt;DATADOG_USER_PASSWORD_IN_RDS&gt;</span>
+</span></span><span class=line><span class=cl><span class=c1>#    port: 3306</span>
+</span></span><span class=line><span class=cl><span class=c1>#    tags:</span>
+</span></span><span class=line><span class=cl><span class=c1>#      - dbinstanceidentifier:xxx-instance-1</span>
+</span></span><span class=line><span class=cl><span class=c1>#    dbm: true</span>
+</span></span><span class=line><span class=cl><span class=c1>#    options:</span>
+</span></span><span class=line><span class=cl><span class=c1>#      disable_innodb_metrics: true</span>
+</span></span><span class=line><span class=cl>...
+</span></span></code></pre></div><p> </p><h3 id=datadog-에이전트-재시작 class="relative group">Datadog 에이전트 재시작 <span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#datadog-%ec%97%90%ec%9d%b4%ec%a0%84%ed%8a%b8-%ec%9e%ac%ec%8b%9c%ec%9e%91 aria-label=Anchor>#</a></span></h3><p>삭제한 RDS 설정을 적용하기 위해 데이터독 에이전트를 재시작합니다.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>$ sudo systemctl restart datadog-agent
+</span></span></code></pre></div><p> </p><p>데이터독 에이전트의 상태를 확인합니다.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>$ sudo systemctl status datadog-agent
+</span></span><span class=line><span class=cl>● datadog-agent.service - Datadog Agent
+</span></span><span class=line><span class=cl>     Loaded: loaded <span class=o>(</span>/lib/systemd/system/datadog-agent.service<span class=p>;</span> enabled<span class=p>;</span> vendor preset: enabled<span class=o>)</span>
+</span></span><span class=line><span class=cl>     Active: active <span class=o>(</span>running<span class=o>)</span> since Thu 2022-07-21 21:02:50 UTC<span class=p>;</span> 4h 40min ago
+</span></span><span class=line><span class=cl>   Main PID: <span class=m>2325855</span> <span class=o>(</span>agent<span class=o>)</span>
+</span></span><span class=line><span class=cl>      Tasks: <span class=m>28</span> <span class=o>(</span>limit: 2319<span class=o>)</span>
+</span></span><span class=line><span class=cl>     Memory: 228.1M
+</span></span><span class=line><span class=cl>     CGroup: /system.slice/datadog-agent.service
+</span></span><span class=line><span class=cl>             └─2325855 /opt/datadog-agent/bin/agent/agent run -p /opt/datadog-agent/run/agent.pid
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>Jul <span class=m>22</span> 01:27:50 ip-172-31-23-185 agent<span class=o>[</span>2325855<span class=o>]</span>: 2022-07-22 01:27:50 UTC <span class=p>|</span> CORE <span class=p>|</span> INFO <span class=p>|</span> <span class=o>(</span>pkg/serializer/serializer.go:388 in sendMetadata<span class=o>)</span> <span class=p>|</span> Sent metadata payload, size <span class=o>(</span>raw/compressed<span class=o>)</span>: 3090/704 bytes.
+</span></span><span class=line><span class=cl>Jul <span class=m>22</span> 01:27:54 ip-172-31-23-185 agent<span class=o>[</span>2325855<span class=o>]</span>: 2022-07-22 01:27:54 UTC <span class=p>|</span> CORE <span class=p>|</span> INFO <span class=p>|</span> <span class=o>(</span>pkg/serializer/serializer.go:412 in SendProcessesMetadata<span class=o>)</span> <span class=p>|</span> Sent processes metadata payload, size: <span class=m>1438</span> bytes.
+</span></span><span class=line><span class=cl>Jul <span class=m>22</span> 01:32:53 ip-172-31-23-185 agent<span class=o>[</span>2325855<span class=o>]</span>: 2022-07-22 01:32:53 UTC <span class=p>|</span> CORE <span class=p>|</span> INFO <span class=p>|</span> <span class=o>(</span>pkg/metadata/host/host.go:170 in getNetworkMeta<span class=o>)</span> <span class=p>|</span> Adding public IPv4 11.22.33.44 to network metadata
+</span></span><span class=line><span class=cl>...
+</span></span></code></pre></div><p>현재 데이터독 에이전트가 동작하고 있습니다.</p><p> </p><h3 id=테스트 class="relative group">테스트 <span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%ed%85%8c%ec%8a%a4%ed%8a%b8 aria-label=Anchor>#</a></span></h3><p>이제 데이터독 에이전트의 설정 정보에서 잘 반영되었는지 확인합니다.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>$ sudo datadog-agent configcheck
+</span></span><span class=line><span class=cl>...
+</span></span><span class=line><span class=cl><span class=o>===</span> mysql <span class=nv>check</span> <span class=o>===</span>
+</span></span><span class=line><span class=cl>Configuration provider: file
+</span></span><span class=line><span class=cl>Configuration source: file:/etc/datadog-agent/conf.d/mysql.d/conf.yaml
+</span></span><span class=line><span class=cl>Instance ID: mysql: xxxxxxxxxxxxxxx
+</span></span><span class=line><span class=cl>dbm: <span class=nb>true</span>
+</span></span><span class=line><span class=cl>host: xxxxxxx-a.xxxxxxx.ap-northeast-2.rds.amazonaws.com
+</span></span><span class=line><span class=cl>options:
+</span></span><span class=line><span class=cl>  disable_innodb_metrics: <span class=nb>true</span>
+</span></span><span class=line><span class=cl>password: ********
+</span></span><span class=line><span class=cl>port: <span class=m>3306</span>
+</span></span><span class=line><span class=cl>tags:
+</span></span><span class=line><span class=cl>- dbinstanceidentifier:xxxxxxx-v4-a
+</span></span><span class=line><span class=cl>username: datadog
+</span></span><span class=line><span class=cl>~
+</span></span><span class=line><span class=cl>Instance ID: mysql:xxxxxxxxxxxxxxx
+</span></span><span class=line><span class=cl>dbm: <span class=nb>true</span>
+</span></span><span class=line><span class=cl>host: xxxxxxx-b.xxxxxxx.ap-northeast-2.rds.amazonaws.com
+</span></span><span class=line><span class=cl>options:
+</span></span><span class=line><span class=cl>  disable_innodb_metrics: <span class=nb>true</span>
+</span></span><span class=line><span class=cl>password: ********
+</span></span><span class=line><span class=cl>port: <span class=m>3306</span>
+</span></span><span class=line><span class=cl>tags:
+</span></span><span class=line><span class=cl>- dbinstanceidentifier:xxxxxxx-v4-b
+</span></span><span class=line><span class=cl>username: datadog
+</span></span><span class=line><span class=cl>~
+</span></span><span class=line><span class=cl>Instance ID: mysql:xxxxxxxxxxxxxxx
+</span></span><span class=line><span class=cl>dbm: <span class=nb>true</span>
+</span></span><span class=line><span class=cl>host: xxxxxxx-c.xxxxxxx.ap-northeast-2.rds.amazonaws.com
+</span></span><span class=line><span class=cl>options:
+</span></span><span class=line><span class=cl>  disable_innodb_metrics: <span class=nb>true</span>
+</span></span><span class=line><span class=cl>password: ********
+</span></span><span class=line><span class=cl>port: <span class=m>3306</span>
+</span></span><span class=line><span class=cl>tags:
+</span></span><span class=line><span class=cl>- dbinstanceidentifier:xxxxxxx-v4-c
+</span></span><span class=line><span class=cl>username: datadog
+</span></span><span class=line><span class=cl>~
+</span></span><span class=line><span class=cl>Instance ID: mysql:xxxxxxxxxxxxxxx
+</span></span><span class=line><span class=cl>dbm: <span class=nb>true</span>
+</span></span><span class=line><span class=cl>host: xxxxxxx-instance-1.xxxxxxx.ap-northeast-2.rds.amazonaws.com
+</span></span><span class=line><span class=cl>options:
+</span></span><span class=line><span class=cl>  disable_innodb_metrics: <span class=nb>true</span>
+</span></span><span class=line><span class=cl>password: ********
+</span></span><span class=line><span class=cl>port: <span class=m>3306</span>
+</span></span><span class=line><span class=cl>tags:
+</span></span><span class=line><span class=cl>- dbinstanceidentifier:xxxxxxx-instance-1
+</span></span><span class=line><span class=cl>username: datadog
+</span></span><span class=line><span class=cl>~
+</span></span><span class=line><span class=cl>...
+</span></span></code></pre></div><p> </p><p><figure><img class="my-0 rounded-md" src=./2.png alt=APM></figure></p><p>APM → Services 메뉴로 들어갑니다.</p><p><figure><img class="my-0 rounded-md" src=./3.png alt="Database disappeared"></figure></p><p>검색창에서 해당 데이터베이스 이름을 검색해도 결과가 나오지 않는 걸 확인할 수 있습니다.</p><p>APM에서 해당 DB가 조회가 되지 않는 걸 확인한 후, AWS 콘솔에 접속해서 해당 RDS 클러스터를 삭제를 진행하면 됩니다.</p><p> </p><h3 id=cloud-siem의-알람-발생-가능성 class="relative group">Cloud SIEM의 알람 발생 가능성 <span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#cloud-siem%ec%9d%98-%ec%95%8c%eb%9e%8c-%eb%b0%9c%ec%83%9d-%ea%b0%80%eb%8a%a5%ec%84%b1 aria-label=Anchor>#</a></span></h3><p>데이터독의 Cloud SIEM 기능을 사용하고 있는 경우, RDS를 삭제하면 알람이 발생할 수 있습니다.<br>데이터독에서 RDS 삭제 관련 알람 설정을 확인하는 방법은 아래와 같습니다.</p><p>Security → Detection Rules → 검색창에 <code>AWS RDS Cluster deleted</code> 입력 후 조회</p><p>아래는 AWS RDS Cluster deleted 룰이 활성화된 화면입니다.</p><p><figure><img class="my-0 rounded-md" src=./4.png alt="Cloud SIEM Rule"></figure></p><p><code>AWS RDS Cluster delete</code> Cloud SIEM 룰의 Log detection 쿼리는 아래와 같이 설정되어 있습니다.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Query of AWS RDS Cluster deleted.</span>
+</span></span><span class=line><span class=cl>source:cloudtrail -@level:Error @evt.name:DeleteDBCluster
+</span></span></code></pre></div><p>AWS에서 RDS를 삭제하게 되면, 데이터독이 RDS Cluster deleted 이벤트를 소스인 Cloudtrail에서 캐치하고 정해진 위치(e.g. slack channel, 기타 등등.)로 알람을 발송합니다.</p><p>RDS 클러스터 삭제 알람과 관련한 더 많은 정보는 데이터독 공식문서 <a href=https://docs.datadoghq.com/security_platform/default_rules/aws-rds-cluster-deleted/>AWS RDS Cluster deleted</a>에서 확인할 수 있습니다.</p><p> </p><h2 id=결론 class="relative group">결론 <span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%ea%b2%b0%eb%a1%a0 aria-label=Anchor>#</a></span></h2><p>데이터독 수집 대상에 해당되는 RDS는 AWS 콘솔에서 바로 삭제하면 안되고, 데이터독 에이전트에서 RDS를 제외한 후 삭제하도록 합니다.</p><p>RDS를 삭제하는 과정에서 데이터독 Cloud SIEM이 이를 감지하고 알람을 발생시킬 가능성이 있습니다.<br>RDS 삭제 후 갑자기 데이터독 알람이 울려도 당황하지 마세요.</p></div></section><footer class="pt-8 max-w-prose print:hidden"><script src=https://utteranc.es/client.js repo=seyslee/seyslee.github.io issue-term=pathname label=blog-comment theme=github-dark crossorigin=anonymous async></script></footer></article></main><footer class="py-10 print:hidden"><div class="flex items-center justify-between"><div><p class="text-sm text-neutral-500 dark:text-neutral-400">&copy;
+2022
+Younsung Lee</p></div></div></footer></div></body></html>
