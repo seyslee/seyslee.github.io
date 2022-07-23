@@ -122,7 +122,7 @@ multinode-lab-m03   Ready    <none>          36m   v1.24.1
 현재 경로에 `nginx-deploy.yaml` 파일을 생성합니다.
 
 ```yaml
-$ cat << EOF >> ./nginx-deploy.yaml
+$ cat << EOF > ./nginx-deploy.yaml
 apiVersion: apps/v1
 kind: Deployment            # 타입은 Deployment
 metadata:
@@ -215,7 +215,7 @@ multinode-lab-m03   Ready    <none>          11m   v1.24.1
 service를 생성하기 위해 매니페스트를 작성합니다.
 
 ```yaml
-$ cat << EOF >> ./nginx-service.yaml
+$ cat << EOF > ./nginx-service.yaml
 apiVersion: v1
 kind: Service
 metadata:
